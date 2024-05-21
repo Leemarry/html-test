@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class="top">
+      <p>
+        <span class="tips">由于大促期间订单量激增，您的订单送达时效可能出现延迟，请您耐心等待~</span>
+        <span>12由于大促期间订单量激增，您的订单送达时效可能出现延迟，请您耐心等待~23</span>
+      </p>
+    </div>
+    <!-- <div class="main">
+      <h6>然后这里放的就是卤煮</h6>
+      <h4>外放堪称手机圈</h4>
+      <h2>宇宙无敌第一</h2>
+      <h6>小米10 Pro</h6>
+      <h2>wo不接受争辩</h2>
+      <h3>·</h3>
+      <h3>·</h3>
+      <h3>·</h3>
+      <h3>·</h3>
+    </div> -->
+  </div>
+
+</body>
+
+</html>
+
+<style>
+  .tips {
+    width: 560px;
+  }
+
+  p {
+    position: absolute;
+    height: 34px;
+    left: 34px;
+    white-space: nowrap;
+    display: flex;
+    animation: move linear 12s infinite;
+    animation-delay: 3s;
+  }
+
+  @keyframes move {
+    0% {
+      left: 34px;
+    }
+
+    100% {
+      left: -526px;
+    }
+  }
+
+  /* 这里以下请忽略，重点在上面 */
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  body,
+  html {
+    height: 100%;
+  }
+
+  #app {
+    height: 100%;
+    background: #ececec;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* .main {
+    flex: 1;
+  } */
+
+  /* .top {
+    position: relative;
+    overflow: hidden;
+    height: 34px;
+    background: #fff;
+  } */
+
+  /* .top span{
+      line-height: 34px;
+      display: inline-block;
+    }
+    .top::before{
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 34px;
+      z-index: 9;
+      background-image: linear-gradient(90deg,#f00 0%, #f00 60%, transparent 100%);
+    }
+    .top::after{
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 34px;
+      z-index: 9;
+      background-image: linear-gradient(-90deg,#f00 0%, #f00 60%, transparent 100%);
+    }
+    h1,h2,h3,h4,h5,h6{
+      margin: 20px auto;
+      text-align: center;
+    } */
+</style>
+
+
+<!-- <style>
+.marquee-container {
+  width: 300px;
+  height: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  position: absolute;
+  animation: marquee 10s linear infinite;
+}
+
+.marquee-text::after {
+  content: attr(data-content);
+  position: absolute;
+  right: -100%;
+  white-space: nowrap;
+  animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+</style> -->

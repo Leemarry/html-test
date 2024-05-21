@@ -1,0 +1,196 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2023-10-13 16:48:41
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-04-17 18:01:30
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>添加影像</title>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Widgets/widgets.css"
+        rel="stylesheet" />
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script>
+    <!-- <script src="http://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js" ></script> -->
+</head>
+
+<body style="margin: 0px; width: 100%; height: 100%">
+    <div id="cesiumContainer" style="width: 100%; height: 100%; position: absolute"></div>
+</body>
+<script>
+     var subdomains=['0','1','2','3','4','5','6','7'];
+    //  		
+    var webKey = 'c65720c5de284b39525342ad0265a104'
+    var url;
+    Cesium.Ion.defaultAccessToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ODBiMzY4OS1iYmIwLTQwM2UtYjRmOS05NmE4ZTRlNDdhYWEiLCJpZCI6MTUyMTEwLCJpYXQiOjE3MDk3NzI2MzJ9.PwUC2tyDTy4MCHzRspKzCvAJgZuvN9z2sjcQCC_iLJs";
+    var viewer = new Cesium.Viewer("cesiumContainer", {
+        selectionIndicator: false, //关闭绿色点击框
+        //需要进行可视化的数据源的集合
+        animation: false, //是否显示动画控件
+        timeline: false, //是否显示时间线控件
+        shouldAnimate: false,
+        homeButton: false, //是否显示Home按钮
+        fullscreenButton: false, //是否显示全屏按钮
+        baseLayerPicker: false, //是否显示图层选择控件
+        geocoder: false, //是否显示地名查找控件
+        sceneModePicker: false, //是否显示投影方式控件
+        navigationHelpButton: false, //是否显示帮助信息控件
+        infoBox: false, //是否显示点击要素之后显示的信息
+        requestRenderMode: true, //启用请求渲染模式
+        scene3DOnly: false, //每个几何实例将只能以3D渲染以节省GPU内存
+        sceneMode: 3, //初始场景模式 1 2D模式 2 2D循环模式 3 3D模式  Cesium.SceneMode
+        fullscreenElement: document.body, //全屏时渲染的HTML元素 暂时没发现用处
+        imageryProvider: new Cesium.WebMapTileServiceImageryProvider({		 
+           url:'https://｛s｝.tdandity.gov.cn/img_w/wmts?service=WMIS&version=1.0.O&request=GetTile&tileuatrdx=｛TileMatrix｝&layer=img&styLe=default&tilenow=｛TileRow｝&tilecol=｛TileCoL｝&tilematrixset=w&format=tiles&tk'+ webKey,
+            layer: "img",	//WMTS请求的层名称
+            style: "default",//WMTS请求的样式名称
+            format: "tiles",//MIME类型，用于从服务器检索图像
+            tileMatrixSetID: "w",//	用于WMTS请求的TileMatrixSet的标识符
+            subdomains: ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"],//天地图8个服务器
+            show:false,
+            maximumLevel: ,
+            minimumLevel: 1,
+			      })
+
+    });
+
+    if (Cesium.FeatureDetection.supportsImageRenderingPixelated()) { //判断是否支持图像渲染像素化处理
+        viewer.resolutionScale = window.devicePixelRatio;
+    }
+    //是否开启抗锯齿
+    viewer.scene.fxaa = true; // 关闭fxaa 最新的cesium已经将fxaa移到PostProcessStageCollection
+    viewer.scene.postProcessStages.fxaa.enabled = true;
+
+
+    // var  imageryProvider = new Cesium.ArcGisMapServerImageryProvider({
+    //     url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+    // })
+    // viewer.imageryLayers.addImageryProvider(imageryProvider);
+
+
+    //#region  geoserver
+
+    // var imageryProvider = new Cesium.WebMapServiceImageryProvider({
+    //         // 这里是你的 geoserver服务点击查看图层的 url
+    //         // url: '/geoserver/work/wms?',  // 这里改为代理地址
+    //         url: 'http://localhost:8683/geoserver/work/wms?',
+    //         // 这里是自定义的图层名称
+    //         layers: 'work:tongs',  // 要对应说 geoserver 图层 	work:yingDeFactory
+    //         parameters: {
+    //             service: 'WMS',
+    //             format: 'image/png',
+    //             transparent: true,
+    //             // style : 'raster',
+    //         },
+    //     });
+
+
+
+    //#endregion
+
+    //#region  /{z}/{x}/{y}.png
+
+    var imageryProvider = new Cesium.UrlTemplateImageryProvider({
+        url: "../result/{z}/{x}/{y}.png",
+        // url: "./result/{z}/{x}/{y}.png",
+    });
+
+    //#endregion
+
+    // 图层添加
+    // viewer.imageryLayers.addImageryProvider(imageryProvider);
+
+
+
+
+
+    //飞到指定地方
+    // viewer.scene.camera.flyTo({
+    //     destination: Cesium.Cartesian3.fromDegrees(112.26670, 31.01892, 1000),
+    //     orientation: {
+    //         heading: Cesium.Math.toRadians(90), // 设置偏航角度（单位：弧度）
+    //         pitch: Cesium.Math.toRadians(-90), // 设置俯仰角度（单位：弧度）
+    //         roll: Cesium.Math.toRadians(0) // 设置横滚角度（单位：弧度）
+    //     }
+    // })
+    // 设置默认相机视角  工厂 112.26670, 31.01892 // 
+    viewer.camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(112.26670, 31.01892,
+        1000), // 114.45006173 ,29.62837653 //  112.26670, 31.01892
+        // 方向，俯视和仰视的视角
+        orientation: {
+            heading: Cesium.Math.toRadians(0), // 设置偏航角度（单位：弧度）
+            pitch: Cesium.Math.toRadians(-90), // 设置俯仰角度（单位：弧度）
+            roll: Cesium.Math.toRadians(0) // 设置横滚角度（单位：弧度）
+        }
+    });
+    //   window.viewer.scene.camera.flyTo({
+    // destination: Cesium.Cartesian3.fromDegrees(lng, lat, 700),
+    //         duration: 1.0 // 设置动画时间为1.5秒 lat:31.01593501   lng 
+    //       })
+    // 
+    //     window.viewer.zoomTo(                     // 使用 Cesium 的 zoomTo 方法
+    //     Cesium.Cartesian3.fromDegrees(112.26670, 31.01892, 1000),                       // 需要缩放到的瓦片集或实体对象
+    //     new Cesium.HeadingPitchRange(           // 通过 HeadingPitchRange 对象设置缩放参数
+    //         0.6,                               // 旋转角度（偏航角）, 0.6 弧度约为 34.38 度
+    //         -0.4,                              // 倾斜角度（俯仰角）, -0.4 弧度约为 -22.92 度
+    //         palace3DTileset.boundingSphere.radius * 0.35   // 缩放范围（距离）, 根据瓦片集包围球的半径计算得到
+    //     )
+    // );
+</script>
+
+</html>
+
+<!-- var imageryProvider = new Cesium.WebMapServiceImageryProvider({
+            // 这里是你的 geoserver服务点击查看图层的 url
+            // url: 'http://localhost:5501/geoserver/work/wms?',
+            url: '/geoserver/work/wms?',  // 这里改为代理地址
+            // 这里是自定义的图层名称
+            layers: 'work:yingDeMap',
+            parameters: {
+                // service: 'WMS',
+                format: 'image/png',
+                transparent: true,
+                // style : 'raster',
+            },
+        });
+        // 图层添加
+      viewer.imageryLayers.addImageryProvider(imageryProvider); -->
+
+<!-- 
+  //1
+//添加本地瓦片地图
+// imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+//   url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+// }),
+
+
+// imageryProvider: new Cesium.UrlTemplateImageryProvider({
+  
+//   url: "http://localhost:456/static/Map/result/{z}/{x}/{y}.png",
+//   // url: "./result/{z}/{x}/{y}.png",
+// }), -->
+
+
+<!-- //   let layerWMTSRest = new Cesium.WebMapTileServiceImageryProvider({
+  //     // 注意：gwc/rest/wmts 很多博客这里提供的是错的
+  //     // 注意：{TileMatrixSet}/{TileMatrixSet}:{TileMatrix} 中间有冒号
+  //     url : 'http://openlayers.vip/geoserver/gwc/rest/wmts/cite:xintai18/{style}/{TileMatrixSet}/{TileMatrixSet}:{TileMatrix}/{TileRow}/{TileCol}?format=image/png',
+  //     // 注意：这里的样式参数必须有
+  //     style : 'raster',
+  //     // 图层不传也可以
+  //     layer:'cite:xintai18',
+  //     // 必填
+  //     format: "image/png",
+  //     // 选填
+  //     maximumLevel: 21,
+  //     // 必填
+  //     tileMatrixSetID : 'EPSG:4326'
+  // }); -->

@@ -1,0 +1,37 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-03-07 09:31:07
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-03-07 10:20:13
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+</head>
+<body>
+<!-- 将生成的代码复制到此处↓↓↓ -->
+<div style="width: 200px; height:150px;" id="tp-weather-widget"></div>
+
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble", //   "slim",
+      location: "WW2MYN52R11E",
+      geolocation: false,
+      language: "auto",
+      unit: "c",
+      theme: "auto",
+      token: "dd422f2d-c302-4036-be0c-162bbf110859",
+      hover: "disabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+
+</body>
+</html>

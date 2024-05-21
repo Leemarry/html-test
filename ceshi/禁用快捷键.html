@@ -1,0 +1,41 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-05-09 11:12:18
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-05-09 17:25:21
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标签元素打印信息</title>
+</head>
+<body>
+
+<div id="customDiv" data-custom="true" click>测试</div>
+
+<script>
+// 添加点击事件监听器
+document.getElementById('customDiv').addEventListener('click', function() {
+    console.log('你点击了自定义标签元素');
+});
+
+// 在赋值时打印信息
+document.getElementById('customDiv').innerHTML = '新的内容'; // 示例赋值操作
+console.log('你对自定义标签元素进行了赋值操作');
+
+</script>
+
+</body>
+</html>
+
+<!-- created:在绑定元素的attribute或事件监听器被应用之前调用。
+beforeMount: 当指令第一次绑定到元素并且在挂载父组件之前调用。
+mounted: 在绑定元素的父组件被挂载后调用。
+beforeUpdate: 在更新包含组件的VNode之前调用。
+updated: 在包含组件的VNode及其子组件的VNode更新后调用。
+beforeUnmount: 在卸载绑定元素的父组件之前调用。
+unmounted: 当指令与元素解除绑定且父组件已卸载时，只调用一次。 -->

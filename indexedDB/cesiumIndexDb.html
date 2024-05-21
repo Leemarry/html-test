@@ -1,0 +1,52 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-02 08:59:38
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-11 09:52:05
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesium使用IndexDB</title>
+     <!-- <link href="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script> -->
+  <link rel="stylesheet" href="./Cesium/Widgets/widgets.css">
+  <script src="./Cesium/Cesium.js"></script>
+    
+</head>
+<body style="margin: 0px; width: 100%; height: 100%">
+    <div id="cesiumContainer" style="width: 100%; height: 100%; position: absolute"></div>
+  </body>
+</html>
+
+<script>
+      var url;
+  Cesium.Ion.defaultAccessToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzRiNzNkYS0zZTRmLTRhOTMtODFlNS0zOWFhN2FmYzZmYjkiLCJpZCI6MTUyMTEwLCJpYXQiOjE2ODg2OTYyMDl9.sWkoSUmLFPfbMTMFgAZeQKjBQERg-TZPBBtIN34sDNQ";
+  var viewer = new Cesium.Viewer("cesiumContainer", {
+    selectionIndicator: false, //关闭绿色点击框
+    //需要进行可视化的数据源的集合
+    animation: false, //是否显示动画控件
+    timeline: false, //是否显示时间线控件
+    shouldAnimate: false,
+    homeButton: false, //是否显示Home按钮
+    fullscreenButton: false, //是否显示全屏按钮
+    baseLayerPicker: false, //是否显示图层选择控件
+    geocoder: false, //是否显示地名查找控件
+    sceneModePicker: false, //是否显示投影方式控件
+    navigationHelpButton: false, //是否显示帮助信息控件
+    // infoBox: false, //是否显示点击要素之后显示的信息
+    requestRenderMode: true, //启用请求渲染模式
+    scene3DOnly: false, //每个几何实例将只能以3D渲染以节省GPU内存
+    sceneMode: 3, //初始场景模式 1 2D模式 2 2D循环模式 3 3D模式  Cesium.SceneMode
+    fullscreenElement: document.body, //全屏时渲染的HTML元素 暂时没发现用处
+    // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+    //   url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+    // }),
+  });
+</script>

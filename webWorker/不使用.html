@@ -1,0 +1,65 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2023-12-22 15:29:17
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-10 18:06:09
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>阻塞主线程的计算示例</title>
+</head>
+<body>
+  <h1>阻塞主线程的计算示例</h1>
+  <button id="start-button">开始计算</button>
+  <p id="result"></p>
+
+  <button onclick="startWorker()">开始计算另一个</button>
+  <p id="results"></p>
+
+  <script>
+    function calculate() {
+      // 阻塞主线程的计算操作
+      // 该计算操作会执行一个占用大量时间的循环任务
+      for (let i = 0; i < 6000000000; i++) {
+        Math.sqrt(i);
+      }
+      // 计算完成后更新页面
+      document.getElementById('result').textContent = '计算完成！';
+    }
+
+    
+    var op =new Worker("./op.js")
+
+    // 在按钮点击事件中执行计算函数 --开始计算
+    document.getElementById('start-button').addEventListener('click', function() {
+      // calculate();
+    // 使用webworker
+    console.log('使用webworker');
+    op.postMessage('ok')
+    });
+
+    op.onmessage = function(event){
+        var message = event.data
+        document.getElementById('result').textContent = '计算完成！'+message;
+    }
+
+    // >开始计算另一个
+    function startWorker() {
+        console.log('ooooo');
+    othercalculates()
+    }
+
+    var sum = 0;
+  function othercalculates() {
+    // 这里可以写你的计算任务逻辑
+    for (var i = 0; i < 1000000; i++) {
+      sum += i;
+    }
+    document.getElementById('results').textContent = '计算结果为：' + sum;
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-05-15 19:14:33
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-05-17 08:36:11
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Move Button Within Parent Container</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* 防止页面滚动 */
+        }
+
+        .op {
+            width: 500px;
+            height: 500px;
+            position: relative;
+            margin: 100px auto;
+            /* 为了让示例更清晰，将父容器居中显示 */
+            background-color: #f0f0f0;
+            /* 为了更清楚地看到父容器的位置 */
+        }
+
+        .ppp {
+            width: 220px;
+            height: 220px;
+            position: relative;
+        }
+
+        .btn {
+            width: 20px;
+            height: 20px;
+            background-color: rgb(38, 128, 206);
+            position: absolute;
+            cursor: pointer;
+            /* border-radius: 50%; */
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            /* 让按钮呈圆形 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="op">
+        <div class="ppp">
+            <div class="btn">s</div>
+        </div>
+    </div>
+
+    <script>
+        var op = document.querySelector(".op");
+        var btn = document.querySelector(".btn");
+
+        // 获取父容器在视口中的位置
+        var opRect = op.getBoundingClientRect();
+        var opLeft = opRect.left;
+        var opTop = opRect.top;
+        var opWidth = opRect.width;
+        var opHeight = opRect.height;
+        console.log(opRect, 'op', opLeft, opTop, opWidth);
+        console.log('btn', btn.offsetWidth, btn.offsetHeight);
+        var mousemoveHandler = function (e) {
+            // 获取父容器在视口中的位置
+            var opRect = op.getBoundingClientRect();
+            var opLeft = opRect.left;
+            var opTop = opRect.top;
+            var opWidth = opRect.width;
+            var opHeight = opRect.height;
+
+
+            var x = e.pageX;
+            var y = e.pageY;
+
+            console.log(opRect, 'sss', opLeft, opTop, opWidth, x);
+
+
+            // 限制按钮在父容器内部移动
+            var btnLeft = Math.min(opWidth - btn.offsetWidth, Math.max(0, x - opLeft));
+            var btnTop = Math.min(opHeight - btn.offsetHeight, Math.max(0, y - opTop - btn.offsetHeight));
+
+
+            btn.style.opacity = 1;
+            btn.style.left = btnLeft + "px";
+            btn.style.top = btnTop + "px";
+        };
+
+        op.addEventListener("mousemove", mousemoveHandler);
+
+        // setTimeout(function () {
+        //     btn.removeEventListener("mousemove", mousemoveHandler);
+        // }, 5000);
+    </script>
+</body>
+
+</html>

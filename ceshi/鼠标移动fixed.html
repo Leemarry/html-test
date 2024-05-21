@@ -1,0 +1,102 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-05-15 19:14:33
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-05-16 18:53:54
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>固定定位</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* 防止页面滚动 */
+        }
+
+        .op {
+            width: 500px;
+            height: 500px;
+            margin: 100px auto;
+            /* 为了让示例更清晰，将父容器居中显示 */
+            background-color: #f0f0f0;
+            /* 为了更清楚地看到父容器的位置 */
+        }
+
+        .ppp {
+            width: 220px;
+            height: 220px;
+
+        }
+
+        .btn {
+            width: 20px;
+            height: 20px;
+            background-color: rgb(38, 128, 206);
+            position: fixed;
+            cursor: pointer;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            /* 让按钮呈圆形 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="op">
+        <div class="ppp">
+            <div class="btn">s</div>
+        </div>
+    </div>
+
+    <script>
+        var op = document.querySelector(".op");
+        var btn = document.querySelector(".btn");
+
+        var opRect = op.getBoundingClientRect();
+        var opLeft = opRect.left;
+        var opTop = opRect.top;
+        var opWidth = opRect.width;
+        var opHeight = opRect.height;
+
+        var btnWidth = btn.offsetWidth;
+        var btnHeight = btn.offsetHeight;
+
+        var maxLeft = opWidth - btnWidth;
+        var maxTop = opHeight - btnHeight;
+
+        console.log('maxLeft', maxLeft, 'maxTop', maxTop);
+        btn.style.left = maxLeft + 'px'
+        btn.style.top = maxTop + "px";
+
+
+        // 
+
+        var mousemoveHandler = function (e) {
+            var x = e.pageX - opLeft // Adjusting for button's width
+            var y = e.pageY - opTop - (btnHeight / 1); // Adjusting for button's height
+
+            // Limiting button's movement within the container
+            var btnLeft = Math.min(maxLeft, Math.max(0, x));
+            var btnTop = Math.min(maxTop, Math.max(0, y));
+
+            btn.style.opacity = 1;
+            btn.style.left = btnLeft + opLeft + "px";
+            btn.style.top = btnTop + opTop + "px";
+        };
+
+        // op.addEventListener("mousemove", mousemoveHandler);
+    </script>
+</body>
+
+</html>

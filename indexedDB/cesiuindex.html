@@ -1,0 +1,85 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-11 14:04:55
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-12 08:54:04
+-->
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-11 13:27:42
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-11 14:04:27
+-->
+
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2023-10-13 16:48:41
+ * @LastEditors: Andy
+ * @LastEditTime: 2023-12-20 11:18:54
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>创建实体</title>
+    <!-- <link href="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Widgets/widgets.css"
+        rel="stylesheet" />
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script> -->
+
+    <script src="./Cesium/^1.98/Cesium.js"></script>
+    <link rel="stylesheet" href="./Cesium/^1.98/Widgets/widgets.css">
+
+    <!-- <link rel="stylesheet" href="./Cesium/Widgets/widgets.css">
+    <script src="./Cesium/Cesium.js"></script> -->
+    <!-- <script src="https://raw.githubusercontent.com/mozilla/localForage/master/dist/localforage.min.js"></script> -->
+</head>
+
+<body style="margin: 0px; width: 100%; height: 100%">
+    <div id="cesiumContainer" style="width: 100%; height: 100%; position: absolute"></div>
+    <!-- <script type="module" src="./cesiuindex.js"></script> -->
+</body>
+</html>
+<script src="./CesiumOfflineCache/CesiumOfflineCache.min.js"></script>
+<script>
+
+
+CesiumOfflineCache.ruleList.add('https://c.tile.thunderforest.com');
+    var url;
+    Cesium.Ion.defaultAccessToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzRiNzNkYS0zZTRmLTRhOTMtODFlNS0zOWFhN2FmYzZmYjkiLCJpZCI6MTUyMTEwLCJpYXQiOjE2ODg2OTYyMDl9.sWkoSUmLFPfbMTMFgAZeQKjBQERg-TZPBBtIN34sDNQ";
+    var viewer = new Cesium.Viewer("cesiumContainer", {
+        imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+            url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+        }),
+    });
+
+    const layer= viewer.imageryLayers.addImageryProvider(
+    
+        new Cesium.UrlTemplateImageryProvider({
+        url: 'https://c.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
+        tilingScheme: new Cesium.WebMercatorTilingScheme(),
+        maximumLevel: 12
+    })
+    )
+
+
+    // url:"https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+    // const layer2 = viewer.imageryLayers.addImageryProvider(
+    //     new Cesium.ArcGisMapServerImageryProvider({
+    //     url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+    
+    // })
+    // )
+
+</script>
+

@@ -1,0 +1,100 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-02 08:37:36
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-11 11:53:59
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="dbTest()">db测试获取图片</button>
+</body>
+</html>
+
+<!-- <script>
+        var db;
+  const request = indexedDB.open('myDatabase', 2); // 将版本号更改为需要的版本号
+
+request.onupgradeneeded = (event) => {
+   db = event.target.result;
+
+  // 创建对象存储空间
+  if (!db.objectStoreNames.contains('images')) {
+    const objectStore = db.createObjectStore('images', { keyPath: 'id' });
+  }
+};
+
+request.onsuccess = (event) => {
+   db = event.target.result;
+   console.log("开启成功success",db);
+
+  // 下载图片并存储到IndexedDB
+  fetch('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/18/107344/214166')
+    .then(response => response.blob())
+    .then(blob => {
+      // 存储图片数据
+      const imageObject = {
+        id: 'imageId',
+        data: blob
+      };
+
+      const transaction = db.transaction(['images'], 'readwrite');
+      const objectStore = transaction.objectStore('images');
+      const request = objectStore.put(imageObject);
+
+      request.onsuccess = () => {
+        console.log('图片已成功存储到IndexedDB');
+      };
+
+      request.onerror = () => {
+        console.error('存储图片到IndexedDB失败');
+      };
+    });
+};
+
+request.onerror = (event) => {
+  console.error('打开IndexedDB数据库失败');
+};
+
+// 
+function dbTest(){
+  const request = indexedDB.open('myDatabase', 2); // 打开你的IndexedDB数据库
+
+request.onsuccess = (event) => {
+  const db = event.target.result;
+
+  const transaction = db.transaction(['images'], 'readonly');
+  const objectStore = transaction.objectStore('images');
+
+  const getImageRequest = objectStore.get('imageId'); // 根据图片的唯一ID获取图片数据
+
+  getImageRequest.onsuccess = (event) => {
+    const imageObject = event.target.result;
+    console.log('imageObject',imageObject);
+    // 在HTML中显示图片
+    const imageUrl = URL.createObjectURL(imageObject.data);
+    const imgElement = document.createElement('img');
+    imgElement.src = imageUrl;
+    document.body.appendChild(imgElement);
+  };
+
+  getImageRequest.onerror = () => {
+    console.error('获取图片数据失败');
+  };
+};
+
+request.onerror = (event) => {
+  console.error('打开IndexedDB数据库失败');
+};
+
+}
+
+</script> -->

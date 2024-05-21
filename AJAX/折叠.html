@@ -1,0 +1,301 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-03-06 13:12:43
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-05-11 18:20:29
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div>
+        <button onclick="handleXHRClickss()"> 点击</button>
+        <a href="http://127.0.0.1:9090/ceshi/PvReport.pdf" download>PDF</a>
+    </div>
+</body>
+
+</html>
+<script>
+    var url = 'http://127.0.0.1:9090/ceshi/PvReport.pdf';
+
+    var filename = 'R.png';
+
+    const controller = new AbortController();
+    const {
+        signal
+    } = controller;
+
+    function handleFetchClick(signal) {
+        var url = 'http://127.0.0.1:9090/ceshi/14.jpg'; //http://127.0.0.1:9090/ceshi/14.jpg PvReport.pdf
+        console.log('signal', signal);
+        fetch(url, {
+                signal
+            })
+            .then(response => {
+                if (response.status == 200) {
+                    // 返回的.blob()为promise，然后生成了blob对象，此方法获得的blob对象包含了数据类型，十分方便
+                    console.log('response', response);
+                    var contentType = response.headers.get('content-type');
+                    console.log(contentType);
+                    return response.blob()
+                }
+            }).then(blob => {
+                console.log('blobUrl', blob);
+
+                createElementTodownload(blob, '')
+            })
+            .catch(error => {
+                console.warn(`Fetch 2 error: ${error.message}`);
+            });
+
+
+        // 等待 2 秒后取消请求
+
+    }
+
+    function handleClick() {
+        // 创建第一个请求的 AbortController
+        const controller1 = new AbortController();
+        const signal1 = controller1.signal;
+        handleFetchClick(signal1);
+        // 创建第二个请求的 AbortController
+        const controller2 = new AbortController();
+        const signal2 = controller2.signal;
+        handleFetchClick(signal2);
+
+        setTimeout(() => {
+            controller1.abort();
+            console.log('取消');
+        }, 2);
+    }
+
+
+
+
+    function createElementTodownload(blob, filename = '') {
+        // var fragment = document.createDocumentFragment();
+        var element = document.createElement('a');
+        const blobUrl = URL.createObjectURL(blob);
+        element.setAttribute('href', blobUrl);
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+        URL.revokeObjectURL(blobUrl)
+    }
+
+
+    function handleXHRClickss() {
+
+        var data = {
+            "allDeviceInformation": {
+                "bw1": 5,
+                "bw2": 2,
+                "deviceCount": 5,
+                "stationCount": 3,
+                "devicePowerOnCount": 5,
+                "uavDataStructs": [{
+                        "uavId": "71c4779e-2a72-4576-9b3b-80087659uav1",
+                        "uavName": "UAV123",
+                        "stationId": "71c4779e-2a72-4576-9b3b-80087659sav1",
+                        "stationName": "STATION456"
+                    },
+                    {
+                        "uavId": "71c4779e-2a72-4576-9b3b-80087659uav2",
+                        "uavName": "UAV124",
+                        "stationId": "71c4779e-2a72-4576-9b3b-80087659sav1",
+                        "stationName": "STATION456"
+                    },
+                    {
+                        "uavId": "71c4779e-2a72-4576-9b3b-80087659uav3",
+                        "uavName": "UAV125",
+                        "stationId": "71c4779e-2a72-4576-9b3b-80087659sav2",
+                        "stationName": "STATION457"
+                    },
+                    {
+                        "uavId": "71c4779e-2a72-4576-9b3b-80087659uav4",
+                        "uavName": "UAV126",
+                        "stationId": "71c4779e-2a72-4576-9b3b-80087659sav2",
+                        "stationName": "STATION457"
+                    },
+                    {
+                        "uavId": "71c4779e-2a72-4576-9b3b-80087659uav5",
+                        "uavName": "UAV127",
+                        "stationId": "71c4779e-2a72-4576-9b3b-80087659sav3",
+                        "stationName": "STATION457"
+                    }
+                ]
+            },
+            "fragments": [{
+                    "id": 1,
+                    "fu": 22,
+                    "fd": 10
+                },
+                {
+                    "id": 2,
+                    "fu": 54,
+                    "fd": 50
+                },
+                {
+                    "id": 3,
+                    "fu": 104,
+                    "fd": 80
+                }
+            ],
+            "divisor": 2
+        };
+
+        var key = 'STZM3wOV_mjH8QsjJ';
+        var location = '上海';
+        var language = 'zh-Hans';
+        var unit = 'c';
+        var params = {
+            key,
+            location,
+            language,
+            unit
+        };
+        var apiUrl = new URL("https://api.seniverse.com/v3/weather/now.json");
+        var urlParams = new URLSearchParams(params)
+        apiUrl = apiUrl + '?' + urlParams.toString();
+
+
+        var url = 'https://537l84g956.goho.co/api/db/dbm/handle'; //http://127.0.0.1:9090/ceshi/14.jpg 
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var blob = xhr.response;
+                console.log(xhr);
+                var contentType = xhr.getResponseHeader('Content-Type');
+                createElementTodownload(blob, filename = '')
+
+            }
+        }
+        xhr.ontimeout = function (e) {
+            // XMLHttpRequest 超时。在此做某事。
+            console.log('XMLHttpRequest 超时。在此做某事。', e);
+        };
+        xhr.open("POST", url, true);
+        // xhr.timeout = 1; // 超时时间，单位是毫秒
+        // xhr.setRequestHeader("Content-Type", "image/jpeg");
+        xhr.setRequestHeader("Content-Type", 'application/json;charset=utf-8');
+        xhr.responseType = 'json';
+        const dataStr = JSON.stringify(data)
+        xhr.send(dataStr)
+
+    }
+
+
+    // https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=17671864920
+
+    function handleXHRClick() {
+
+        var data = {
+            postData: 'your_data_here',
+            anotherData: 'more_data'
+        };
+
+        var key = 'STZM3wOV_mjH8QsjJ';
+        var location = '上海';
+        var language = 'zh-Hans';
+        var unit = 'c';
+        var params = {
+            key,
+            location,
+            language,
+            unit
+        };
+        var apiUrl = new URL("https://api.seniverse.com/v3/weather/now.json");
+        var urlParams = new URLSearchParams(params)
+        apiUrl = apiUrl + '?' + urlParams.toString();
+
+
+        var url = 'https://picsum.photos/150/200'; //http://127.0.0.1:9090/ceshi/14.jpg 
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var blob = xhr.response;
+                console.log(xhr);
+                var contentType = xhr.getResponseHeader('Content-Type');
+                createElementTodownload(blob, filename = '')
+
+            }
+        }
+        xhr.ontimeout = function (e) {
+            // XMLHttpRequest 超时。在此做某事。
+            console.log('XMLHttpRequest 超时。在此做某事。', e);
+        };
+        xhr.open("GET", apiUrl, true);
+        // xhr.timeout = 1; // 超时时间，单位是毫秒
+        // xhr.setRequestHeader("Content-Type", "image/jpeg");
+        xhr.setRequestHeader("Content-Type", 'application/json;charset=utf-8');
+        xhr.responseType = 'blob';
+        xhr.send()
+        // setTimeout(() => {
+        //     // 中断请求
+        //     console.log('中断请求');
+        //     // xhr.abort();
+        // }, 3000);
+
+    }
+
+    function queryWeather() {
+        var data = {
+            postData: 'your_data_here',
+            anotherData: 'more_data'
+        };
+
+        var key = 'STZM3wOV_mjH8QsjJ';
+        var location = '上海';
+        var language = 'zh-Hans';
+        var unit = 'c';
+        var params = {
+            key,
+            location,
+            language,
+            unit
+        };
+
+        var apiUrl = new URL("https://api.seniverse.com/v3/weather/now.json");
+        var urlParams = new URLSearchParams(params);
+
+        // 将查询参数附加到 API URL
+        apiUrl = apiUrl + '?' + urlParams.toString();
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', apiUrl, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    // 在这里处理响应数据
+                    console.log(response);
+                } else {
+                    // 处理错误情况
+                    console.error('请求失败：', xhr.status, xhr);
+                }
+            }
+        };
+
+        xhr.send(JSON.stringify(data));
+    }
+</script>
+
+<style>
+    /* .tab-content can be styled as you like */
+</style>

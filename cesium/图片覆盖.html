@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>图片覆盖</title>
+    <!-- <link href="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Widgets/widgets.css"
+        rel="stylesheet" />
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script> -->
+    <!-- 本地 -->
+    <!-- <link rel="stylesheet" href="./Cesium/Widgets/widgets.css"> -->
+    <!-- <script type=""  src="./Cesium/Cesium.js"></script> -->
+    <link rel="stylesheet" href="./CesiumUnminified/Widgets/widgets.css">
+    <script type=""  src="./CesiumUnminified/Cesium.js"></script>
+</head>
+
+<body style="margin: 0px; width: 100%; height: 100%">
+    <div id="cesiumContainer" style="width: 100%; height: 100%; position: absolute"></div>
+</body>
+<script>
+    var url;
+    Cesium.Ion.defaultAccessToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzRiNzNkYS0zZTRmLTRhOTMtODFlNS0zOWFhN2FmYzZmYjkiLCJpZCI6MTUyMTEwLCJpYXQiOjE2ODg2OTYyMDl9.sWkoSUmLFPfbMTMFgAZeQKjBQERg-TZPBBtIN34sDNQ";
+    var viewer = new Cesium.Viewer("cesiumContainer", {
+        selectionIndicator: false, //关闭绿色点击框
+        //需要进行可视化的数据源的集合
+        animation: false, //是否显示动画控件
+        timeline: false, //是否显示时间线控件
+        shouldAnimate: false,
+        homeButton: false, //是否显示Home按钮
+        fullscreenButton: false, //是否显示全屏按钮
+        baseLayerPicker: false, //是否显示图层选择控件
+        geocoder: false, //是否显示地名查找控件
+        sceneModePicker: false, //是否显示投影方式控件
+        navigationHelpButton: false, //是否显示帮助信息控件
+        infoBox: false, //是否显示点击要素之后显示的信息
+        requestRenderMode: true, //启用请求渲染模式
+        scene3DOnly: false, //每个几何实例将只能以3D渲染以节省GPU内存
+        sceneMode: 3, //初始场景模式 1 2D模式 2 2D循环模式 3 3D模式  Cesium.SceneMode
+        fullscreenElement: document.body, //全屏时渲染的HTML元素 暂时没发现用处
+        // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        //     url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+        // }),
+        // 天地图地形
+        terrainProvider: new Cesium.CesiumTerrainProvider({
+            url: "http://data.mars3d.cn/terrain",
+        }),
+    });
+
+
+
+    //#region  图片四个点位置
+    const topLeft = {
+        longitude: 116.313969,
+        latitude: 39.896964,
+    };
+    const topRight = {
+        longitude: 116.329297,
+        latitude: 39.897618,
+    };
+    const bottomRight = {
+        longitude: 116.329920,
+        latitude: 39.887897,
+    };
+    const bottomLeft = {
+        longitude: 116.313986,
+        latitude: 39.887171,
+    };
+    // const coverRectangle = new Cesium.Rectangle.fromDegrees(
+    //     Math.min(topLeft.longitude, bottomLeft.longitude),
+    //     Math.min(bottomLeft.latitude, bottomRight.latitude),
+    //     Math.max(topRight.longitude, bottomRight.longitude),
+    //     Math.max(topLeft.latitude, topRight.latitude)
+    // );
+
+    const defaultImageryLayerCutout = Cesium.Rectangle.fromDegrees(
+        -90,
+        20,
+        -70,
+        40
+    );
+    //#endregion
+
+    // Cut a rectangle out of the base layer
+    const layers = viewer.imageryLayers;
+    console.log(layers);
+    const firstimageryBaseLayer = layers.get(0);
+    console.log('firstimageryBaseLayer', layers);
+    // const imageryBaseLayer = layers.get(0);
+
+    // // 创建图像基础图层
+    const imageryBaseLayer = new Cesium.ImageryLayer(
+        new Cesium.ArcGisMapServerImageryProvider({
+            url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+            rectangle: Cesium.Rectangle.fromDegrees(
+                Math.min(topLeft.longitude, bottomLeft.longitude),
+                Math.min(bottomLeft.latitude, bottomRight.latitude),
+                Math.max(topRight.longitude, bottomRight.longitude),
+                Math.max(topLeft.latitude, topRight.latitude)
+            ),
+        })
+    );
+    // 将图像基础图层添加到图层集合中
+    layers.add(imageryBaseLayer);
+
+    imageryBaseLayer.cutoutRectangle =
+    defaultImageryLayerCutout; //在 imageryBaseLayer 图层上创建一个裁剪矩形。裁剪矩形可以用来在显示图层的时候裁剪掉一部分区域，只显示裁剪矩形内的部分。
+    const logo = new Cesium.ImageryLayer(
+        new Cesium.SingleTileImageryProvider({
+            url: "https://picsum.photos/150/200",
+            rectangle: defaultImageryLayerCutout,
+        }), {
+            alpha: 0.1,
+            show: true,
+        },
+
+    );
+    layers.add(logo);
+    // 隐藏覆盖图片
+    // logo.show = false;
+
+
+    //#region   设置相机位置
+    // 设置默认相机视角
+    viewer.camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(
+            (topLeft.longitude + bottomRight.longitude) / 2, // 计算中心经度
+            (topLeft.latitude + bottomRight.latitude) / 2, // 计算中心纬度
+            10000 // 相机高度（单位：米）
+        ),
+        // 方向，俯视和仰视的视角
+        orientation: {
+            heading: Cesium.Math.toRadians(0), // 设置偏航角度（单位：弧度）
+            pitch: Cesium.Math.toRadians(-90), // 设置俯仰角度（单位：弧度）
+            roll: Cesium.Math.toRadians(0) // 设置横滚角度（单位：弧度）
+        }
+    });
+    //#endregion
+</script>

@@ -1,0 +1,40 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-23 15:15:22
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-02-04 11:21:59
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+<script>
+    const fragment = document.createDocumentFragment();
+
+    // 创建 DOM 元素
+    const div1 = document.createElement("div");
+    div1.textContent = "Hello";
+
+    const div2 = document.createElement("div");
+    div2.textContent = "World";
+
+    // 将元素添加到文档片段中
+    fragment.appendChild(div1);
+    fragment.appendChild(div2);
+
+    // 将文档片段一次性添加到文档中
+    document.body.appendChild(fragment);
+</script>

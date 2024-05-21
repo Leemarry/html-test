@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>read数据</title>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Widgets/widgets.css"
+        rel="stylesheet" />
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script>
+</head>
+
+<body style="margin: 0px; width: 100%; height: 100%">
+    <div>
+        <button onclick="moveData()">移除</button>
+    </div>
+    <div id="cesiumContainer" style="width: 100%; height: 100%; position: absolute"></div>
+</body>
+
+
+</html>
+
+<script>
+    var url;
+    Cesium.Ion.defaultAccessToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ODBiMzY4OS1iYmIwLTQwM2UtYjRmOS05NmE4ZTRlNDdhYWEiLCJpZCI6MTUyMTEwLCJpYXQiOjE3MDk3NzI2MzJ9.PwUC2tyDTy4MCHzRspKzCvAJgZuvN9z2sjcQCC_iLJs";
+    var viewer = new Cesium.Viewer("cesiumContainer", {
+        selectionIndicator: false, //关闭绿色点击框
+        //需要进行可视化的数据源的集合
+        animation: false, //是否显示动画控件
+        timeline: false, //是否显示时间线控件
+        shouldAnimate: false,
+        homeButton: false, //是否显示Home按钮
+        fullscreenButton: false, //是否显示全屏按钮
+        baseLayerPicker: false, //是否显示图层选择控件
+        geocoder: false, //是否显示地名查找控件
+        sceneModePicker: false, //是否显示投影方式控件
+        navigationHelpButton: false, //是否显示帮助信息控件
+        infoBox: false, //是否显示点击要素之后显示的信息
+        requestRenderMode: true, //启用请求渲染模式
+        scene3DOnly: false, //每个几何实例将只能以3D渲染以节省GPU内存
+        sceneMode: 3, //初始场景模式 1 2D模式 2 2D循环模式 3 3D模式  Cesium.SceneMode
+        fullscreenElement: document.body, //全屏时渲染的HTML元素 暂时没发现用处
+        //添加本地瓦片地图
+        imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+            url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+        }),
+    });
+
+    if (Cesium.FeatureDetection.supportsImageRenderingPixelated()) { //判断是否支持图像渲染像素化处理
+        viewer.resolutionScale = window.devicePixelRatio;
+    }
+    //是否开启抗锯齿
+    viewer.scene.fxaa = true; // 关闭fxaa 最新的cesium已经将fxaa移到PostProcessStageCollection
+    viewer.scene.postProcessStages.fxaa.enabled = true;
+
+
+    // var  imageryProvider = new Cesium.ArcGisMapServerImageryProvider({
+    //     url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+    // })
+    // viewer.imageryLayers.addImageryProvider(imageryProvider);
+    // var imageryProvider = new Cesium.WebMapServiceImageryProvider({
+    //             // 这里是你的 geoserver服务点击查看图层的 url
+    //             // url: '/geoserver/work/wms?',  // 这里改为代理地址
+    //             url: 'http://localhost:8683/geoserver/work/wms?',
+    //             // 这里是自定义的图层名称
+    //             layers: 'work:yingDeFactory',  // 要对应说 geoserver 图层
+    //             parameters: {
+    //                 service: 'WMS',
+    //                 format: 'image/png',
+    //                 transparent: true,
+    //                 // style : 'raster',
+    //             },
+    //         });
+
+    //#region  kml
+
+    let kmlUrl1 = "http://127.0.0.1:9090/ceshi/kml/1.kml";
+    let kmlUrl2 = "http://127.0.0.1:9090/ceshi/kml/2.kml";
+    let kmlUrl3 = "http://127.0.0.1:9090/ceshi/kml/3.kml";
+    let kmlUrl4 = "http://127.0.0.1:9090/ceshi/kml/4.kml";
+    let kmlUrl5 = "http://127.0.0.1:9090/ceshi/kml/5.kml";
+    let kmlUrl6 = "http://127.0.0.1:9090/ceshi/kml/6.kml";
+    let kmlUrl7 = "http://127.0.0.1:9090/ceshi/kml/7.kml";
+    let kmlUrl8 = "http://127.0.0.1:9090/ceshi/kml/8.kml";
+
+
+
+
+
+    //     const dataSourcePromise1 = Cesium.KmlDataSource.load(kmlUrl1, {
+    //         camera: viewer.scene.camera,
+    //         canvas: viewer.scene.canvas,
+
+    //     });
+    //     dataSourcePromise1.then(function(dataSource) {
+    //     dataSource.id = 'dataSource1'; // Set a unique ID for the data source
+    //     viewer.dataSources.add(dataSource);
+    // });
+
+    //     // viewer.dataSources.add(dataSourcePromise1);
+    //     const dataSourcePromise2 = Cesium.KmlDataSource.load(kmlUrl2);
+    //     console.log('dataSourcePromise2',dataSourcePromise2);
+    //     viewer.dataSources.add(dataSourcePromise2);
+
+    //     const dataSourcePromise3 = Cesium.KmlDataSource.load(kmlUrl3);
+    //     viewer.dataSources.add(dataSourcePromise3);
+
+    //     const dataSourcePromise4 = Cesium.KmlDataSource.load(kmlUrl4);
+    //     viewer.dataSources.add(dataSourcePromise4);
+
+    //     const dataSourcePromise5 = Cesium.KmlDataSource.load(kmlUrl5);
+    //     viewer.dataSources.add(dataSourcePromise5);
+
+    //     const dataSourcePromise6 = Cesium.KmlDataSource.load(kmlUrl6);
+    //     viewer.dataSources.add(dataSourcePromise6);
+
+    //     const dataSourcePromise7 = Cesium.KmlDataSource.load(kmlUrl7);
+    //     viewer.dataSources.add(dataSourcePromise7);
+
+    //     const dataSourcePromise8 = Cesium.KmlDataSource.load(kmlUrl8);
+    //     viewer.dataSources.add(dataSourcePromise8);
+
+    //     viewer.zoomTo(dataSourcePromise1);
+
+
+
+
+
+
+
+    const dataSourcePromises = [];
+    const kmlUrls = [
+        "http://127.0.0.1:9090/ceshi/kml/1.kml",
+        "http://127.0.0.1:9090/ceshi/kml/2.kml",
+        "http://127.0.0.1:9090/ceshi/kml/3.kml",
+        "http://127.0.0.1:9090/ceshi/kml/4.kml",
+        "http://127.0.0.1:9090/ceshi/kml/5.kml",
+        "http://127.0.0.1:9090/ceshi/kml/6.kml",
+        "http://127.0.0.1:9090/ceshi/kml/7.kml",
+        "http://127.0.0.1:9090/ceshi/kml/8.kml"
+    ];
+
+
+
+    // kmlUrls.forEach(function (kmlUrl, index) {
+
+    //     let addData = Cesium.KmlDataSource.load(kmlUrl)
+    //     addData.then(function (dataSource) {
+    //         viewer.dataSources.add(dataSource)
+    //         viewer.zoomTo(dataSource) // 定位到该dataSource
+
+    //     })
+
+    //     dataSourcePromises.push(addData);
+    // });
+
+
+    //#region 循环添加id标识符
+
+    //#endregion
+    kmlUrls.forEach(function (kmlUrl, index) {
+    let addData = Cesium.KmlDataSource.load(kmlUrl);
+    addData.then(function (dataSource) {
+        dataSource.id = index; // Assign ID to the data source
+        viewer.dataSources.add(dataSource);
+        viewer.zoomTo(dataSource); // Zoom to the dataSource
+
+        // Attach click event to the entities in the dataSource
+        dataSource.entities.values.forEach(entity => {
+            entity.description = 'Data source ID: ' + index; // Attach a description for identification
+            entity.isPickable = true; // Ensure entities are pickable
+            entity.dataSourceId = index; // Attach data source ID to the entity
+            entity.name = 'source'+index; // Attach data source ID to the entity
+        });
+
+        console.log(dataSource,dataSource.entities);
+
+        // Click event handler for the viewer
+        viewer.screenSpaceEventHandler.setInputAction(function (movement) {
+            var pickedObject = viewer.scene.pick(movement.position);
+            if (Cesium.defined(pickedObject)) {
+                var entity = pickedObject.id;
+                console.log(pickedObject);
+                if (Cesium.defined(entity) && Cesium.defined(entity.dataSourceId)) {
+                    console.log('Clicked on data source with ID: ' + entity.dataSourceId);
+                    // Perform actions based on the clicked data source ID
+                }
+            }
+        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    });
+
+    dataSourcePromises.push(addData);
+});
+
+    function moveData() {
+        console.log('ss');
+        removeDataSources()
+    }
+
+
+    function removeDataSources() {
+        dataSourcePromises.forEach(function (dataSourcePromise) {
+            dataSourcePromise.then(function (dataSource) {
+                viewer.dataSources.remove(dataSource);
+            });
+        });
+    }
+
+
+    //#endregion
+
+    // Assuming viewer is your Cesium viewer object
+
+    // Add click event listener to the viewer
+    // viewer.screenSpaceEventHandler.setInputAction(function onLeftClick(movement) {
+    //     // Get the clicked position
+    //     var pickedObject = viewer.scene.pick(movement.position);
+
+    //     // Check if an object was picked
+    //     if (Cesium.defined(pickedObject)) {
+    //         // var dataSource = pickedObject.id && pickedObject.id.dataSource;
+    //         console.log("Clicked on KML data source:", pickedObject);
+    //         // if (dataSource instanceof Cesium.KmlDataSource) {
+    //         //     // Determine which data source was clicked
+
+    //         // }
+    //     }
+    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+
+
+
+
+    //#region  监听地图的鼠标点击事件
+
+
+    // 监听地图的鼠标点击事件
+    // viewer.screenSpaceEventHandler.setInputAction(function onLeftClick(movement) {
+    //     // 获取点击位置的屏幕坐标
+    //     var clickPosition = movement.position;
+
+    //     // 获取点击位置的地理坐标
+    //     var pickRay = viewer.camera.getPickRay(clickPosition);
+    //     var cartesian = viewer.scene.globe.pick(pickRay, viewer.scene);
+    //     if (cartesian) {
+    //         // 获取数据源的数量
+    //         var dataSourceCount = viewer.dataSources.length;
+
+    //         // 遍历每个数据源，检查点击位置是否在其实体范围内
+    //         for (var i = 0; i < dataSourceCount; i++) {
+    //             var dataSource = viewer.dataSources.get(i);
+    //             if (dataSource.entities) {
+    //                 dataSource.entities.values.forEach(function(entity) {
+    //                     // 检查实体类型是否为矩形
+    //                console.log(' 检查实体类型是否为矩形',entity);
+    //                 });
+    //             }
+    //         }
+    //     }
+    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    // viewer.screenSpaceEventHandler.setInputAction(function (movement) {
+    //     var cartesian = viewer.camera.pickEllipsoid(movement.position, viewer.scene.globe.ellipsoid);
+    //     if (cartesian) {
+    //         var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+    //         var longitude = Cesium.Math.toDegrees(cartographic.longitude);
+    //         var latitude = Cesium.Math.toDegrees(cartographic.latitude);
+    //         var position = {
+    //             x: movement.position.x,
+    //             y: movement.position.y,
+    //             longitude: longitude,
+    //             latitude: latitude
+    //         };
+    //         console.log("点击位置屏幕坐标：", position);
+    //     }
+    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+
+
+    //#endregion
+
+
+
+
+
+    //#region  cmzl
+
+    // const czml = [{
+    //         id: "document",
+    //         name: "CZML Colors",
+    //         version: "1.0",
+    //     },
+    //     {
+    //         id: "rgba",
+    //         name: "Rectangle with outline using RGBA Colors",
+    //         rectangle: {
+    //             coordinates: {
+    //                 wsenDegrees: [-120, 40, -110, 50],
+    //             },
+    //             fill: true,
+    //             material: {
+    //                 solidColor: {
+    //                     color: {
+    //                         rgba: [255, 0, 0, 100],
+    //                     },
+    //                 },
+    //             },
+    //             height: 0, // disables ground clamping, needed for outlines
+    //             outline: true,
+    //             outlineColor: {
+    //                 rgba: [0, 0, 0, 255],
+    //             },
+    //         },
+    //     },
+    //     {
+    //         id: "rgbaf",
+    //         name: "Rectangle using RGBAF Colors",
+    //         rectangle: {
+    //             coordinates: {
+    //                 wsenDegrees: [-100, 40, -90, 50]
+    //             },
+    //             fill: true,
+    //             material: {
+    //                 solidColor: {
+    //                     color: {
+    //                         rgbaf: [1, 0, 0, 0.39],
+    //                     },
+    //                 },
+    //             },
+    //             height: 0, // disables ground clamping, needed for outlines
+    //             outline: true,
+    //             outlineColor: {
+    //                 rgba: [0, 0, 0, 255],
+    //             },
+    //         },
+    //     },
+    // ];
+
+    //#endregion
+
+    // const dataSourcePromise = Cesium.CzmlDataSource.load(czml);
+    // viewer.dataSources.add(dataSourcePromise);
+    // viewer.zoomTo(dataSourcePromise);
+
+
+
+
+    //飞到指定地方
+    // viewer.scene.camera.flyTo({
+    //     destination: Cesium.Cartesian3.fromDegrees(112.26670, 31.01892, 1000),
+    //     orientation: {
+    //         heading: Cesium.Math.toRadians(90), // 设置偏航角度（单位：弧度）
+    //         pitch: Cesium.Math.toRadians(-90), // 设置俯仰角度（单位：弧度）
+    //         roll: Cesium.Math.toRadians(0) // 设置横滚角度（单位：弧度）
+    //     }
+    // })
+    // 设置默认相机视角
+    // viewer.camera.setView({
+    //     destination: Cesium.Cartesian3.fromDegrees(112.26670, 31.01892, 1000),
+    //     // 方向，俯视和仰视的视角
+    //     orientation: {
+    //         heading: Cesium.Math.toRadians(0), // 设置偏航角度（单位：弧度）
+    //         pitch: Cesium.Math.toRadians(-90), // 设置俯仰角度（单位：弧度）
+    //         roll: Cesium.Math.toRadians(0) // 设置横滚角度（单位：弧度）
+    //     }
+    // });
+</script>

@@ -1,0 +1,55 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-08 14:50:16
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-08 17:44:52
+-->
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const domains = ["https://cdn.topskys.org/v0", "https://cdn.topskys1.org/v1", "https://cdn.topskys2.org/v2"]; 
+        const maxRetry=3;
+        const retryInfo={};
+        window.addEventListener("error", e => {
+            const tag = e.target
+            console.log(tag);
+            if (tag.tagName === 'SCRIPT' && !(e instanceof ErrorEvent)) {
+                console.log("JS 加载错误")
+                const url=new URL(tag.src)
+                if(!retryInfo[url.pathname]){
+                    retryInfo[url.pathname]={
+                        times:0,
+                        nextIndex:0,
+                    }
+                }
+                const info=retryInfo[url.pathname]; 
+                 const script=document.createElement("script")
+                 url.host=domains[info.nextIndex]; 
+                 console.log();
+                 document.write(`<script src="${url.toString()}">\<\/script>`); 
+
+                 script.src=url.toString(); 
+                 document.body.insertBefore(script,tag); 
+
+                info.times++;
+                info.nextIndex=(info.nextIndex+1)%domains.length;
+            }
+        }, true);
+    </script>
+</head>
+ 
+<body>
+    <script src="https://cdn.topskys.org/v0/js.js"></script>
+    <script src="https://cdn.xx1.cn/y.js"></script>
+    <script src="https://cdn.xx2.com/loadjs.js"></script>
+</body>
+ 
+</html>

@@ -1,0 +1,40 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-31 10:26:27
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-31 10:43:27
+-->
+<html>
+  <head>
+    <title>css filter issue</title>
+
+  </head>
+  <body>
+  
+    <!-- <style>
+        .filter::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            backdrop-filter: blur(2px);
+        }
+    </style>
+<div style="height: 18000px;width: 300px;background-image: url(https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg);">
+    <div class="filter" style="position: fixed;top:0;left: 0; height: 300px;width: 300px;"></div>
+</div> -->
+
+<div style="height: 18000px;width: 300px;background-image: url(https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg);">
+    <div
+        style="backdrop-filter:blur(2px); height: 300px; width:300px;">
+    </div>
+    <div style="position: fixed;top:0;left: 0; height: 300px;width: 300px;"></div>
+</div>
+
+
+  </body>
+</html>

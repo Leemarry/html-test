@@ -1,0 +1,79 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-02-18 18:01:11
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-02-26 17:11:42
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 500px;
+            background-color: antiquewhite;
+            position: absolute;
+            background-image: url("https://top-mvp-img.xhscdn.com/miniimg/1000g1i81etmd8is4o0003oqd6mc015uq3uh1hcg");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <button>重置</button>
+    <div>
+        <img style=" width: 100%; visibility: hidden;"
+            src="https://top-mvp-img.xhscdn.com/miniimg/1000g1i81etmd8is4o0003oqd6mc015uq3uh1hcg" alt=""></div>
+</body>
+<script>
+    var button = document.querySelector('button')
+    button.onclick = function () {
+        divMove.style.top = 40 + 'px'
+        divMove.style.left = 10 + 'px'
+        scale = 1
+        divMove.style.transform = `scale(${scale})`
+
+    }
+
+    var divMove = document.querySelector('div')
+    divMove.onmousedown = function (e) {
+        console.log('oooo');
+        var startX = e.clientX;
+        var startY = e.clientY;
+        var left = parseInt(divMove.style.left) || 0;
+    var top = parseInt(divMove.style.top) || 0;
+        window.onmousemove = function (event) {
+
+            var deltaX = event.clientX - startX;
+            var deltaY = event.clientY - startY;
+
+            console.log('水平移动距离：', left, '垂直移动距离：', deltaY);
+            divMove.style.left = left + deltaX + 'px' //event.clientX-e.target.offsetWidth/2+'px'
+            divMove.style.top = top + deltaY + 'px' //event.clientY-e.target.offsetHeight/2+'px'
+        }
+    }
+    divMove.onmouseup = function () {
+        window.onmousemove = null
+    }
+    let scale = 1
+    divMove.onwheel = function (e) {
+
+        if (e.wheelDelta > 0) {
+            scale += 0.05
+            divMove.style.transform = `scale(${scale})`
+        } else {
+            scale -= 0.05
+            divMove.style.transform = `scale(${scale})`
+        }
+    }
+</script>
+
+</html>

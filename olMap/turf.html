@@ -1,0 +1,57 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-02-03 14:00:40
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-03-26 14:28:48
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script src="./turf.min.js"></script>
+<script>
+
+// var features = turf.featureCollection([
+//             turf.point([-97.522259, 35.4691]),
+//             turf.point([-97.502754, 35.463455]),
+//             turf.point([-97.508269, 35.463245])
+//         ]);
+
+//         var center = turf.center(features);
+//         console.log(center, 'center');
+
+
+
+        var center = [116.439049, 39.89823];
+var radius = 1;
+var options = {steps: 4, units: 'kilometers', properties: {foo: 'bar'}};
+var circle = turf.circle(center, radius, options);
+console.log(center);
+console.log(circle);
+
+// 东北角：39.907239009009004, 116.45079194256633
+// 西北角：39.907239009009004, 116.42730605743367
+// 西南角：39.88922099099099, 116.42730605743367
+// 东南角：39.88922099099099, 116.45079194256633
+
+
+// var features = turf.featureCollection([
+//   turf.point( [116.45079194256633, 39.907239009009004]),
+//   turf.point( [116.42730605743367, 39.907239009009004]),
+//   turf.point( [116.42730605743367, 39.88922099099099]),
+//   turf.point( [116.45079194256633,39.88922099099099])
+// ]);
+
+// var center = turf.center(features);
+// console.log(center);
+</script>

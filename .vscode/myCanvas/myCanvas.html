@@ -1,0 +1,37 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-16 13:27:53
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-16 13:27:54
+-->
+<!DOCTYPE html>
+<html>
+<body>
+
+<p id="pp">要使用的图像：</p>
+<img id="tulip" src="/i/eg_tulip.jpg" alt="The Tulip" />
+
+<p>画布：</p>
+<canvas id="myCanvas" width="500" height="300" style="border:1px solid #d3d3d3;background:#ffffff;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<script>
+
+
+
+
+let canvas = document.getElementById('myCanvas');
+let ctx = canvas.getContext('2d');
+
+let image = new Image();
+image.onload = function() {
+  ctx.drawImage(image, 11, 50);
+};
+image.src = '/i/eg_tulip.jpg';
+</script>
+
+</body>
+</html>

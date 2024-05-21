@@ -1,0 +1,42 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-02-04 15:44:24
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-02-04 15:54:54
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="div1">sss</div>
+<div id="div2">ss</div>
+<div id="div3" ></div>
+    
+</body>
+</html>
+<script>
+function say1() {
+    const url = 'http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=2&text=我是杨少通!Hello World!';
+    const audio = new Audio(url);
+    audio.src = url;
+    audio.play();
+}
+
+const div1 = document.querySelector('.div1')
+div1.onclick= function say1() {
+    const url = 'http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=2&text=我是杨少通!Hello World!';
+    const audio = new Audio(url);
+    audio.src = url;
+    audio.play();
+}
+
+
+
+</script>

@@ -1,0 +1,220 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-02-18 17:50:03
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-02-28 10:10:04
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="image-container" id="imageContainer">
+    <img src="./14.jpg" alt="Image" id="image">
+  </div>
+</body>
+
+</html>
+<script>
+  var imageContainer = document.getElementById("imageContainer");
+  var image = document.getElementById("image");
+  var scale = 1;
+
+  var isDragging = false;
+  var offsetX = 0;
+  var offsetY = 0;
+
+  imageContainer.addEventListener("wheel", function (event) {
+    event.preventDefault();
+
+    var lastLeft = parseFloat(image.style.left) || 0; // 获取当前的 left 值
+    var lastTop = parseFloat(image.style.top) || 0; // 获取当前的 top 值
+
+   // 记录上一次的缩放比例
+   var lastScale = scale;
+
+    scale += event.deltaY * -0.001;
+    scale = Math.min(Math.max(1, scale), 2);
+   image.style.transform = "scale(" + scale + ")";
+    // 计算缩放比例变化
+    var scaleChange = scale - lastScale;
+    if(scaleChange ==0&&scale!=2){
+      image.style.transition = 'transform 0.3s';
+      image.style.left = 0+"px"
+      image.style.top = 0 + "px";
+    }
+    if(scale<lastScale){
+
+      
+console.log('缩小',scaleChange);
+image.style.transition = 'transform 0.3s,left 0.25s, top 0.25s';
+
+
+    // // // 根据缩放比例变化来调整 left 和 top 属性值
+    // image.style.left = (lastLeft + (150 * scaleChange)) + "px";
+    // image.style.top = (lastTop + (100 * scaleChange)) + "px";
+
+
+    const width = image.offsetWidth
+
+const scales = image.style.transform;
+// 使用正则表达式匹配 transform 中的数组值
+var transformArray = scales.match(/\(([^)]+)\)/)[1].split(',').map(Number)[0];
+var imageContainerWidth = imageContainer.clientWidth;
+var imageContainerHeight = imageContainer.clientHeight;
+var maxOffsetX = (imageContainerWidth * (transformArray - 1) / 2);
+var maxOffsetY = (imageContainerHeight * (transformArray - 1) / 2);
+var left = parseInt(image.style.left) || 0;
+var top = parseInt(image.style.top) || 0;
+
+var offsetX =   Math.min(Math.max(left, -maxOffsetX), maxOffsetX);
+var offsetY = Math.min(Math.max(top, -maxOffsetY), maxOffsetY);
+const multiplier=imageContainerWidth * (transformArray - 1) ;
+image.style.left = Math.round(offsetX) + 'px' //event.clientX-e.target.offsetWidth/2+'px'
+image.style.top =  Math.round(offsetY) + 'px' //event.clientY-e.target.offsetHeight/2+'px'  
+
+
+//逻辑错误  （缩小或者放大比例  left-（1.2 -上一次1.6）*left   (imageContainerWidth * (transformArray - 1))
+
+// 使用正则表达式匹配 transform 中的数组值
+var transformArray = scales.match(/\(([^)]+)\)/)[1].split(',').map(Number)[0];
+
+console.log(transformArray);
+// console.log(scales, width, 'ss');
+
+
+    }
+
+
+
+// const width = image.offsetWidth
+
+// const scales = image.style.transform;
+// // 使用正则表达式匹配 transform 中的数组值
+// var transformArray = scales.match(/\(([^)]+)\)/)[1].split(',').map(Number)[0];
+// var imageContainerWidth = imageContainer.clientWidth;
+// var imageContainerHeight = imageContainer.clientHeight;
+// var maxOffsetX = (imageContainerWidth * (transformArray - 1) / 2);
+// var maxOffsetY = (imageContainerHeight * (transformArray - 1) / 2);
+// var left = parseInt(image.style.left) || 0;
+// var top = parseInt(image.style.top) || 0;
+
+// var offsetX =   Math.min(Math.max(left, -maxOffsetX), maxOffsetX);
+// var offsetY = Math.min(Math.max(top, -maxOffsetY), maxOffsetY);
+// const multiplier=imageContainerWidth * (transformArray - 1) ;
+// image.style.left = Math.round(offsetX) + 'px' //event.clientX-e.target.offsetWidth/2+'px'
+// image.style.top =  Math.round(offsetY) + 'px' //event.clientY-e.target.offsetHeight/2+'px'  
+
+
+// //逻辑错误  （缩小或者放大比例  left-（1.2 -上一次1.6）*left   (imageContainerWidth * (transformArray - 1))
+
+// // 使用正则表达式匹配 transform 中的数组值
+// var transformArray = scales.match(/\(([^)]+)\)/)[1].split(',').map(Number)[0];
+
+// console.log(transformArray);
+// console.log(scales, width, 'ss');
+
+
+  });
+
+//
+
+
+// const width = image.offsetWidth
+
+// const scales = image.style.transform;
+// // 使用正则表达式匹配 transform 中的数组值
+// var transformArray = scales.match(/\(([^)]+)\)/)[1].split(',').map(Number)[0];
+// var imageContainerWidth = imageContainer.clientWidth;
+// var imageContainerHeight = imageContainer.clientHeight;
+// var maxOffsetX = (imageContainerWidth * (transformArray - 1) / 2);
+// var maxOffsetY = (imageContainerHeight * (transformArray - 1) / 2);
+// var left = parseInt(image.style.left) || 0;
+// var top = parseInt(image.style.top) || 0;
+
+// var offsetX =   Math.min(Math.max(left, -maxOffsetX), maxOffsetX);
+// var offsetY = Math.min(Math.max(top, -maxOffsetY), maxOffsetY);
+// const multiplier=imageContainerWidth * (transformArray - 1) ;
+// image.style.left = Math.round(offsetX) + 'px' //event.clientX-e.target.offsetWidth/2+'px'
+// image.style.top =  Math.round(offsetY) + 'px' //event.clientY-e.target.offsetHeight/2+'px'  
+
+
+// //逻辑错误  （缩小或者放大比例  left-（1.2 -上一次1.6）*left   (imageContainerWidth * (transformArray - 1))
+
+// // 使用正则表达式匹配 transform 中的数组值
+// var transformArray = scales.match(/\(([^)]+)\)/)[1].split(',').map(Number)[0];
+
+// console.log(transformArray);
+// console.log(scales, width, 'ss');
+
+  //移动图片
+
+  image.onmousedown = function (e) {
+    e.preventDefault();
+    console.log('oooo');
+    var startX = e.clientX;
+    var startY = e.clientY;
+    var left = parseInt(image.style.left) || 0;
+    var top = parseInt(image.style.top) || 0;
+    window.onmousemove = function (event) {
+      var imageContainerWidth = imageContainer.clientWidth;
+      var imageContainerHeight = imageContainer.clientHeight;
+      image.style.transition = 'transform 0.3s';
+      const scales = image.style.transform;
+      
+      // 使用正则表达式匹配 transform 中的数组值
+      var transformArray = scales.match(/\(([^)]+)\)/)[1].split(',').map(Number)[0];
+
+      e.preventDefault();
+      var deltaX = left + event.clientX - startX;
+      var deltaY = top + event.clientY - startY;
+      console.log('父容器宽度：', imageContainerWidth)
+
+      var maxOffsetX = (imageContainerWidth * (transformArray - 1) / 2);
+      var maxOffsetY = (imageContainerHeight * (transformArray - 1) / 2);
+      // console.log('imageContainerWidth',imageContainerWidth,'transformArray',transformArray,'offsetXs',offsetXs);
+      // 最小为 0 最大为300  (父容器 / scale /2)  (300/2)
+      var offsetX = Math.min(Math.max(deltaX, -maxOffsetX), maxOffsetX);
+  
+      var offsetY = Math.min(Math.max(deltaY, -maxOffsetY), maxOffsetY);
+      console.log('水平移动距离：', offsetX, '垂直移动距离：', offsetY);
+      image.style.left = offsetX + 'px' //event.clientX-e.target.offsetWidth/2+'px'
+      image.style.top = offsetY + 'px' //event.clientY-e.target.offsetHeight/2+'px'
+    }
+  }
+  image.onmouseup = function () {
+    window.onmousemove = null
+  }
+</script>
+<style>
+  .image-container {
+
+    width: 300px;
+    height: 200px;
+    overflow: hidden;
+    position: fixed;
+    left: 300px;
+    top: 300px;
+    background-color: antiquewhite;
+  }
+
+  .image-container img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* transition: transform 0.3s; */
+    transform: scale(1);
+    /* transform-origin: left top; */
+    transform-origin: center;
+    transition:transform 0.3s ease ; /* 添加过渡效果 , left 0.25s, top 0.25s */  
+
+  }
+</style>

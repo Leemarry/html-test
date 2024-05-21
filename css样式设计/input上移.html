@@ -1,0 +1,137 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-03-26 08:40:53
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-04-09 13:17:15
+-->
+<!-- https://uiverse.io/elements -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="form__group field">
+        <input type="input" class="form__field" placeholder="Name" required="">
+        <label for="name" class="form__label">Name</label>
+    </div>
+</body>
+</html>
+
+<script>
+function calculateSquareCoordinates(lat0, lon0, squareSize) {
+    // 地球的平均周长（以米为单位）
+    const earthCircumference = 40075000;
+
+    // 一度纬度对应的距离（以米为单位）
+    const degreeLatDistance = earthCircumference / 360;
+
+    // 计算纬度差（以度为单位）
+    const deltaLatitude = squareSize / degreeLatDistance;
+
+    // 以中心点为中心的正方形四个角的经纬度坐标
+    const northeast = {
+        latitude: lat0 + deltaLatitude,
+        longitude: lon0 + (squareSize / (degreeLatDistance * Math.cos(lat0 * Math.PI / 180)))
+    };
+
+    const southeast = {
+        latitude: lat0 - deltaLatitude,
+        longitude: lon0 + (squareSize / (degreeLatDistance * Math.cos(lat0 * Math.PI / 180)))
+    };
+
+    const northwest = {
+        latitude: lat0 + deltaLatitude,
+        longitude: lon0 - (squareSize / (degreeLatDistance * Math.cos(lat0 * Math.PI / 180)))
+    };
+
+    const southwest = {
+        latitude: lat0 - deltaLatitude,
+        longitude: lon0 - (squareSize / (degreeLatDistance * Math.cos(lat0 * Math.PI / 180)))
+    };
+
+    return { northeast, southeast, northwest, southwest };
+}
+
+// 示例使用方法
+const centerLatitude = 39.89823; //40.7128; // 纽约市的纬度  [116.439049, 39.89823]
+const centerLongitude =116.439049; // -74.0060; // 纽约市的经度
+const squareSize = 1000; // 正方形边长，假设单位为米
+
+const squareCoordinates = calculateSquareCoordinates(centerLatitude, centerLongitude, squareSize);
+
+console.log("Northeast:", squareCoordinates.northeast);
+console.log("Southeast:", squareCoordinates.southeast);
+console.log("Northwest:", squareCoordinates.northwest);
+console.log("Southwest:", squareCoordinates.southwest);
+</script>
+
+<style>
+    .form__group {
+  position: relative;
+  padding: 20px 0 0;
+  width: 100%;
+  max-width: 180px;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 17px;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+
+.form__field::placeholder {
+  color: transparent;
+}
+
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 17px;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: #9b9b9b;
+  pointer-events: none;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #116399, #38caef);
+  border-image-slice: 1;
+}
+
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: #38caef;
+  font-weight: 700;
+}
+
+/* reset input */
+.form__field:required, .form__field:invalid {
+  box-shadow: none;
+}
+</style>

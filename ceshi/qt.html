@@ -1,0 +1,40 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-05-17 14:46:06
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-05-17 15:03:57
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>color拾取器</title>
+</head>
+
+<body>
+    <label for="colorWell">Color: <span id="currentColorLabel">褐色</span></label>
+    <input type="color" id="color">
+</body>
+<script>
+    document.querySelector("#color").onchange = function () {
+        document.getElementById('color').click();
+        const color = this.value; // 获取颜色值
+        const currentColorLabel = document.getElementById("currentColorLabel");
+        currentColorLabel.textContent = color; // 更新显示当前颜色的 label 内容
+
+
+        // 必须添加触发click事件否则不能通过点击确定按钮触发更改颜色  
+        document.body.style.background = this.value;
+    }
+
+    //     const color = event.target.value; // 获取颜色值
+    //   const currentColorLabel = document.getElementById("currentColorLabel");
+    //   currentColorLabel.textContent = color; // 更新显示当前颜色的 label 内容
+</script>
+
+</html>

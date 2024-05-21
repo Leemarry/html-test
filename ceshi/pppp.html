@@ -1,0 +1,53 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: likai
+ * @Date: 2024-05-20 15:37:50
+ * @LastEditors: likai
+ * @LastEditTime: 2024-05-20 15:49:43
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="op">
+        <div class="p">7777</div>
+        <!-- <div class="p">777ssss7</div> -->
+    </div>
+</body>
+
+</html>
+<style>
+    .op {
+        width: 500px;
+        height: 500px;
+        background-color: antiquewhite;
+        position: relative;
+    }
+
+    .p {
+        position: absolute;
+        top: 20px;
+    }
+</style>
+<script>
+    // const elements = document.querySelectorAll('.p');
+    // const pele = document.getElementsByClassName('p')
+    const element = document.querySelector('.p');
+    // console.log('p', pele, element);
+    const tops = element.offsetTop
+    console.log('top', tops);
+
+    const opRect = element.getBoundingClientRect()
+    const cRectLeft = opRect.left
+    const cRectTop = opRect.top
+    console.log('opRect', cRectTop);
+</script>

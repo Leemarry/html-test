@@ -1,0 +1,485 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2023-12-27 08:32:09
+ * @LastEditors: Andy
+ * @LastEditTime: 2023-12-27 08:33:15
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container1" class="resizable"></div>
+</body>
+</html>
+
+<style>
+    #container1{
+        width: 200px;
+        height: 200px;
+        background-color: antiquewhite;
+    }
+</style>
+<script>
+    bindResize();
+
+function bindResize() {
+	const el = document.getElementById('container1');
+	let els = el.style, x = y = 0;
+
+	el.addEventListener('mousemove', function(evt) {
+		if (el.offsetWidth - evt.offsetX <= 10) {
+			els.cursor = 'e-resize';
+		} else {
+			els.cursor = 'auto';
+		}})
+			
+		el.addEventListener('mousedown', function(evt) {
+			// 点击位置与元素右边框的距离，不变值
+			x = el.offsetWidth - evt.offsetX
+				
+			// 在支持 setCapture 捕捉焦点, 设置事件
+			el.setCapture ? (
+				el.setCapture(), 
+				el.onmousemove = function (ev) { mouseMove(ev || event) },
+				el.onmouseup = mouseUp
+			) : ($(document).bind("mousemove", mouseMove).bind("mouseup", mouseUp))
+				
+			// 阻止默认事件
+				evt.preventDefault();
+			})
+
+			// 鼠标移动事件
+			function mouseMove(evt) {
+				els.width = evt.offsetX + x + 'px';
+				
+				// 如果鼠标移出元素或屏幕外
+				if (evt.offsetX <= 0 || evt.offsetX >= document.body.clientWidth + 2) {
+					mouseUp()
+				}
+			}
+			
+			// 释放焦点，移除事件
+			function mouseUp() {
+				el.releaseCapture ? (
+					el.releaseCapture(), el.onmousemove = el.onmouseup = null
+				) : ($(document).unbind("mousemove", mouseMove).unbind("mouseup", mouseUp))
+			}
+		}
+
+</script>
+
+
+<!-- <div class="con">
+        <aside>
+          <div class="resize"></div>
+          <div class="line"></div>
+          <div class="section aside-section">
+            <div class="aside-flex">
+                    <div class="flex-item flex-fly">
+                        <el-card class="top-card" shadow="always" @click="clickmsg">
+                            <!== <i class="el-icon-menu"></i> ==>
+
+                            <el-statistic>
+                                <template slot="title">
+                                    飞行架次
+                                </template>
+                                <template slot="formatter">
+                                    {{flylist.length>0 ? flylist.length : '空'}}
+                                </template>
+                            </el-statistic>
+                        </el-card>
+                        <div class="table-card fly-table-card">
+                            <!== 骨架 ==>
+                            <el-skeleton :loading=" flyloading" animated :throttle="500">
+                                <template slot="template">
+                                    <el-card v-for="(item,index) of 8" :key="index" class="photo-card">
+
+                                        <!== 卡片的头部位 ==>
+                                        <template #header>
+                                            <div class="card-header">
+                                                <el-skeleton-item variant="h1" style="width: 100%" />
+                                            </div>
+                                        </template>
+                                        <!== 卡片显示的内容 ==>
+                                        <div>
+                                            <el-skeleton-item variant="p" style="width: 100%" />
+                                            <el-skeleton-item variant="p" style="width: 100%" />
+                                            <el-skeleton-item variant="p" style="width: 100%" />
+                                            <el-skeleton-item variant="p" style="width: 100%" />
+                                        </div>
+                                    </el-card>
+                                </template>
+                                <template>
+                                    <el-card v-for="(item,index) of flylist" :key="index">
+                                        <el-collapse>
+                                            <el-collapse-item class="el-collapse-items" @dblclick.native="switchingFlightSorties(item)">
+                                                <template slot="title">
+                                                    <div style="width:100%">
+                                                        <el-row class="bgbgbg">
+                                                            <el-col :span="3"><span>{{ index + 1 }}</span></el-col>
+                                                            <el-col :span="21">
+                                                                <div class="">
+                                                                    <span class="items-sn">{{ parseTime(item.aremdTime) }}</span>
+                                                                </div>
+                                                            </el-col>
+                                                        </el-row>
+                                                    </div>
+                                                </template>
+                                                <!== 下面 ==>
+                                                <div class="rowlist" style="background: rgba(0, 0, 0, 0);">
+                                                    <el-row>
+                                                        <el-col class="rowlisttitle" :span="24">
+                                                            <div style="">
+                                                                <span class="fontweight">无人机编号&nbsp;:&nbsp;</span>
+                                                                <span>{{item.uavId}}</span>
+                                                            </div>
+                                                        </el-col>
+                                                        <el-col :span="24">
+                                                            <div style="padding-left:10px;">
+                                                                <span class="fontweight">时间&nbsp;:&nbsp;</span>
+                                                                <span>{{time(item.aremdTime)}}</span>
+                                                                <!==  ==>
+                                                            </div>
+                                                        </el-col>
+                                                        <el-col :span="24">
+                                                            <div style="padding-left:10px;">
+                                                                <span class="fontweight">飞行&nbsp;:&nbsp;</span>
+                                                                <span>{{shuntime(item.flyingTime)}}</span>
+                                                            </div>
+                                                        </el-col>
+                                                        <!== place ==>
+                                                    </el-row>
+                                                </div>
+                                            </el-collapse-item>
+                                        </el-collapse>
+                                    </el-card>
+                                </template>
+                            </el-skeleton>
+
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <el-card class="top-card" shadow="always">
+
+                            <el-statistic title="图片架次">
+                                <template slot="formatter">
+                                    {{photolist.length>0 ? photolist.length : '空'}}
+                                </template>
+                            </el-statistic>
+                        </el-card>
+                        <div class="table-card">
+                            <!== 骨架 ==>
+                            <el-skeleton :loading="photoloading" animated :throttle="500">
+                                <template slot="template">
+                                    <el-card v-for="(item,index) of 6" :key="index" class="photo-card ">
+                                        <!== 卡片的头部位 ==>
+                                        <template #header>
+                                            <div class="card-header">
+                                                <el-row :gutter="5" style="width:100%">
+                                                    <el-col :span="10">
+                                                        <el-skeleton-item variant="h3" style="width: 100%" />
+                                                    </el-col>
+                                                    <el-col :span="14">
+                                                        <el-skeleton-item variant="h3" style="width: 100%" />
+                                                    </el-col>
+                                                </el-row>
+                                            </div>
+                                        </template>
+                                        <!== 卡片显示的内容 ==>
+                                        <div class="image-demo">
+                                            <!== 卡片中显示的内容 ==>
+                                            <el-row class="image-info" :gutter="3">
+                                                <el-col :xs="24" :sm="14" :md="14" :lg="14" :xl="24">
+                                                    <el-skeleton-item variant="image" style="width: 100%; height: 100px ;overflow: auto; " />
+                                                </el-col>
+                                                <el-col :xs="24" :sm="10" :md="10" :lg="10" :xl="24">
+                                                    <el-skeleton-item variant="text" style="width: 100%" />
+                                                </el-col>
+                                            </el-row>
+                                        </div>
+                                    </el-card>
+                                </template>
+                                <template>
+                                    <div v-if="photolist && photolist.length">
+                                        <el-card v-for="(item,index) of photolist" :key="index" class="photo-card ">
+                                            <!== 卡片的头部位 ==>
+                                            <template #header>
+                                                <div class="card-header">
+                                                    <el-checkbox v-if="islatestSortyInfo" v-model="item.checked" @change="photochangeChecked(item,$event)">{{`图片${item.id}`}}</el-checkbox>
+                                                    <div v-else>{{item.id}} </div>
+                                                    <div>
+                                                        <!== 修改按钮 ==>
+                                                        <el-button type="text" icon="el-icon-edit-outline" @click="openpage(item)" />
+                                                        <!== 删除按钮 ==>
+                                                        <el-button type="text" icon="el-icon-delete" @click="psendC(item)" />
+                                                        <!== 开关按钮 ==>
+                                                        <el-button type="text" icon="el-icon-switch-button" @click="otherpage()" />
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <!== 卡片显示的内容 ==>
+                                            <div class="image-demo">
+                                                <!== 卡片中显示的内容 ==>
+                                                <el-row :gutter="3" class="image-info">
+                                                    <el-col :xs="24" :sm="14" :md="14" :lg="14" :xl="24">
+                                                        <el-image style="width: 100%; height: 100px ;overflow: auto; " :src="item.pathImage" fit="cover" :preview-src-list="[item.pathImage]">
+                                                        </el-image>
+                                                    </el-col>
+                                                    <el-col class="demo-text" :xs="24" :sm="10" :md="10" :lg="10" :xl="24">
+                                                        <div>
+                                                            <!== <span class="fontweight">时间&nbsp;:&nbsp;</span>
+                                                                <span>{{time(item.aremdTime)}}</span> ==>
+                                                            <div>
+                                                                <span class="fontweight">时间&nbsp;:&nbsp;</span>
+                                                                {{parseTime(item.createDate)}}
+                                                            </div>
+                                                            <!== <div>{{parseTime(item.createDate)}}</div> ==>
+                                                            <div><span class="fontweight">经纬度&nbsp;:&nbsp;</span>
+                                                                {{`(${ (item.lng).toFixed(3)},${(item.lat).toFixed(3)})`}}</div>
+                                                        </div>
+                                                    </el-col>
+                                                </el-row>
+
+                                            </div>
+                                        </el-card>
+                                    </div>
+                                    <el-empty v-else description="暂无数据"></el-empty>
+                                </template>
+
+                            </el-skeleton>
+
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <el-card class="top-card el-card" shadow="always">
+                            <el-statistic title="洞斑架次" @click.native="getCoordinates">
+                                <template slot="formatter">
+                                    {{pointlist.length>0 ? pointlist.length : '空'}}
+                                </template>
+                            </el-statistic>
+                        </el-card>
+                        <div class="table-card parent-element" id="coio">
+                            <!== 骨架 ==>
+                            <el-skeleton :loading="pointloading" animated :throttle="500">
+                                <template slot="template">
+                                    <el-card v-for="(item,index) of 8" :key="index" class="photo-card ">
+                                        <!== 卡片的头部位 ==>
+                                        <template #header>
+                                            <div class="card-header">
+                                                <el-skeleton-item variant="h1" style="width: 100%" />
+                                            </div>
+                                        </template>
+                                        <!== 卡片显示的内容 ==>
+                                        <div style="height:80px;width:100%">
+                                            <el-row :gutter="20">
+                                                <el-col :span="16">
+                                                    <el-skeleton-item variant="h3" style="width: 100%" />
+                                                    <el-skeleton-item variant="p" style="width: 100%" />
+                                                </el-col>
+                                                <el-col :span="8">
+                                                    <el-skeleton-item variant="p" style="width: 100%" />
+                                                </el-col>
+                                            </el-row>
+                                        </div>
+                                    </el-card>
+                                </template>
+                                <template>
+                                    <div v-if="pointlist && pointlist.length">
+                                        <el-card v-for="(item,index) of pointlist" :key="index" :class="['point-card , child-element ' , `photoId-${item.photoId}`]">
+                                            <!== 卡片的头部位 ==>
+                                            <template #header>
+                                                <div class="card-header">
+                                                    <el-checkbox v-if="islatestSortyInfo" v-model="item.checked" @change="checked=>pointchangeChecked(item,checked)">{{`洞斑${item.id}`}}</el-checkbox>
+                                                    <div v-else>{{`洞斑${item.id}`}} </div>
+                                                    <div>
+                                                        <!== 修改按钮 ==>
+                                                        <el-button type="text" icon="el-icon-edit-outline" @click="startwebWorker" />
+                                                        <!== 删除按钮 ==>
+                                                        <el-button type="text" icon="el-icon-delete" />
+                                                        <!== 开关按钮 ==>
+                                                        <el-button type="text" icon="el-icon-switch-button" />
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <!== 卡片显示的内容 ==>
+                                            <div style="font-size: 12px;">
+                                                <div><span class="fontweight">经纬度&nbsp;:&nbsp;</span>
+                                                    {{`(${ (item.lng).toFixed(3)},${(item.lat).toFixed(3)})`}}</div>
+                                            </div>
+                                        </el-card>
+                                    </div>
+                                    <el-empty v-else description="暂无数据"></el-empty>
+                                </template>
+                            </el-skeleton>
+                        </div>
+                    </div>
+            </div>
+          </div>
+        </aside>
+        <main>
+            <div class="main">
+                <div class="resize-out">
+                    <div class="resize-bottom"></div>
+                </div>
+
+               
+                <div class="linse"></div>
+                <div class="sectiontext">11111</div>
+                
+              </div>
+              <footer >
+             
+                <section>bottom</section>
+              </footer>
+        </main>
+      </div> -->
+
+
+      // //   对象
+// // #region外层 布局
+// .con {
+//   display: flex;
+//   outline: 4px solid rosybrown;
+//   height: 100%;
+//   width: 100%;
+// }
+
+// main {
+//   background-color: rgb(238, 241, 246);
+//   flex: 1;
+//   /* 竖直方向拉伸 */
+//   display: flex;
+//   flex-direction: column;
+//   position: relative;
+// }
+
+// // #endregion 外层布局
+
+
+// // #region 左侧区域
+// aside {
+//   position: relative;
+//   overflow: hidden;
+//   background-color: rgb(230, 237, 249);
+// }
+
+// //左侧内容
+// .section {
+//   position: absolute;
+//   inset: 0 5px 0 0;
+// }
+
+// .resize {
+//   width: 725px;
+//   height: 20px;
+//   overflow: scroll;
+//   resize: horizontal;
+//   // opacity: 0;
+//   transform: scaleY(100);
+
+//   &::-webkit-scrollbar {
+//     width: 5px;
+//     height: 10px;
+
+//   }
+// }
+
+// .line {
+//   position: absolute;
+//   top: 0;
+//   right: 0;
+//   width: 4px;
+//   bottom: 0;
+//   background-color: royalblue;
+
+// }
+
+// // #endregion 左侧区域
+
+// // #region 左侧内部布局 
+// ::v-deep .aside-section {
+//   .aside-flex {
+//     height: 100%;
+//     @include flexLayout(row, center);
+
+//     .flex-item {
+//       overflow-y: auto;
+//       flex: 1;
+//       margin: 0 10px;
+//       @include flexLayout(column, center);
+//     }
+
+//     // .top-card {
+//     //   @include flexLayout(row, center, center);
+//     //   .el-card__body {
+//     //     padding: 15px;
+//     //   }
+//     // }
+//     // .table-card {
+//     //   overflow: auto;
+//     //   flex: 1;
+//     //   margin-top: 20px;
+//     //   background-color: rgb(238, 241, 246);
+  
+//     //   .el-card {
+//     //     margin: -3px 0 8px 0;
+  
+//     //     .el-card__header,
+//     //     .el-card__body {
+//     //       padding: 5px 8px;
+//     //     }
+//     //   }
+  
+//     //   .image-demo {
+//     //     .image-info {
+//     //       container-type: inline-size;
+//     //       // contain: :in;
+//     //       .demo-text{
+//     //           font-size: 6cqw;
+//     //       }
+//     //     }
+//     //   }
+//     // }
+    
+//   }
+
+// }
+
+
+// // #region 右侧区域
+// .main {
+//   position: relative;
+//   /* min-height: 200px; */
+//   background-color: rgb(225, 199, 134);
+// }
+
+// .sectiontext {
+//   position: absolute;
+//   inset: 0 0 5px 0;
+// }
+
+// .resize-out {
+//   /* transform: scaleX(-1); */
+// }
+
+// .resize-bottom {
+//   min-height: 200px;
+//   height: 100%;
+//   overflow: hidden;
+//   resize: vertical;
+//   /* transform: scaleX(100); */
+//   /* width: 60px; */
+// }
+
+// footer {
+//   flex: 1;
+// }
+
+// // #endregion 右侧区域

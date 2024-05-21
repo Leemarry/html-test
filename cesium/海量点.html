@@ -1,0 +1,528 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2023-10-13 16:48:41
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-05-17 10:06:31
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>Cesium点击弹窗</title>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Widgets/widgets.css"
+        rel="stylesheet" />
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script>
+    <!-- <link rel="stylesheet" href="./Cesium/Widgets/widgets.css">
+      <script type=""  src="./Cesium/Cesium.js"></script> -->
+</head>
+
+<body style="margin: 0px; width: 100%; height: 100%">
+    <div id="cesiumContainer" style="width: 100%; height: 100%; position: absolute"></div>
+</body>
+<script>
+    var url;
+    Cesium.Ion.defaultAccessToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzRiNzNkYS0zZTRmLTRhOTMtODFlNS0zOWFhN2FmYzZmYjkiLCJpZCI6MTUyMTEwLCJpYXQiOjE2ODg2OTYyMDl9.sWkoSUmLFPfbMTMFgAZeQKjBQERg-TZPBBtIN34sDNQ";
+    var viewer = new Cesium.Viewer("cesiumContainer", {
+        selectionIndicator: false, //关闭绿色点击框
+        //需要进行可视化的数据源的集合
+        animation: false, //是否显示动画控件
+        timeline: false, //是否显示时间线控件
+        shouldAnimate: false,
+        homeButton: false, //是否显示Home按钮
+        fullscreenButton: false, //是否显示全屏按钮
+        baseLayerPicker: false, //是否显示图层选择控件
+        geocoder: false, //是否显示地名查找控件
+        sceneModePicker: false, //是否显示投影方式控件
+        navigationHelpButton: false, //是否显示帮助信息控件
+        infoBox: true, //是否显示点击要素之后显示的信息
+        requestRenderMode: true, //启用请求渲染模式
+        scene3DOnly: false, //每个几何实例将只能以3D渲染以节省GPU内存
+        sceneMode: 3, //初始场景模式 1 2D模式 2 2D循环模式 3 3D模式  Cesium.SceneMode
+        fullscreenElement: document.body, //全屏时渲染的HTML元素 暂时没发现用处
+        imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+            url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+        }),
+        // 天地图地形
+        terrainProvider: new Cesium.CesiumTerrainProvider({
+            url: "http://data.mars3d.cn/terrain",
+        }),
+    });
+    //开启地形
+    // viewer.terrainProvider = Cesium.createWorldTerrain();
+    viewer.cesiumWidget.creditContainer.style.display = "none"; // 去除logo
+    viewer.scene.globe.depthTestAgainstTerrain = false; //解决地形遮挡entity问题
+
+    const fact = {
+        "id": 1,
+        "number": "paishui_1",
+        "name": "排水口1#",
+        "lat": 31.017248537282896,
+        "lng": 112.26408624071956,
+        "target": "无",
+        "pollutantCategory": "染料，化工液体",
+        "pollutantThreshold": " 50mg/m3",
+        "modelPath": null,
+        "factoryId": 1
+    }
+
+    //#region 显示单个点
+
+    addEntity(500)
+
+    //  const promise = Cesium.sampleTerrainMostDetailed(terrainProvider, positions);
+    async function addEntity(height = 500) {
+        //代码1
+        let orientation = Cesium.Transforms.headingPitchRollQuaternion(
+            Cesium.Cartesian3.fromDegrees(112.26408624071956, 31.017248537282896, height),
+            new Cesium.HeadingPitchRoll(0, 0, 0) //模型的偏航角（heading）模型的俯仰角（pitch） 表示模型的横滚角（roll）
+        );
+
+        var entity = new Cesium.Entity({
+            name: 'test',
+            show: true,
+            id: 'ppppppp',
+            position: Cesium.Cartesian3.fromDegrees(112.26408624071956, 31.017248537282896),
+            point: {
+                pixelSize: 10,
+                color: Cesium.Color.RED,
+                disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                heightReference: Cesium.HeightReference
+                    .CLAMP_TO_GROUND, //设置HeightReference高度参考类型为CLAMP_TO_GROUND贴地类型
+            },
+            // label: {
+            //     show: true,
+            //     font: "16px sans-serif", // 设置字体大小为16像素，使用sans-serif字体
+            //     text: "航点",
+            //     horizontalOrigin: Cesium.HorizontalOrigin.CENTER, // 水平对齐方式为中心
+            //     verticalOrigin: Cesium.VerticalOrigin.BOTTOM, // 垂直对齐方式为底部
+            //     pixelOffset: new Cesium.Cartesian2(0, -10), // 标签相对于点的偏移量
+            //     disableDepthTestDistance: Number.POSITIVE_INFINITY,
+            //     heightReference: Cesium.HeightReference
+            //         .CLAMP_TO_GROUND, //设置HeightReference高度参考类型为CLAMP_TO_GROUND贴地类型
+            // },
+            description: `
+                <p>这是entity的属性信息，entity的description里面可以写一段html</p>                
+                <img width="450" height="200" src="./test.png"></img>
+                <video width="450" height="350" controls="controls" type="video/mp4" preload="auto">
+                    <source src="./test2.mp4" autostart="true">
+                </video>
+                <p>苹果园dog</p>`
+        });
+
+        console.log(entity);
+        viewer.entities.add(entity);
+        console.log('entity', entity);
+
+        //代码2
+        return entity;
+    }
+    //#endregion
+
+
+    // 点击生成线
+    var drawing = false;
+    var positions = [];
+    var line;
+
+    viewer.cesiumWidget.screenSpaceEventHandler.setInputAction(function (e) {
+        var ray = viewer.camera.getPickRay(e.position);
+        var position = viewer.scene.globe.pick(ray, viewer.scene);
+        if (position) {
+            if (!drawing) {
+                drawing = true;
+                positions.push(position);
+                line = viewer.entities.add({
+                    polyline: {
+                        positions: new Cesium.CallbackProperty(function () {
+                            return positions;
+                        }, false),
+                        width: 3,
+                        material: Cesium.Color.RED
+                    }
+                });
+            } else {
+                positions.push(position);
+            }
+        }
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+    // 监听鼠标移动事件
+    viewer.cesiumWidget.screenSpaceEventHandler.setInputAction(function (e) {
+        if (drawing) {
+            var ray = viewer.camera.getPickRay(e.endPosition);
+            var position = viewer.scene.globe.pick(ray, viewer.scene);
+            if (position) {
+                positions.pop();
+                positions.push(position);
+            }
+        }
+    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+    // 停止绘制线
+    viewer.cesiumWidget.screenSpaceEventHandler.setInputAction(function (e) {
+        drawing = false;
+        positions.pop(); // 移除最后一个点，因为在鼠标移动事件中会多添加一个点
+        line = null;
+    }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+
+
+    // var billboardPosition = viewer.scene.cartesianToCanvasCoordinates(entity.position.getValue(Cesium.JulianDate.now()));
+
+
+    //     viewer.screenSpaceEventHandler.setInputAction(function(movement) {
+    //     var cartesian = viewer.camera.pickEllipsoid(movement.position, viewer.scene.globe.ellipsoid);
+    //     if (cartesian) {
+    //         var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+    //         var longitude = Cesium.Math.toDegrees(cartographic.longitude);
+    //         var latitude = Cesium.Math.toDegrees(cartographic.latitude);
+    //         var position = {
+    //             x: movement.position.x,
+    //             y: movement.position.y,
+    //             longitude: longitude,
+    //             latitude: latitude
+    //         };
+    //         console.log("点击位置屏幕坐标：", position);
+    //     }
+    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+    // #region 创建一个广告牌 带 lable
+    // let model = addbillboardEntity()
+
+    function addbillboardEntity() {
+        var entity = new Cesium.Entity({
+            position: Cesium.Cartesian3.fromDegrees(114.28066108893864, 37.54304127247652),
+            name: 'billboard',
+            id: 'billboardsss',
+            billboard: {
+                // 图像地址，URI或Canvas的属性
+                image: './gas.png',
+                show: true,
+                disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                heightReference: Cesium.HeightReference
+                    .CLAMP_TO_GROUND, //设置HeightReference高度参考类型为CLAMP_TO_GROUND贴地类型
+
+
+                // horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+                // verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                // disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                // pixelOffset: new Cesium.Cartesian2(-6, 6),
+                scale: 0.45,
+            },
+
+            label: {
+                show: false,
+                font: "16px sans-serif", // 设置字体大小为16像素，使用sans-serif字体
+                text: "航点",
+                horizontalOrigin: Cesium.HorizontalOrigin.CENTER, // 水平对齐方式为中心
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM, // 垂直对齐方式为底部
+                pixelOffset: new Cesium.Cartesian2(0, -10), // 标签相对于点的偏移量
+            },
+            description: `
+                <p>这是entity的属性信息，entity的description里面可以写一段html</p>                
+                <img width="450" height="200" src="./test.png"></img>
+                <video width="450" height="350" controls="controls" type="video/mp4" preload="auto">
+                    <source src="./test2.mp4" autostart="true">
+                </video>
+                <p>苹果园dog</p>`
+        });
+
+        viewer.entities.add(entity);
+        return entity;
+    }
+
+    var entities = viewer.entities.values;
+    console.log('entities', entities);
+
+    // 遍历数组，移除所有符合条件的实体
+    for (var i = 0; i < entities.length; i++) {
+        var entity = entities[i];
+
+        console.log(entity.type);
+    }
+
+
+    //     var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    // handler.setInputAction(function(event) {
+    //     var pickedObject = viewer.scene.pick(event.position);
+    //     console.log(pickedObject);
+    //     if (Cesium.defined(pickedObject) && pickedObject.id ) {
+    //         console.log('Billboard clicked:', pickedObject.id);
+
+    //     }
+    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    //#endregion
+
+
+
+    //#region  创建一个BillboardCollection对象
+    //var billboards = new Cesium.BillboardCollection();
+    // 将BillboardCollection对象添加到场景中的primitives中
+    var billboards = viewer.scene.primitives.add(new Cesium.BillboardCollection());
+    // 循环生成Billboard
+    // for (var longitude = -180; longitude < 180; longitude++) {
+    //     var color = Cesium.Color.PINK;
+    //     if ((longitude % 2) === 0) {
+    //         color = Cesium.Color.CYAN;
+    //     }
+    //     for (var latitude = -90; latitude < 90; latitude++) {
+    //         // 创建一个Billboard并设置其位置、图像和颜色
+    //         billboards.add({
+    //             position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
+    //             image: './gas.png',
+    //             color: color,
+    //             scale: 1.0,
+    //         });
+    //     }
+    // }
+    //     var billboards = viewer.scene.primitives.add(new Cesium.BillboardCollection());
+    //     var id = 0;
+    // // 循环生成Billboard
+    // for (var longitude = -180; longitude < 180; longitude++) {
+    //     var color = Cesium.Color.PINK;
+    //     if ((longitude % 2) === 0) {
+    //         color = Cesium.Color.CYAN;
+    //     }
+    //     for (var latitude = -90; latitude < 90; latitude++) {
+    //         // 创建一个Billboard并设置其位置、图像和颜色
+    //         var billboard = billboards.add({
+    //             id: 'billboard_' + id,
+    //             name: 'billboard_' + id,
+    //             position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
+    //             image: './gas.png',
+    //             color: color,
+    //             scale: 1.0,
+    //         });
+    //         id++;
+
+    //     }
+    // }
+    // 创建ScreenSpaceEventHandler来监听点击事件
+    //     var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    //     handler.setInputAction(function(event) {
+    //         var pickedObject = viewer.scene.pick(event.position);
+    //         console.log(pickedObject);
+    //         if (Cesium.defined(pickedObject) && pickedObject.id && pickedObject.id instanceof Cesium.Billboard) {
+    //             console.log('Billboard clicked:', pickedObject.id);
+    //             // 在这里可以添加点击事件的处理逻辑
+    //             // 根据pickedObject.id中的信息进行相应操作
+    //         }
+    //     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    //     //#endregion
+
+    //     //#region  自定义的广告牌效果
+    //     /**
+    //  * 用于添加poi的icon和label的函数
+    //  * @param {*} lon ：经度
+    //  * @param {*} lat ：纬度
+    //  * @param {*} name ：标签内容
+    //  * @param {*} color ：底部圆和横线的颜色
+    //  * @param {*} url ：icon地址
+    //  */
+    // //  this.updateMapCenter(114.1068607, 30.9550616, 400.05766199658808, 85, -45);
+    //  poiIconLabelAdd(114.1068607, 30.9550616, 'opopp',color = Cesium.Color.PINK )
+    // function poiIconLabelAdd(lon, lat, name, color) {
+    //     this.viewer.entities.add({
+    //         name: name,
+    //         position: Cesium.Cartesian3.fromDegrees(lon, lat, 300),
+    //         // 图标
+    //         billboard: {
+    //             image: './gas.png',
+    //             width: 50,
+    //             height: 50,
+    //         },
+    //         label: {
+    //             //文字标签
+    //             text: name,
+    //             font: '20px sans-serif',
+    //             style: Cesium.LabelStyle.FILL,
+    //             // 对齐方式(水平和竖直)
+    //             horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+    //             verticalOrigin: Cesium.VerticalOrigin.CENTER,
+    //             pixelOffset: new Cesium.Cartesian2(20, -2),
+    //             showBackground: true,
+    //             backgroundColor: new Cesium.Color.fromBytes(0, 70, 24),
+    //         },
+    //     });
+
+    //     // 先画线后画点，防止线压盖点
+    //     let linePositions = [];
+    //     linePositions.push(new Cesium.Cartesian3.fromDegrees(lon, lat, 5));
+    //     linePositions.push(new Cesium.Cartesian3.fromDegrees(lon, lat, 300));
+    //     viewer.entities.add({
+    //         polyline: {
+    //             positions: linePositions,
+    //             width: 1.5,
+    //             material: color,
+    //         }
+    //     })
+
+    //     // 画点
+    //     viewer.entities.add({
+    //         // 给初始点位设置一定的离地高度，否者会被压盖
+    //         position: Cesium.Cartesian3.fromDegrees(lon, lat, 5),
+    //         point: {
+    //             color: color,
+    //             pixelSize: 15,
+    //         }
+    //     })
+    // }
+
+
+    //#endregion
+
+
+
+
+    //#region 
+
+    //   const collection = new Cesium.BillboardCollection({ scene: viewer.scene })
+    //   collection.add({
+    // 	position: Cesium.Cartesian3.fromDegrees(114, 39, 500),
+    // 	image: './gas.png',
+    // 	verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+    // 	horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+    // 	heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+    // })
+
+    // 创建 Popup 对象
+    // var popup = new Cesium.Popup();
+    // //  var billboards = viewer.scene.primitives.add(new Cesium.BillboardCollection());
+
+    // // 循环生成Billboard
+    // for (var longitude = -180; longitude < 180; longitude++) {
+    //   var color = Cesium.Color.PINK;
+    //   if ((longitude % 2) === 0) {
+    //     color = Cesium.Color.CYAN;
+    //   }
+    //   for (var latitude = -90; latitude < 90; latitude++) {
+    //     // 创建一个Billboard并设置其位置、图像、颜色
+    //     var billboard = billboards.add({
+    //       position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
+    //       image: './gas.png',
+    //       color: color,
+    //       scale: 1.0,
+    //     });
+
+    //     // 添加单击事件监听器
+    //     billboard.billboard.showWhenInView = true;
+    //     billboard.billboard.disableDepthTestDistance = Number.POSITIVE_INFINITY;
+    //     billboard.click = function() {
+    //       // 设置 Popup 内容
+    //       var content = document.createElement("div");
+    //       content.innerHTML = `
+    //         <p>这是entity的属性信息，entity的description里面可以写一段html</p>                
+    //         <img width="450" height="200" src="./test.png"></img>
+    //         <video width="450" height="350" controls="controls" type="video/mp4" preload="auto">
+    //             <source src="./test2.mp4" autostart="true">
+    //         </video>
+    //         <p>苹果园dog</p>
+    //       `;
+
+    //       // 设置 Popup 显示位置和内容，并打开弹窗
+    //       popup.showAt(billboard.position, content);
+    //     };
+    //   }
+    // }
+    //#endregion
+
+    //#region  Primitive生成大量点方式
+    // //  生成PointPrimitiveCollection对象
+    // const collection = new Cesium.BillboardCollection()
+    // const Pointcollection = new Cesium.BillboardCollection()
+    // var pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
+    // var id = 0;
+    // //  生成64800个点，每个经度、纬度值各生成一个点，高度为0（贴地表）
+    // //  每个点都添加到PointPrimitiveCollection对象中
+    // for (var longitude = -180; longitude < 180; longitude++) {
+    //     var color = Cesium.Color.PINK;
+    //     if ((longitude % 2) === 0) {
+    //         color = Cesium.Color.CYAN;
+    //     }
+    //     for (var latitude = -90; latitude < 90; latitude++) {
+    //         var primitive = pointCollection.add({
+    //             position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
+    //             color: color,
+    //             id:id,
+
+    //         });
+
+    //         primitive.tooltip = '第' + id + '个点';
+    //         primitive.popup = '第' + id + '个点';
+    //         console.log(primitive);
+    //         primitive.click = function (primitive) { //单击
+    //             console.log(primitive);
+    //             //单击事件 
+    //             console.log('lll');
+    //         }
+    //         id++
+    //     }
+    // }
+    // //  模拟每个点固定向外偏移(1km,1km,1km)(跟时间无关，每帧调用此函数)
+    // function animatePoints() {
+    //     var positionScratch = new Cesium.Cartesian3();
+    //     var points = pointCollection._pointPrimitives;
+    //     var length = points.length;
+    //     for (var i = 0; i < length; ++i) {
+    //         var point = points[i];
+    //         Cesium.Cartesian3.clone(point.position, positionScratch);
+    //         Cesium.Cartesian3.add(
+    //             positionScratch,
+    //             new Cesium.Cartesian3(1000, 1000, 1000),
+    //             positionScratch);
+    //         point.position = positionScratch;
+    //     }
+    // }
+    // //  scene中的render 方法，每一帧都被会调用，用于场景的重绘
+    // //  此处的preRender在render方法之前执行，也是每一帧被调用
+    // //  由于每一帧调用animatePoints方法时，方法内部都将每个点
+    // //    的位移向外移动1km，因此所有点就都运动起来了
+    // // viewer.scene.preRender.addEventListener(animatePoints);
+    //#endregion
+
+
+
+
+    // viewer.entities.add({
+    //         position: Cesium.Cartesian3.fromDegrees(112.816525, 28.413053,78),
+    //         name: 'point',
+    //         billboard: {
+    //             // 图像地址，URI或Canvas的属性
+    //             image:  './gas.png',
+    //             show: true,
+    //         　　 heightReference: Cesium.HeightReference.CLAMP_TO_GROUND   //设置HeightReference高度参考类型为CLAMP_TO_GROUND贴地类型
+    //           }
+    //     });
+
+    // 地图设置视角的位置
+    // viewer.clock.shouldAnimate = true;
+    // viewer.trackedEntity = model;
+
+    // model.viewFrom = new Cesium.Cartesian3(0, 0, 18);
+    // viewer.scene.requestRender();
+    // 获取所有实体的数组
+    // var entities = viewer.entities.values;
+    // for (let index = 0; index < entities.length; index++) {
+    //   const entity = entities[index];
+    //   if (entity.id && entity.id.indexOf('polygon')!==-1) {
+    //     viewer.entities.remove(entity)
+    //     i--; //移除时
+    //     viewer.scene.requestRender();
+    //   }
+    // }
+    // this.updateMapCenter(114.1068607, 30.9550616, 400.05766199658808, 85, -45);
+</script>
+
+</html>
+<style>
+    #card {
+        width: 50px;
+        height: 50px;
+        background-color: aquamarine;
+    }
+</style>

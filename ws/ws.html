@@ -1,0 +1,68 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-03-20 09:02:28
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-03-20 09:28:44
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        let ws =
+            'ws://localhost:9551/efapi/reseeding/websockets/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb21wYW55SWQiOjEsInJvbGVJZCI6MiwidXNlckxvZ2luTmFtZSI6InRlc3RlciIsInVzZXJOYW1lIjoidGVzdGVyIiwiZXhwIjoxNzEwOTA3NTMzLCJ1c2VySWQiOjJ9.FXu8NB-WK3wXPaxlt_l-Ewm89oN-pHIKZf3q8QLMJKU';
+        // let websocket = new WebSocket("ws://localhost:8080/channel/echo");
+        let websocket = new WebSocket(ws);
+
+        // 连接断开
+        websocket.onclose = e => {
+            console.log(`连接关闭: code=${e.code}, reason=${e.reason}`)
+        }
+        // 收到消息
+        websocket.onmessage = e => {
+            console.log(`收到消息：${e.data}`);
+        }
+        // 异常
+        websocket.onerror = e => {
+            console.log("连接异常")
+            console.error(e)
+        }
+        // 连接打开
+        websocket.onopen = e => {
+            console.log("连接打开");
+
+
+            // 创建一个包含 8 个字节的 ArrayBuffer 对象
+            let buffer = new ArrayBuffer(8);
+
+            // 填充 ArrayBuffer 对象
+            let view = new Uint8Array(buffer);
+            for (let i = 0; i < view.length; i++) {
+                view[i] = i;
+            }
+
+            // 发送二进制数据
+            websocket.send(buffer);
+
+            // 创建连接后，往服务器连续写入3条消息
+            websocket.send("sprigdoc.cn");
+            websocket.send("sprigdoc.cn11");
+            websocket.send("sprigdoc.cn222");
+
+            // 最后发送 bye，由服务器断开连接
+            // websocket.send("bye");
+
+            // 也可以由客户端主动断开
+            // websocket.close();
+        }
+    </script>
+</body>
+
+</html>

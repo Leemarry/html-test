@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  #d1 {
+    background-color: aliceblue;
+    width: 40px;
+    height: 40px;
+  }
+
+  #d2 {
+    background-color: rgb(0, 255, 42);
+    width: 40px;
+    height: 40px;
+  }
+
+  #d5 {
+    background-color: rgb(236, 15, 89);
+    width: 40px;
+    height: 80px;
+  }
+</style>
+
+<body>
+  <div id="father">
+    <div id="d1">
+      d1
+    </div>
+    <div class="d2top" style="width: 100px; height:100px;background-color: beige;">
+      <div id="d2">
+        d2
+      </div>
+    </div>
+    <div id="d3">
+      d3
+    </div>
+    <div id="d4">
+      d4
+    </div>
+    <div class="d5top" style="width: 200px; height:150px;background-color: aqua;">
+      <div id="d5">
+        d5
+      </div>
+    </div>
+    <div onclick="switchs()">点击</div>
+  </div>
+</body>
+<script>
+  //#region 
+
+  // var newObj = document.createElement("div");
+  // // newObj.setAttribute("id","new");
+  // // newObj.innerHTML = "哈哈";
+  // // var d1 = document.getElementById("d1");
+  // var d2 = document.getElementById("d2");
+  // // var d3 = document.getElementById("d3");
+  // // var d4 = document.getElementById("d4");
+  // var d5 = document.getElementById("d5");
+  // d1.parentElement.insertBefore(newObj,d5);
+  // d1.parentElement.insertBefore(d5,d2);
+  // d1.parentElement.insertBefore(d2,newObj);
+  // d1.parentElement.removeChild(newObj);
+
+  // // 找到父元素
+  // var father = document.getElementById("father");
+
+  // // 找到 div2 和 div5
+  // var div2 = document.getElementById("d2");
+  // var div5 = document.getElementById("d5");
+
+  // // 获取 div2 和 div5 的父容器
+  // var div2Container = div2.parentNode;
+  // var div5Container = div5.parentNode;
+
+  // // 将 div2 移到 div5 的位置
+  // div5Container.insertBefore(div2, div5);
+
+  // // 将 div5 移到 div2 的位置
+  // father.insertBefore(div5, div2Container);
+
+
+  // // 找到父元素
+  // var father = document.getElementById("father");
+  // // 找到 div2 和 div5
+  // var div2 = document.getElementById("d2");
+  // var div5 = document.getElementById("d5");
+  // // 获取 div2 和 div5 的父容器
+  // var div2Container = div2.parentNode;
+  // var div5Container = div5.parentNode;
+  // // 创建一个临时元素
+  // // var temp = document.createElement('div');
+  // // temp.setAttribute("id","new");
+  // // temp.innerHTML = "哈哈";
+  // // 将 div5 移动到临时元素下
+  // // div5Container.replaceChild(temp, div5);
+  // // 将 div2 移动到 div5 的位置
+  // div2Container.replaceChild(div5, div2);
+
+  // // 将临时元素移动到 div2 的位置
+  // // father.replaceChild(div2, temp);
+
+  // 找到父元素
+
+  //#endregion
+  // var father = document.getElementById("father");
+
+
+
+
+  function switchs(){
+      // 找到 div2 和 div5
+  var div2 = document.getElementById("d2");
+  var div5 = document.getElementById("d5");
+
+  // 保存 div2 的兄弟节点和父节点
+  var div2NextSibling = div2.nextSibling;
+  console.log(div2, div2NextSibling);
+
+  var div2Parent = div2.parentNode;
+  console.log('div2Parent', div2Parent);
+
+  // 保存 div5 的兄弟节点和父节点
+  var div5NextSibling = div5.nextSibling;
+  var div5Parent = div5.parentNode;
+  console.log('div5Parent', div5Parent);
+
+  // 将 div5 移动到 div2 的位置
+  div2Parent.insertBefore(div5, div2NextSibling);
+
+  // // 将 div2 移动到 div5 的位置
+  div5Parent.insertBefore(div2, div5NextSibling);
+
+  }
+</script>
+
+</html>

@@ -1,0 +1,101 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-01-11 13:27:42
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-01-11 14:04:27
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+         <!-- <link href="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script> -->
+  <link rel="stylesheet" href="./Cesium/Widgets/widgets.css">
+  <script src="./Cesium/Cesium.js"></script>
+  <script src="https://raw.githubusercontent.com/mozilla/localForage/master/dist/localforage.min.js"></script>
+</head>
+<body style="margin: 0px; width: 100%; height: 100%">
+    <div id="cesiumContainer" style="width: 100%; height: 100%; position: absolute"></div>
+
+  </body>
+</html>
+<script>
+
+
+</script>
+<script>
+    // 创建 IndexedDB 数据库和对象存储空间
+const request = indexedDB.open('myDatabase', 1);
+
+request.onupgradeneeded = function(event) {
+  const db = event.target.result;
+  const objectStore = db.createObjectStore('myStore', { keyPath: 'url' });
+};
+
+// 获取地图瓦片并存储到 IndexedDB
+function fetchAndStoreTile(url) {
+  return fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const request = indexedDB.open('myDatabase', 1);
+      request.onsuccess = function(event) {
+        const db = event.target.result;
+        const transaction = db.transaction(['myStore'], 'readwrite');
+        const store = transaction.objectStore('myStore');
+        const putRequest = store.put(blob, url);
+
+        putRequest.onsuccess = function(event) {
+          console.log('Tile stored in IndexedDB');
+        };
+      };
+    });
+}
+
+// 设置 TileDiscardPolicy
+Cesium.TileDiscardPolicy = function(tile) {
+    console.log('op');
+  const url = tile.url;
+  const request = indexedDB.open('myDatabase', 1);
+
+  request.onsuccess = function(event) {
+    const db = event.target.result;
+    const transaction = db.transaction(['myStore'], 'readonly');
+    const store = transaction.objectStore('myStore');
+    const getRequest = store.get(url);
+
+    getRequest.onsuccess = function(event) {
+      const blob = event.target.result;
+      if (blob) {
+        // 使用IndexedDB中的瓦片数据
+        tile.image = createImageBitmap(blob);
+        tile.hasAlpha = true;
+        console.log('Tile loaded from IndexedDB');
+      } else {
+        // 重新请求新的瓦片数据
+        fetchAndStoreTile(url)
+          .then(() => {
+            console.log('Tile loaded from network');
+          })
+          .catch(error => {
+            console.error('Error fetching tile:', error);
+          });
+      }
+    };
+  };
+};
+
+// 创建 Cesium Viewer
+const viewer = new Cesium.Viewer('cesiumContainer', {   
+    imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+      url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
+    }),
+//   imageryProvider: new Cesium.TileDiscardPolicyImageryProvider({
+//     url: 'https://example.com/{z}/{x}/{y}.png'
+//   })
+});
+</script>

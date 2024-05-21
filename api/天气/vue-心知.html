@@ -1,0 +1,101 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-03-07 10:23:57
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-03-07 10:48:06
+-->
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-02-29 08:45:53
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-02-29 15:43:08
+-->
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+
+<head>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <div style="width: 200px; height:150px;" id="tp-weather-widget"></div>
+        <button @click="switchLoaction('WX4FBXXFKE4F')">切换到武汉</button>
+
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            inputSn: '',
+            selectType: '1',
+            restaurants: [],
+            state1: '',
+            state2: '',
+            timeout: null,
+        },
+        methods: {
+            switchLoaction(location) {
+                let parentElement = document.getElementById('tp-weather-widget');
+                parentElement.parentNode.removeChild(parentElement);
+//                 let childNodes = parentElement.childNodes;
+//                 while (parentElement.firstChild) {
+//   parentElement.removeChild(parentElement.firstChild);
+// }
+
+         
+                            (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+                window.SeniverseWeatherWidget('show', {
+                  flavor: "bubble", //   "slim",
+                  location: location,
+                  geolocation: false,
+                  language: "auto",
+                  unit: "c",
+                  theme: "auto",
+                  token: "dd422f2d-c302-4036-be0c-162bbf110859",
+                  hover: "disabled",
+                  container: "tp-weather-widget"
+                })
+            },
+            op() {
+                            (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+                window.SeniverseWeatherWidget('show', {
+                  flavor: "bubble", //   "slim",
+                  location: "WW2MYN52R11E",
+                  geolocation: false,
+                  language: "auto",
+                  unit: "c",
+                  theme: "auto",
+                  token: "dd422f2d-c302-4036-be0c-162bbf110859",
+                  hover: "disabled",
+                  container: "tp-weather-widget"
+                })
+            }
+
+        },
+        mounted() {
+            this.op()
+
+        },
+    })
+</script>
+
+</html>
+<style>
+
+</style>

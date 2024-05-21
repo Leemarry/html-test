@@ -1,0 +1,87 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-05-10 14:57:18
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-05-10 15:03:27
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="width:100px; height:100px ;" class="panel">ssss
+
+        <div class="panel-footer"></div>
+      </div>
+    
+</body>
+</html>
+<style>
+.panel {
+    position: relative;
+    border: 1px solid rgba(25, 186, 139, 0.17);
+    padding: 0 0.1875rem 0.5rem;
+    transition: all .8s;
+    cursor: pointer
+  }
+
+  .panel::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-top: 2px solid #02a6b5;
+    border-left: 2px solid #02a6b5;
+    z-index: 999;
+    transition: all .5s
+  }
+  .panel::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-top: 2px solid #02a6b5;
+    border-right: 2px solid #02a6b5;
+    z-index: 999;
+    transition: all .5s
+  }
+  .panel .panel-footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+.panel .panel-footer::before {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-bottom: 2px solid #02a6b5;
+  border-left: 2px solid #02a6b5;
+  transition: all .5s
+}
+.panel .panel-footer::after {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-bottom: 2px solid #02a6b5;
+    border-right: 2px solid #02a6b5;
+    transition: all .5s
+  }
+</style>

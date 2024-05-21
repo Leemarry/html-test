@@ -1,0 +1,59 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-02-27 13:50:34
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-02-27 13:57:39
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=div, initial-scale=1.0">
+  <title>css3实现div凸起或凹陷效果</title>
+</head>
+<style>
+  body{
+    background-color: #14274F;
+  }
+  /* 公共基础样式 */
+  .demo{
+    width: 300px;
+    height: 150px;
+    background-color: #14274F;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px;
+  }
+  /* 凸起效果样式 */
+  .demo1 {
+    border-left: 1px solid #33B8EC;
+    border-top: 1px solid #33B8EC;
+    border-right: 3px solid #000;
+    border-bottom: 3px solid #000;
+    
+  }
+  /* 凹陷效果样式 */
+  .demo2 {
+    border-right: 1px solid #33B8EC;
+    border-bottom: 1px solid #33B8EC;
+    border-left: 3px solid #000;
+    border-top: 3px solid #000;
+  }
+  .demo3{
+    box-shadow:rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+</style>
+
+<body>
+  <div class="demo demo1">凸起效果</div>
+  <div class="demo demo2">凹陷效果</div>
+  <div class="demo demo3"></div>
+</body>
+
+</html>

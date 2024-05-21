@@ -1,0 +1,60 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2024-02-26 14:20:13
+ * @LastEditors: Andy
+ * @LastEditTime: 2024-02-26 14:26:23
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="slider" type="range"  min="0" max="550" step="1"  /> 
+</body>
+</html>
+<style>
+    
+</style>
+
+<style type="text/css">
+    body {
+        background-color: #344861;
+        color: #ffffff;
+    }
+
+    /*给滑动条添加样式*/
+    input[type="range"] {
+        -webkit-appearance: none; /*禁用滑动条的默认样式*/
+        border-radius: 15px; /*设置滑动条的圆角大小*/
+        width: 60%; /*设置滑动条的宽*/
+        height: 10px; /*设置滑动条的高*/
+        background-color: #313335; /*设置滑动条的背景色*/
+
+    }
+
+    /*给滑块(thumb)添加样式*/
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none; /*禁用滑动条上的按钮的默认样式*/
+        border-radius: 15px; /*设置滑动条上的按钮的圆角大小*/
+        height: 30px; /*设置滑块的高，应该比滑动条要大一些*/
+        width: 20px; /*设置滑块的宽*/
+        top: -5px; /*让滑块向上偏移 (滑块高-滑动条高)/2*/
+        background-color: #ffffff; /*设置滑块的背景色*/
+    }
+
+    /*滑动条控件获取到焦点时，会显示包裹整个控件的边框，可以将把边框取消*/
+    input[type=range]:focus {
+        outline: none;
+    }
+
+    fieldset {
+        width: 90%;
+        margin-top: 20px;
+    }
+</style>

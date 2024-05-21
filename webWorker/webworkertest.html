@@ -1,0 +1,49 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Eugene
+ * @Date: 2023-12-22 15:06:21
+ * @LastEditors: Andy
+ * @LastEditTime: 2023-12-22 15:13:52
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Web Worker 示例</title>
+</head>
+<body>
+  <h1>Web Worker 示例</h1>
+  <button onclick="startWorker()">开始计算</button>
+  <p id="result"></p>
+
+  <script>
+    // 在主线程中创建 Worker 对象
+    var worker = new Worker('./worker.js');
+
+    // 绑定消息接收事件处理程序
+    worker.onmessage = function(event) {
+      // 处理从 Worker 线程发送的消息
+      var result = event.data;
+      document.getElementById('result').textContent = '计算结果为：' + result;
+    }
+
+    function startWorker() {
+      // 启动 Worker 线程，发送消息
+      console.log('启动 Worker 线程，发送消息');
+      worker.postMessage('start');
+    // calculate()
+    }
+
+
+var sum = 0;
+  function calculate() {
+    // 这里可以写你的计算任务逻辑
+    for (var i = 0; i < 1000000; i++) {
+      sum += i;
+    }
+    document.getElementById('result').textContent = '计算结果为：' + sum;
+  }
+
+  </script>
+</body>
+</html>
