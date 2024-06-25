@@ -1,0 +1,35 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: likai
+ * @Date: 2024-06-05 14:42:11
+ * @LastEditors: likai
+ * @LastEditTime: 2024-06-05 14:42:15
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="parent">
+        父容器
+        <div id="child">
+          子容器
+        </div>
+      </div>
+      
+      <script>
+      document.getElementById("parent").addEventListener("click", function() {
+        console.log("父容器被点击");
+      });
+      
+      document.getElementById("child").addEventListener("click", function(event) {
+        event.stopPropagation();
+        console.log("子容器被点击");
+      });
+      </script>
+</body>
+</html>

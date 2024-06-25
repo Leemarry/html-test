@@ -1,0 +1,116 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: likai
+ * @Date: 2024-05-23 08:34:48
+ * @LastEditors: likai
+ * @LastEditTime: 2024-05-23 08:57:33
+-->
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>复制到 Canvas 并绘制</title>  
+    <style>  
+        canvas {  
+            border: 1px solid black;  
+            display: block;  
+            margin: 10px auto;  
+        }  
+    </style>  
+</head>  
+<body>  
+    <img id="sourceImage" src="./C.png" alt="Source Image" style="max-width: 200px; cursor: pointer;">  
+    <canvas id="myCanvas" width="500" height="500"></canvas>  
+    <button id="downloadButton">下载图片</button>  
+  
+   
+</body>  
+</html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {  
+    const sourceImage = document.getElementById('sourceImage');  
+    const canvas = document.getElementById('myCanvas');  
+    const ctx = canvas.getContext('2d'); 
+    // ctx.translate(0.5, 0.5); 
+     //  计算画布的宽度
+     width = canvas.offsetWidth,
+    //  计算画布的高度
+    height = canvas.offsetHeight,
+    //  设置宽高
+    canvas.width = width;
+    canvas.height = height;
+    const downloadButton = document.getElementById('downloadButton');  
+  
+    // 用于判断鼠标是否按下  
+    let isDrawing = false;  
+  
+    // 加载图片并绘制到Canvas  
+    sourceImage.addEventListener('click', function() {  
+        const img = new Image();  
+        img.onload = function() {  
+            // 清除Canvas内容  
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  
+            // 绘制图片到Canvas  
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);  
+        };  
+        img.src = sourceImage.src;  
+    });  
+  
+    // 鼠标按下事件  
+    canvas.addEventListener('mousedown', function(e) {  
+        isDrawing = true;  
+        draw(e);  
+    });  
+  
+    // 鼠标移动事件  
+    canvas.addEventListener('mousemove', function(e) {  
+        if (!isDrawing) return;  
+        draw(e);  
+    });  
+  
+    // 鼠标松开事件  
+    canvas.addEventListener('mouseup', function() {  
+        isDrawing = false;  
+    });  
+  
+    // 离开Canvas时停止绘制  
+    canvas.addEventListener('mouseout', function() {  
+        isDrawing = false;  
+    });  
+  
+    // 绘制函数  
+    function draw(e) {  
+        if (!isDrawing) return;  
+  
+        // 清除上一次绘制的线（如果有的话）  
+        ctx.beginPath();  
+        ctx.lineWidth = 5;  
+        ctx.lineCap = 'round';  
+        ctx.strokeStyle = 'black';  
+  
+        // 获取鼠标位置  
+        const rect = canvas.getBoundingClientRect();  
+        const x = e.clientX - rect.left;  
+        const y = e.clientY - rect.top;  
+  
+        // 绘制线条  
+        ctx.lineTo(x, y);  
+        ctx.stroke();  
+  
+        // 开始新的线条  
+        ctx.beginPath();  
+        ctx.moveTo(x, y);  
+    }  
+  
+    // 下载Canvas内容  
+    downloadButton.addEventListener('click', function() {  
+        const dataUrl = canvas.toDataURL('image/png');  
+        const link = document.createElement('a');  
+        link.href = dataUrl;  
+        link.download = 'downloaded-image.png';  
+        link.click();  
+    });  
+});
+</script>

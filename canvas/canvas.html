@@ -1,0 +1,71 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: likai
+ * @Date: 2024-05-23 08:28:43
+ * @LastEditors: likai
+ * @LastEditTime: 2024-05-23 08:32:24
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <img src="./C.png" id="image" />
+  <canvas id="myCanvas" width="1000" height="600" style="border:1px solid #c3c3c3;"></canvas>
+  <button id="downloadBtn">下载绘制图片</button>
+
+  <script type="text/javascript">
+    // 获取图片元素和 canvas 元素
+    var image = document.getElementById('image');
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+
+    // 监听图片的点击事件
+    image.addEventListener('click', function (e) {
+      // 获取图片的尺寸
+      var imageWidth = image.width;
+      var imageHeight = image.height;
+
+      // 将图片复制到 canvas 中
+      canvas.width = imageWidth;
+      canvas.height = imageHeight;
+      ctx.drawImage(image, 0, 0);
+
+      // 监听鼠标的移动事件
+      canvas.addEventListener('mousemove', function (e) {
+        // 获取鼠标的位置
+        var mouseX = e.pageX - canvas.offsetLeft;
+        var mouseY = e.pageY - canvas.offsetTop;
+
+        // 进行绘制
+        ctx.beginPath();
+        ctx.arc(mouseX, mouseY, 10, 0, 2 * Math.PI);
+        ctx.fillStyle ='red';
+        ctx.fill();
+      });
+    });
+
+    // 监听下载按钮的点击事件
+    document.getElementById('downloadBtn').addEventListener('click', function () {
+      // 获取绘制后的图片数据
+      var dataUrl = canvas.toDataURL('image/png');
+
+      // 创建下载链接
+      var downloadLink = document.createElement('a');
+      downloadLink.href = dataUrl;
+      downloadLink.download = 'drawn-image.png';
+
+      // 触发下载
+      downloadLink.click();
+    });
+  </script>
+</body>
+
+</html>
