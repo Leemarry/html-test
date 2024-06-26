@@ -6,15 +6,20 @@
  * @LastEditors: Andy
  * @LastEditTime: 2024-03-12 17:28:03
 -->
-# promise
+### promise
 ## promise.all
+<!-- TOC -->
 
-              let all = Promise.all([p1, p2, p3].map((p) => p.then(res => res).catch(err => false)));
-                all.then((res) => {
-    console.log(res, res.filter(Boolean)) // 2s后打印 [1, 2, false], [1, 2]
-  }).catch((err) => {
-  console.log('err', err)
-})
+- [java 解析dom](#java-解析dom)
+  - [dom4j解析](#dom4j解析)
+- [一级目录](#一级目录)
+  - [二级目录](#二级目录)
+    - [三级目录](#三级目录)
+- [测试](#测试)
+  - [sss](#sss)
+- [ssss](#ssss)
+
+<!-- /TOC -->
 
 
 
