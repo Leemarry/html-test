@@ -1,16 +1,12 @@
 /*
- * @Author: likai ‘766173427@qq.com’
+ * @Author: likai 2806699104@qq.com
  * @Date: 2024-06-25 17:25:27
- * @LastEditors: likai ‘766173427@qq.com’
- * @LastEditTime: 2024-06-26 08:59:08
- * @FilePath: \cshiDemo\Handwritten\writePromiseAll.js
+ * @LastEditors: likai 2806699104@qq.com
+ * @LastEditTime: 2024-06-26 14:15:59
+ * @FilePath: \cshiDemo\promise\Handwritten\writePromiseAll.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-// function promiseAll(){
-//     return new Promise((resolve, reject) => {
-//     });
-// }
- 
+
  Promise.myAll = function(proms) {
     let res , rej;
     const p = new Promise((resolve, reject) => {
@@ -37,7 +33,7 @@
 
     return p;
 }
-Promise.myAll([1,23,Promise.reject(2)]).then(res => {
+Promise.myAll([Promise.reject(2),1]).then(res => {
      console.log(res,"ss");
 },
 err => {

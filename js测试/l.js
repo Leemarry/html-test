@@ -28,8 +28,8 @@ const data = {
     version: "/api/v1"
   },
   control: {
-    prefix: "control",
-    version: "/api/v1"
+    prefix: "control",   
+    version: "/api/v1" 
   }
 };
 

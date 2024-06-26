@@ -1,8 +1,8 @@
 /*
  * @Author: likai ‘766173427@qq.com’
  * @Date: 2024-06-18 13:20:21
- * @LastEditors: likai ‘766173427@qq.com’
- * @LastEditTime: 2024-06-26 09:55:36
+ * @LastEditors: likai 2806699104@qq.com
+ * @LastEditTime: 2024-06-26 16:20:55
  * @FilePath: \cshiDemo\promise\promise1.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -51,28 +51,28 @@
 
 // #region Promise.resolve
 
-// const p = Promise.resolve("成功");
-// p.then((res) => {
-//   console.log("----打印：", res); //----打印： 成功
-// });
+const p = Promise.resolve("成功");
+p.then((res) => {
+  console.log("----打印：", res); //----打印： 成功
+});
 
-// //该用法类似于
-// const p1 = new Promise((resolve, reject) => {
-//   reject("失败");
-// });
-// p1.then((res) => {
-//   console.log("----打印：p1", res); //----打印：p1 成功
-// },
-// (err) => {
-//   console.log("----打印：p1", err); //----打印：p1 失败
-// });
+//该用法类似于
+const p0 = new Promise((resolve, reject) => {
+  reject("失败");
+});
+p0.then((res) => {
+  console.log("----打印：p0", res); //----打印：p1 成功
+},
+(err) => {
+  console.log("----打印：p0", err); //----打印：p1 失败
+});
 
 // #endregion
 
 
 //#region  Promise.reject
-// const p = Promise.reject("失败");
-// p.then(
+// const p1 = Promise.reject("失败");
+// p1.then(
 //     (res) => {
 //         console.log("----打印：", res); //不执行
 //     },
@@ -169,21 +169,96 @@
 //    );
 //#endregion
 //#region 如果.then中写了参数不是函数，则会变成promise穿透哦！
-const p6 = new Promise((resolve, reject) => {
-    resolve("成功");
+// const p6 = new Promise((resolve, reject) => {
+//     resolve("成功");
+//   });
+//   const result2 = p6.then(Promise.resolve("传不过去")); //不是函数
+//   result2.then((res) => {
+//     console.log("----打印：", res); //----打印： 成功
+//   });
+//   //相当于这中写法
+//   const result3 = p6.then(null); //不是函数
+//   result3.then((res) => {
+//     console.log("----打印：", res); //----打印： 成功
+//   });
+//   //也可以写成链式调用，结果一样的
+//   p6.then(null).then((res) => {
+//     console.log("----打印：", res); //----打印： 成功
+//   });
+//#endregion
+
+//#region  Promise.catch
+const p8 = new Promise((resolve, reject) => {
+  reject("拒绝");
+  console.log("----打印："); //会输出
+  throw new Error("抛出错误"); //这一句改变promise状态，因为状态已经决定了
+});
+p8.catch((error) => {
+  console.log('error',error); // ：--拒绝
+  console.log('p82:',p8);
+  
+});
+console.log('p81:',p8);
+// const result4 = p8.then((res) => {
+//   console.log(res)
+// },
+// (rej)=>{
+//   console.log(rej);
+// })
+// console.log('result4',result4);
+
+// 另外写法
+p8.then(
+  (res) => {},
+  (rej) => {
+    console.log("----打印：", rej); //----打印： 拒绝
+  }
+);
+ 
+//另外情况
+const p9 = new Promise((resolve, reject) => {
+  throw new Error("抛出错误");
+});
+p9.catch((error) => {
+  console.log("p1", error); //：Error: 抛出错误
+});
+
+//另外情况---2
+const p10 = new Promise((resolve, reject) => {
+  // resolve( Promise.reject("成功"));
+  reject("成功")
+
+}).then((res) => {  console.log('res',res);},
+  (rej) => {
+    console.log("----打印：", rej); //----打印： 拒绝
+    console.log('p10',p10);
+  }
+) 
+const p11= new Promise((resolve, reject) => {
+  resolve( Promise.reject("成功"));
+  // reject("成功")
+  
+})
+console.log('p11:',p11);
+p11.then((res) => {},
+(rej) => {
+  console.log("----打印：", rej); //----打印： 拒绝
+  console.log('rej-p11:',p11);
+}
+)
+  //如果没有下面这个.then 则错误就会被catch捕获
+  //不提倡这种写法--只是为了证明，then也可以接收到异常
+  .then(
+    (res) => {},
+    (rej) => {
+      console.log("----打印：能接到就执行", rej); //----打印：能接到就执行 Error: 抛出错误
+    }
+  )
+  .catch((error) => {
+    console.log("catch接到", error); //不执行
   });
-  const result2 = p6.then(Promise.resolve("传不过去")); //不是函数
-  result2.then((res) => {
-    console.log("----打印：", res); //----打印： 成功
-  });
-  //相当于这中写法
-  const result3 = p6.then(null); //不是函数
-  result3.then((res) => {
-    console.log("----打印：", res); //----打印： 成功
-  });
-  //也可以写成链式调用，结果一样的
-  p6.then(null).then((res) => {
-    console.log("----打印：", res); //----打印： 成功
-  });
+
+
+
 
 //#endregion

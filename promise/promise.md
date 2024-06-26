@@ -1,23 +1,23 @@
 <!--
- * @Descripttion: 
- * @version: 
- * @Author: Eugene
  * @Date: 2024-03-08 16:29:41
- * @LastEditors: Andy
- * @LastEditTime: 2024-03-12 17:28:03
+ * @LastEditors: likai 2806699104@qq.com
+ * @LastEditTime: 2024-06-26 17:49:04
+ * @FilePath: \cshiDemo\promise\promise.md
+ * @Description: Do not edit
 -->
-### promise
-## promise.all
+
+
+##  promise
 <!-- TOC -->
 
 - [java 解析dom](#java-解析dom)
   - [dom4j解析](#dom4j解析)
-- [一级目录](#一级目录)
-  - [二级目录](#二级目录)
-    - [三级目录](#三级目录)
-- [测试](#测试)
-  - [sss](#sss)
-- [ssss](#ssss)
+- [promise 测试知识](#promise-测试知识)
+  - [promise.All 手写](#promiseall-手写)
+  - [promise.race 手写](#promiserace-手写)
+  - [promise.any 手写](#promiseany-手写)
+  - [Promise.allSettled 手写](#promiseallsettled-手写)
+  - [并发控制](#并发控制)
 
 <!-- /TOC -->
 
@@ -28,67 +28,46 @@
 ## dom4j解析
 
 
-           // 创建 MinioClient 对象并连接到 Minio 对象存储
-            MinioClient minioClient = MinioClient.builder()
-                    .endpoint("http://127.0.0.1:9090")
-                    .credentials("gNkgwJSo4EyFyxHuG5mz", "IieYrz9poS8JsEFXzoo7PG7yhmHK9dqZbaVG1khn")
-                    .build();
+# promise 测试知识 
+<span id="jump">下面对promise的手写</span>
 
-else if (key.endsWith(".jpg")) {
-                            byte[] bytes = byteArrayOutputStream.toByteArray();
-                            executorService.submit(() -> {
-                                try {
-                                    // 写入文件
-                                    minioClient.putObject(
-                                            PutObjectArgs.builder()
-                                                    .bucket("ceshi")
-                                                    .object(key)
-                                                    .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
-                                                    .build());
-                                    // 返回存入路径
-                                    String fileUrl = minioClient.getPresignedObjectUrl(
-                                            GetPresignedObjectUrlArgs.builder()
-                                                    .method(Method.PUT)
-                                                    .bucket("ceshi")
-                                                    .object(key)
-                                                    .build()
-                                    );
-                                    synchronized (resultObject) {
-                                        resultObject.put(key, fileUrl);
-                                    }
-                                } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
-                                    e.printStackTrace();
-                                } finally {
-                                    taskCount.decrementAndGet();
-                                }
-                            });
-                            taskCount.incrementAndGet();
-                        }
+## promise.All 手写
+**文件：**[writePromiseAll.js](./Handwritten/writePromiseAll.js)
 
+## promise.race 手写
+**文件：**[writePromiseRace.js](./Handwritten/writePromiseRace.js)
 
-
-
-
-
-
-
-# 一级目录
-## 二级目录
-### 三级目录
-# 测试
-sss
-## sss
-hhhhh
-# ssss
-ssss 
-[点击跳转到标题一](#jump)
-
-1
-1
-1
-a
-<span id="jump">此处是锚点：标题一</span>
+方法接收的参数和.all、.any接收的参数一样，接收一个可迭代promise对象的数组，当任何一个promise的状态先确定（拒绝或者成功），则会执行.race中的回调函数，具体根据promise的状态 ---和allSettled效果互斥
 <br>
-<a href="https://github.com/BackMountainDevil/The-C-Programming-Language#the-c-programming-language">返回目录</a>
 
-[返回目录](./promise.md) //C2.md
+**实例：** [PromiseRace.js](./PromiseRace.js)
+
+
+## promise.any 手写
+
+**文件：**[writePromiseAny.js](./Handwritten/writePromiseAny.js)
+
+Promise.any接收一个promise的数组作为参数，只要其中有一个Promise成功执行，就会返回已经成功执行的Promise的结果；若全部为rejected状态，则会到最后的promise执行完，全部的promise返回到异常函数中；可用于多通道获取数据，谁先获取就执行下一步程序，跳出这个过程。---和all的相反
+<br>
+
+**实例：** [PromiseAny.js](./promiseAny.js)
+
+## Promise.allSettled 手写
+
+**文件：**[writePromiseAllSettled.js](./Handwritten/writePromiseAllSettled.js)
+
+该方法参数也是和.all相同；顾名思义，这个方法是等所有promise参数确定状态后，才会执行回调函数，不管是成功的状态还是拒绝的状态，都等待全部执行后，并返回一个包含每个 Promise 解决状态的对象数组，每个对象包含两个属性：status 和 value；state表示promise的状态：resolve和rejected，value代表的是promise传递的值。
+
+请注意，Promise.allSettled 是 ES2020（也称为 ES11）中引入的新方法，需要支持该版本的 JavaScript 运行环境才能使用
+<br>
+
+**实例：** [PromiseAllSettled.js](./PromiseAllSettled.js)
+
+## 并发控制
+**实例：** [multiRequest.js](./Handwritten/multiRequest.js)
+
+
+<br>
+<a href="https://github.com/BackMountainDevil/The-C-Programming-Language#the-c-programming-language">github.com</a>
+
+[返回目录](.././README.md) / [回到顶部](#jump)
