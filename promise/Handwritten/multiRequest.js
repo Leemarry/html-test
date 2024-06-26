@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-06-26 16:13:17
  * @LastEditors: likai 2806699104@qq.com
- * @LastEditTime: 2024-06-26 17:38:29
+ * @LastEditTime: 2024-06-26 18:26:43
  * @FilePath: \cshiDemo\promise\Handwritten\multiRequest.js
  * @Description: 并发请求
  */
@@ -130,4 +130,5 @@ const multiRequest = (fetch, params = [], maxRequestNum = 6) => {
           console.error('An error occurred:', error); // 这里不会捕获到错误，因为我们在handleResult中处理了它们  
         });
 
+        
 
