@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- ⚠️生产环境请指定版本号，如 https://unpkg.com/vditor@x.x.x/dist... -->
+<link rel="stylesheet" href="https://unpkg.com/vditor/dist/index.css" />
+<script src="https://unpkg.com/vditor/dist/index.min.js"></script>
+
+</head>
+
+<body>
+    <div id="vditor" class="vditor" ></div>
+</body>
+</html>
+<script>
+
+var contentEditor = new Vditor('vditor', {
+          height: 360,
+          toolbarConfig: {
+            pin: true,
+          },
+          cache: {
+            enable: false,
+          },
+          after: () => {
+            contentEditor.setValue('hello, Vditor + Vue789!')
+            simulateButtonClick()
+          },
+        })
+
+
+            // 在 mounted 钩子中模拟按钮点击  
+    function simulateButtonClick() {  
+        console.log('simulateButtonClick',document);
+        
+      // 获取 DOM 元素
+      // 使用 querySelector 查找具有特定 data-type 的按钮  
+      const previewButton =document.querySelector('button[data-type="preview"]') ;
+      console.log('previewButton',previewButton);
+      
+      // 如果找到按钮，则触发点击事件
+      if (previewButton) {  
+        // 触发按钮的点击事件  
+        console.log('previewButton',previewButton);
+        
+        previewButton.click();  
+      }  
+
+    }
+</script>
