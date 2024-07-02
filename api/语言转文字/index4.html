@@ -1,0 +1,36 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Select Text to Speak</title>  
+    <style>  
+        /* 可选样式 */  
+        body {  
+            font-family: Arial, sans-serif;  
+            padding: 20px;  
+        }  
+        .selectable {  
+            cursor: text;  
+            user-select: text; /* 支持现代浏览器 */  
+            -webkit-user-select: text; /* Safari */  
+            -moz-user-select: text; /* Firefox */  
+            -ms-user-select: text; /* IE/Edge */  
+        }  
+    </style>  
+</head>  
+<body>  
+  
+<div class="selectable" id="text-content">  
+    这是一个示例文本，你可以选中其中的任意文字，然后点击播放按钮来听取语音。但是，在这个例子中，我们将自动检测你选中的文字并播放语音（如果浏览器支持）。  
+</div>  
+
+  
+<script>  
+// 初始自动触发 获取 text-content 的 内容 通过 ，。！？；： 单独的段落   span 
+// 点击对应段落 颜色变成红色 并且播放
+    
+</script>  
+  
+</body>  
+</html>

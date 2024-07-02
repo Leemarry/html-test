@@ -1,0 +1,37 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Document</title>  
+</head>  
+<body>  
+    <div class="op">  
+        点击  
+    </div>  
+    <button class="stop">停止</button>
+  
+    <script>  
+        function playSpeech() {  
+            let speech = new SpeechSynthesisUtterance();  
+            speech.text = '测试文字, 设置话语的音调(0-2 默认1，值越大越尖锐,越低越低沉)  , 设置话语的音调(0-2 默认1，值越大越尖锐,越低越低沉)  ';  
+            speech.pitch = 1; // 设置话语的音调(0-2 默认1，值越大越尖锐,越低越低沉)  
+            speech.rate = 0.9; // 设置说话的速度(0.1-10 默认1，值越大语速越快,越小语速越慢)  
+            speech.volume = 1; // 设置说话的音量  
+            speech.lang = 'zh-CN'; // 设置播放语言  
+            speechSynthesis.speak(speech);  
+        }  
+  
+        function stopSpeech() {  
+            speechSynthesis.cancel();  
+        }
+        document.querySelector('.stop').addEventListener('click', function() {  
+            stopSpeech();  
+        });
+        // 对点击的div添加点击事件  
+        document.querySelector('.op').addEventListener('click', function() {  
+            playSpeech();  
+        });  
+    </script>  
+</body>  
+</html>

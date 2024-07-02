@@ -1,0 +1,84 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Auto Speak Text</title>  
+    <style>  
+        .highlight {  
+            color: black; /* 初始颜色不是红色，以便在点击时变化更明显 */  
+            cursor: pointer;  
+        }  
+        .highlight.active {  
+            color: red; /* 激活（点击）时的颜色 */  
+        }  
+    </style>  
+</head>  
+<body>  
+  
+<div class="selectable" id="text-content">  
+    这是一个示例文本，你可以选中其中的任意文字，然后点击播放按钮来听取语音。但是，在这个例子中，我们将自动检测段落并播放语音（如果浏览器支持）。  
+</div>  
+  
+<script>  
+    document.addEventListener('DOMContentLoaded', function() {  
+        const textContent = document.getElementById('text-content');  
+        const text = textContent.textContent;  
+  
+        // 使用正则表达式拆分文本  
+        const parts = text.split(/([，。！？；：()（）])/);    // 匹配标点符号和括号  
+        // const partsWithoutPunctuation = parts.filter(part => !/[，。！？；：()（）]/.test(part));
+  
+        // 过滤并构建新的HTML  
+        let html = '';  
+        let spanIndex = 0; // 用于跟踪span的索引，以便稍后自动播放  
+        parts.forEach((part, index) => {  
+            if (part.trim() !== '') {  
+                if (/[，。！？；：()（）]/.test(part)) {  
+                    // 如果是标点符号，则直接添加  
+                    html += part;  
+                } else {  
+                    // 否则，将文本包装在<span>中，并添加点击事件  
+                    const spanId = `span-${spanIndex++}`;  
+                    html += `<span id="${spanId}" class="highlight" onclick="playSpeechAndHighlight(this)">${part}</span>`;  
+                }  
+            }  
+        });  
+  
+        // 将新的HTML设置回div  
+        textContent.innerHTML = html;  
+  
+        // 自动播放第一个段落的语音（如果有）  
+        const firstSpan = document.querySelector('.highlight');  
+        if (firstSpan) {  
+            console.log('firstSpan', firstSpan);
+            playSpeechAndHighlight(firstSpan);  
+        }  
+    });  
+  
+    // 播放语音并高亮显示的函数  
+    function playSpeechAndHighlight(element) {  
+           // 保存当前播放的元素的ID  
+           currentPlayingElementId = element.id;  
+        // 播放语音  
+        const utterance = new SpeechSynthesisUtterance(element.textContent);  
+        utterance.lang = 'zh-CN';  
+          // 当语音播放结束时，恢复颜色  
+          utterance.onend = function() {  
+                const element = document.getElementById(currentPlayingElementId);  
+                if (element) {  
+                    element.classList.remove('active');  
+                    currentPlayingElementId = null; // 重置当前播放的ID  
+                }  
+            };
+        speechSynthesis.speak(utterance);  
+  
+        // 高亮显示  
+        element.classList.add('active');  
+  
+        // 如果需要，可以在播放完毕后取消高亮（这里不实现）  
+    }  
+</script>  
+  
+</body>  
+</html>

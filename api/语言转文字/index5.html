@@ -1,0 +1,85 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Select Text and Speak</title>  
+    <style>  
+        .highlight {  
+            color: red;  
+            cursor: pointer;  
+        }  
+    </style>  
+</head>  
+<body>  
+  
+<div class="selectable" id="text-content">  
+    这是一个示例文本，你可以选中其中的任意文字，然后点击播放按钮来听取语音。但是，在这个例子中，我们将自动检测你点击的文字并播放语音（如果浏览器支持）。  
+</div>  
+  
+<script>  
+    document.addEventListener('DOMContentLoaded', function() {  
+        const textContent = document.getElementById('text-content');  
+        const text = textContent.textContent;  
+  
+        // 使用正则表达式来拆分文本，保留标点符号前的文字作为单独的段落  
+        const parts = text.split(/([，。！？；：()（）])/);  
+  
+        // 过滤掉空字符串，并重新组合成带有<span>的HTML  
+        let html = '';  
+        parts.forEach((part, index) => {  
+            if (part.trim() !== '') { // 忽略空字符串  
+                // 如果当前部分是标点符号，则直接添加；否则，将其包装在<span>中  
+                if (/[，。！？；：]/.test(part)) {  
+                    html += part;  
+                } else {  
+                    html += `<span class="highlight" onclick="playSpeech(this)">${part}</span>`;  
+                }  
+            }  
+        });  
+  
+        // 将修改后的HTML设置回textContent（实际上应该是innerHTML）  
+        textContent.innerHTML = html;  
+  
+        // 播放语音的函数  
+        function playSpeech(element) {  
+            // 这里只是模拟播放语音，实际中你可能需要调用某个API或播放预录制的音频文件  
+            const utterance = new SpeechSynthesisUtterance(element.textContent);  
+            utterance.lang = 'zh-CN';  
+            speechSynthesis.speak(utterance);  
+  
+            // 可选：高亮显示点击的<span>  
+            // 但由于我们已经通过CSS设置了.highlight类的样式，所以这一步是可选的  
+            // element.classList.add('highlight'); // 如果之前没有高亮，则需要这一步  
+  
+            // 如果你想在播放后取消高亮（仅作为示例），可以添加以下代码  
+            // setTimeout(() => {  
+            //     element.classList.remove('highlight');  
+            //     element.classList.add('played'); // 可以添加另一个类来表示已播放  
+            // }, 1000); // 假设播放时长为1秒  
+        }  
+    });  
+
+       // 播放语音的函数  
+       function playSpeech(element) {  
+            // 这里只是模拟播放语音，实际中你可能需要调用某个API或播放预录制的音频文件  
+            const utterance = new SpeechSynthesisUtterance(element.textContent);  
+            utterance.lang = 'zh-CN';  
+            speechSynthesis.speak(utterance);  
+  
+            // 可选：高亮显示点击的<span>  
+            // 但由于我们已经通过CSS设置了.highlight类的样式，所以这一步是可选的  
+            // element.classList.add('highlight'); // 如果之前没有高亮，则需要这一步  
+  
+            // 如果你想在播放后取消高亮（仅作为示例），可以添加以下代码  
+            // setTimeout(() => {  
+            //     element.classList.remove('highlight');  
+            //     element.classList.add('played'); // 可以添加另一个类来表示已播放  
+            // }, 1000); // 假设播放时长为1秒  
+        }  
+
+    
+</script>  
+  
+</body>  
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Click Text to Highlight and Speak</title>  
+    <style>  
+        .highlight {  
+            color: red;  
+        }  
+    </style>  
+</head>  
+<body>  
+  
+<div id="text-container">  
+    <!-- 这里的文本将被JavaScript动态生成和分割 -->  
+</div>  
+  
+<script>  
+    function splitTextIntoSpans(text, container) {  
+        // 使用正则表达式和replace方法将文本分割成<span>元素  
+        // 这里假设我们使用空格来分割单词（实际情况可能需要更复杂的逻辑）  
+        const words = text.split(/\s+/);  
+        let html = '';  
+        words.forEach((word, index) => {  
+            html += `<span class="word" data-index="${index}" onclick="highlightAndSpeak(this)">${word}</span> `;  
+        });  
+        container.innerHTML = html.trim(); // 移除末尾的空格  
+    }  
+  
+    function highlightAndSpeak(element) {  
+        // 移除其他所有元素的高亮  
+        const words = document.querySelectorAll('#text-container .word.highlight');  
+        words.forEach(word => word.classList.remove('highlight'));  
+  
+        // 高亮当前元素  
+        element.classList.add('highlight');  
+  
+        // 播放语音（这里假设整个单词是一个句子）  
+        const utterance = new SpeechSynthesisUtterance(element.textContent);  
+        utterance.lang = 'zh-CN';  
+        speechSynthesis.speak(utterance);  
+    }  
+  
+    // 示例文本  
+    const text = "这是一个示例文本，你可以点击任意单词来听取语音并高亮显示。";  
+    const container = document.getElementById('text-container');  
+  
+    // 将文本分割并添加到容器中  
+    splitTextIntoSpans(text, container);  
+</script>  
+  
+</body>  
+</html>

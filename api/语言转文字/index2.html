@@ -1,0 +1,53 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Select Text to Speak</title>  
+    <style>  
+        /* 可选样式 */  
+        body {  
+            font-family: Arial, sans-serif;  
+            padding: 20px;  
+        }  
+        .selectable {  
+            cursor: text;  
+            user-select: text; /* 支持现代浏览器 */  
+            -webkit-user-select: text; /* Safari */  
+            -moz-user-select: text; /* Firefox */  
+            -ms-user-select: text; /* IE/Edge */  
+        }  
+    </style>  
+</head>  
+<body>  
+  
+<div class="selectable" id="text-content">  
+    这是一个示例文本，你可以选中其中的任意文字，然后点击播放按钮来听取语音。但是，在这个例子中，我们将自动检测你选中的文字并播放语音（如果浏览器支持）。  
+</div>  
+<div class="selectable" id="text-content2">  
+    这是一个示例文本2，你可以选中其中的任意文字，然后点击播放按钮来听取语音。但是，在这个例子中，我们将自动检测你选中的文字并播放语音（如果浏览器支持）。  
+</div>  
+  
+<script>  
+    function speakSelectedText() {  
+        if (window.getSelection) {  
+            var selection = window.getSelection().toString();  
+            if (selection) {  
+                var utterance = new SpeechSynthesisUtterance(selection);  
+                utterance.lang = 'zh-CN'; // 设置语音语言  
+                speechSynthesis.speak(utterance);  
+            }  
+        }  
+    }  
+  
+    // 监听鼠标释放事件（mouseup），因为通常用户会在释放鼠标时完成文本的选择  
+    document.getElementById('text-content').addEventListener('mouseup', function() {  
+        speakSelectedText();  
+    });  
+  
+    // 可选：如果你还想要在用户选择文本后立即播放（无需等待鼠标释放），可以添加更多的事件监听器，  
+    // 但这可能会在用户未完成选择时就触发播放。  
+</script>  
+  
+</body>  
+</html>
