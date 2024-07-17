@@ -1,0 +1,161 @@
+<!--
+ * @Date: 2024-06-13 19:13:58
+ * @LastEditors: likai 2806699104@qq.com
+ * @LastEditTime: 2024-07-17 11:48:52
+ * @FilePath: \cshiDemo\cesium\model\点云.html
+ * @Description: 文件描述 && Do not edit
+-->
+<!-- cesium 3D 添加点云-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加点云dom</title>
+    <!-- <link href="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script> -->
+    <link rel="stylesheet" href="../CesiumUnminified/Widgets/widgets.css">
+    <script src="../CesiumUnminified/Cesium.js"></script>
+    <style>
+        html,
+        body,
+        #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .button {
+            position: absolute;
+            top: 0px;
+            left: 5px;
+            z-index: 1;
+        }
+    </style>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+<body>
+    <div id="cesiumContainer"></div>
+    <div class='button'>
+        <button class='' onclick='remove()'>移除</button>
+        <button onclick='addtileset()'>添加点云--</button>
+        <button onclick='addmodifyMap()'>反色</button>
+    </div>
+</body>
+
+</html>
+<!-- <script type="module" src="filterColor.js"></script> -->
+<script>
+    Cesium.Ion.defaultAccessToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzRiNzNkYS0zZTRmLTRhOTMtODFlNS0zOWFhN2FmYzZmYjkiLCJpZCI6MTUyMTEwLCJpYXQiOjE2ODg2OTYyMDl9.sWkoSUmLFPfbMTMFgAZeQKjBQERg-TZPBBtIN34sDNQ";
+    let viewer = new Cesium.Viewer("cesiumContainer", {
+        selectionIndicator: false, //关闭绿色点击框
+        //需要进行可视化的数据源的集合
+        animation: false, //是否显示动画控件
+        timeline: false, //是否显示时间线控件
+        shouldAnimate: false,
+        homeButton: false, //是否显示Home按钮
+        fullscreenButton: false, //是否显示全屏按钮
+        baseLayerPicker: false, //是否显示图层选择控件
+        geocoder: false, //是否显示地名查找控件
+        sceneModePicker: false, //是否显示投影方式控件
+        navigationHelpButton: false, //是否显示帮助信息控件
+        infoBox: false, //是否显示点击要素之后显示的信息
+        // requestRenderMode: true, //启用请求渲染模式
+        scene3DOnly: false, //每个几何实例将只能以3D渲染以节省GPU内存
+        sceneMode: 3, //初始场景模式 1 2D模式 2 2D循环模式 3 3D模式  Cesium.SceneMode
+        terrainProvider: Cesium.createWorldTerrain(),
+    });
+    viewer.cesiumWidget.creditContainer.style.display = "none"; // 去除logo
+    viewer.scene.globe.depthTestAgainstTerrain = true; //解决地形遮挡entity问题
+    // 开启抗锯齿
+    viewer.scene.postProcessStages.fxaa.enabled = true;
+
+
+    
+
+    // //定位到该地点
+    // viewer.camera.flyTo({
+    // 	destination : Cesium.Cartesian3.fromDegrees(112.96906,34.70736,5000.0)
+    // });
+    // viewer.imageryLayers.removeAll()
+    let tileset = new Cesium.Cesium3DTileset({
+        url: "./pv/tileset.json",
+    });
+    
+    // tileset.show = false;
+   console.log('viewer',window);
+    function modifyMap(viewer, options) {
+        const baseLayer = viewer.imageryLayers.get(0)
+        //以下几个参数根据实际情况修改,目前我是参照火星科技的参数,个人感觉效果还不错
+        baseLayer.brightness = options.brightness || 0.6
+        baseLayer.contrast = options.contrast || 1.8
+        baseLayer.gamma = options.gamma || 0.3
+        baseLayer.hue = options.hue || 1
+        baseLayer.saturation = options.saturation || 0
+        const baseFragShader = (viewer.scene.globe)._surfaceShaderSet
+            .baseFragmentShaderSource.sources
+        for (let i = 0; i < baseFragShader.length; i++) {
+            const strS = 'color = czm_saturation(color, textureSaturation);\n#endif\n'
+            let strT = 'color = czm_saturation(color, textureSaturation);\n#endif\n'
+            if (options.invertColor) {
+                strT += `
+      color.r = 1.0 - color.r;
+      color.g = 1.0 - color.g;
+      color.b = 1.0 - color.b;
+      `
+            }
+            if (options.filterRGB.length > 0) {
+                strT += `
+      color.r = color.r * ${options.filterRGB[0]}.0/255.0;
+      color.g = color.g * ${options.filterRGB[1]}.0/255.0;
+      color.b = color.b * ${options.filterRGB[2]}.0/255.0;
+      `
+            }
+            baseFragShader[i] = baseFragShader[i].replace(strS, strT)
+        }
+    }
+
+
+    function addmodifyMap() {
+        modifyMap(viewer, {
+            //反色?
+            invertColor: true,
+            //滤色值
+            filterRGB: [0, 1, 0],
+        });
+    }
+
+
+
+    function addtileset() {
+        if (!tileset) {
+            tileset = new Cesium.Cesium3DTileset({
+                url: "http://127.0.0.1:9090/efuavmodel/pointCloud/kunmingPv/tileset.json", // http://127.0.0.1:9090/efuavmodel/pointCloud/kunmingPv/tileset.json 
+                // ./pv/tileset.json
+            });
+        }
+        viewer.scene.primitives.add(tileset);
+        viewer.zoomTo(tileset);
+    }
+
+    function remove() {
+        console.log('remove');
+
+        // 从 viewer 的 primitives 集合中移除 tileset  
+        viewer.scene.primitives.remove(tileset);
+
+        // 可选：如果你需要的话，可以将 tileset 设置为 null 来帮助垃圾回收  
+        tileset = null;
+    }
+
+
+</script>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<title>Drag and Drop File Upload</title>  
+<style>  
+    #drop_zone {  
+        width: 300px;  
+        height: 200px;  
+        border: 2px dashed #ccc;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        margin: 20px;  
+        border-radius: 5px;  
+    }  
+    #drop_zone.over {  
+        border-color: #0087F7;  
+    }  
+</style>  
+</head>  
+<body>  
+  
+<div id="drop_zone">拖放文件到这里</div>  
+<div id="file_info"></div>  
+</body>  
+</html>
+<script>
+document.getElementById('drop_zone').addEventListener('dragover', function(e) {  
+    e.preventDefault(); // 阻止默认处理（默认不允许放置）  
+    e.dataTransfer.dropEffect = 'copy'; // 明确放置效果  
+    this.classList.add('over'); // 可选：添加一些视觉效果  
+});  
+  
+document.getElementById('drop_zone').addEventListener('dragleave', function(e) {  
+    this.classList.remove('over'); // 移除视觉效果  
+});  
+  
+document.getElementById('drop_zone').addEventListener('drop', function(e) {  
+    e.preventDefault(); // 阻止默认处理（默认处理是打开文件）  
+    this.classList.remove('over'); // 移除视觉效果  
+  
+    var files = e.dataTransfer.files; // 获取文件列表  
+    for (var i = 0; i < files.length; i++) {  
+        var file = files[i];  
+        // 这里可以添加代码来预览文件或显示文件信息  
+        file.progress = 0;
+        uploadFile(file)
+        // 在file_infon下 创建 dom 节点 并每一个dom id 为 file.name 
+        var dom = document.createElement('div');
+        dom.id = file.name;
+        dom.innerHTML = '文件名: ' + file.name + '<br>' + '当前进度（百分比）: ' + file.progress + '%<br>' ;
+        dom.style.margin = '10px'; // 设置样式
+        document.getElementById('file_info').appendChild(dom);
+        // 实时修改每一个文件dom的file.progress 怎么弄
+        
+        // document.getElementById('file_info').innerHTML += '文件名: ' + file.name + '<br>' + '当前进度（百分比）: ' + file.progress + '%<br>' ;  
+    }  
+});  
+  
+function uploadFile(file) {  
+
+    // const fileInput = document.getElementById('fileInput');  
+    // const file = fileInput.files[0];  
+    if (!file) {  
+        alert('请选择文件！');  
+        return;  
+    }  
+  
+    const formData = new FormData();  
+    formData.append('file', file);  
+  
+    const xhr = new XMLHttpRequest();  
+  
+    // 更新进度条  
+    xhr.upload.onprogress = function(e) {  
+        if (e.lengthComputable) {  
+            const percentComplete = (e.loaded / e.total) * 100;  
+            const filename = file.name;
+            document.getElementById(filename).innerHTML = '文件名: ' + file.name + '<br>' + '当前进度（百分比）: ' + percentComplete + '%<br>' ;
+            // document.getElementById('progress-bar-fill').style.width = percentComplete + '%';  
+            // document.getElementById('progress-bar-fill').textContent = percentComplete.toFixed(2) + '%';  
+        }  
+    };  
+  
+    // 上传完成  
+    xhr.onload = function() {  
+        if (xhr.status === 200) {  
+            alert('文件上传成功！');  
+        } else {  
+            alert('文件上传失败，状态码：' + xhr.status);  
+        }  
+    };  
+  
+    // 上传出错  
+    xhr.onerror = function() {  
+        alert('文件上传出错！！！');  
+    };  
+  
+    // 设置请求类型为POST，并发送数据到服务器  
+    xhr.open('POST', 'https://jsonplaceholder.typicode.com/posts/', true); // 假设你的上传URL是/upload  
+    xhr.send(formData);  
+}  
+// function uploadFile(file) {  
+
+//     var formData = new FormData();  
+//     formData.append('file', file);  
+  
+//     // 使用fetch API发送文件到服务器  
+//     // fetch('https://jsonplaceholder.typicode.com/posts/', {  
+//     //     method: 'POST',  
+//     //     body: formData  
+//     // })  
+//     // .then(response => response.json())  
+//     // .then(data => {  
+//     //     console.log('Success:', data);  
+//     // })  
+//     // .catch((error) => {  
+//     //     console.error('Error:', error);  
+//     // });  
+// }
+</script>
