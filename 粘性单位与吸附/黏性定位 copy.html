@@ -24,7 +24,7 @@
 </head>
 <body>
 
-<div >
+
     <div class="divcon">
         <div class="mon">1</div>
         <div class="mon sty">2</div>
@@ -42,10 +42,18 @@
         <div class="mon">14</div>
         <div class="mon">15</div>
      </div>
-</div>
+
 </body>
 </html>
 <style>
+         // 前面有个主题是什么  主题的字体颜色是什么
+        // 获取到颜色值 
+        // 修改 html[theme='Custom']  的 background-color 颜色值
+        // 修改 html[theme='Custom']  的 color 颜色值 为 前一个主题的字体颜色
+        // 将 当前主题设置为 Custom
+    html{
+        overflow: hidden;
+    }
     body{margin: 0px;}
     .divcon{
         height: 700px;
@@ -65,5 +73,6 @@
         position:sticky;
         top: 0px;
         background-color: aquamarine;
+        opacity: 0.3;
     }
 </style>

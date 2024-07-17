@@ -1,0 +1,59 @@
+html[theme='highlight'] {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  
+  html[theme='dark'] {
+    background-color: #000000;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  html[theme='Custom'] {
+    background-color: #0000ff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  li {
+    width: 28px;
+    height: 28px;
+    margin: 0 3px;
+    border: 1px solid var(--p-slate-300);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  html[theme='highlight'] li {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  
+  html[theme='dark'] li {
+    background-color: #000000;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  html[theme='Custom'] li {
+    background-color: #0000ff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  html[theme='highlight'] li:hover {
+    border: 1px solid #000000;
+  }
+  
+  html[theme='dark'] li,html[theme='dark'] li:hover {
+    border: 1px solid #ffffff;
+  }
+  
+  html[theme='Custom'] li:hover {
+    border: 2px solid #0000ff;
+  }
+  

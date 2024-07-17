@@ -1,0 +1,141 @@
+<!DOCTYPE html>  
+<html lang="en">  
+  
+<head>  
+  <meta charset="UTF-8">  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>主题切换页面</title>  
+  <style>  
+    .item {  
+      font-size: 14px;  
+    }  
+  
+    html[theme='highlight'] .item {  
+      background-color: #ffffff;  
+      color: #000000;  
+    }  
+  
+    html[theme='dark'] .item {  
+      background-color: #0f100f;  
+      color: white;  
+      font-size: 16px;  
+      font-weight: bold;  
+    }  
+  
+    html[theme='custom'] .item {  
+      background-color: var(--custom-bg-color, #ddd); /* 默认值 */  
+      color: var(--custom-text-color, #333); /* 默认值 */  
+    }  
+
+    html[theme='highlight'] .item2 {  
+      background-color: #ffffff;  
+      color: #000000;  
+    }  
+  
+    html[theme='dark'] .item2 {  
+      background-color: #0f100f;  
+      color: white;  
+      font-size: 16px;  
+      font-weight: bold;  
+    }  
+  
+    html[theme='custom'] .item2 {  
+      background-color: var(--custom-bg-color, #ddd); /* 默认值 */  
+      color: var(--custom-text-color, #333); /* 默认值 */  
+    }  
+    /* 还有很多元素的 */
+  </style>  
+</head>  
+  
+<body>  
+  <div class="item">这是一个示例内容</div>  
+  <div class="item2">这是一个示例内容</div>  
+  <button onclick="changeTheme('highlight')">亮色主题</button>  
+  <button onclick="changeTheme('dark')">暗色主题</button>  
+  <button onclick="showColorPicker()">自定义主题</button>  
+  <input type="color" id="colorPicker" style="display:none;" onchange="applyCustomTheme()">  
+  
+  <script>  
+    function changeTheme(theme) {  
+      document.documentElement.setAttribute('theme', theme);  
+    //   localStorage.setItem('theme', theme);  
+      if (theme === 'custom') {  
+        showColorPicker();  
+      } else {  
+        hideColorPicker();  
+      }  
+    }  
+  
+    function showColorPicker() {  
+      document.getElementById('colorPicker').style.display = 'block';  
+    }  
+  
+    function hideColorPicker() {  
+      document.getElementById('colorPicker').style.display = 'none';  
+    }  
+  
+    function applyCustomTheme() {  
+      const bgColor = document.getElementById('colorPicker').value;  
+      const textColor = calculateTextColor(bgColor); // 假设这是计算文本颜色的函数  
+  
+      document.documentElement.style.setProperty('--custom-bg-color', bgColor);  
+      document.documentElement.style.setProperty('--custom-text-color', textColor);  
+  
+      document.documentElement.setAttribute('theme', 'custom');  
+    //   localStorage.setItem('theme', 'custom');  
+    //   localStorage.setItem('custom-bg-color', bgColor);  
+    //   localStorage.setItem('custom-text-color', textColor);  
+  
+      hideColorPicker();  
+    }  
+  
+    // 示例：简单计算文本颜色（可能需要更复杂的算法以获得最佳对比度）  
+    function calculateTextColor(bgColor) {  
+      return parseInt(bgColor.replace(/^#/, ''), 16) > 0xffffff / 2  
+        ? '#000000' : '#ffffff';  
+    }  
+  
+    // 页面加载时应用存储的主题  
+    window.onload = function() {  
+      const theme = localStorage.getItem('theme');  
+      if (theme) {  
+        changeTheme(theme);  
+  
+        if (theme === 'custom') {  
+        //   const bgColor = localStorage.getItem('custom-bg-color');  
+        //   const textColor = localStorage.getItem('custom-text-color');  
+          document.documentElement.style.setProperty('--custom-bg-color', bgColor);  
+          document.documentElement.style.setProperty('--custom-text-color', textColor);  
+        }  
+      }  
+
+      
+    // 检查浏览器是否支持CSS变量  
+    if (window.CSS && window.CSS.supports && window.CSS.supports('--a', 0)) {  
+        // 浏览器支持CSS变量，无需额外操作  
+        console.log('浏览器支持CSS变量');
+           // 浏览器不支持CSS变量，使用JavaScript动态添加class  
+           document.addEventListener('DOMContentLoaded', function() {  
+            const theme = document.documentElement.getAttribute('theme'); 
+            console.log(theme); 
+            if (theme) {  
+                document.documentElement.className = 'theme-' + theme;  
+            }  
+        });  
+    } else {  
+        // 浏览器不支持CSS变量，使用JavaScript动态添加class  
+        document.addEventListener('DOMContentLoaded', function() {  
+            const theme = document.documentElement.getAttribute('theme'); 
+            console.log(theme); 
+            if (theme) {  
+                document.documentElement.className = 'theme-' + theme;  
+            }  
+        });  
+    }  
+    };  
+
+  </script>  
+</body>  
+  
+</html>

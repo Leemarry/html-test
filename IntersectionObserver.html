@@ -3,8 +3,8 @@
  * @version: 
  * @Author: Eugene
  * @Date: 2023-11-24 08:43:26
- * @LastEditors: Andy
- * @LastEditTime: 2024-02-04 13:53:05
+ * @LastEditors: likai 2806699104@qq.com
+ * @LastEditTime: 2024-07-14 11:27:12
 -->
 <!DOCTYPE html>
 <html>
@@ -84,20 +84,30 @@
 				// console.log(i.boundingClientRect);
 				// console.log(i.intersectionRect);
 				// console.log('================================');
-			console.log(';;ll');
 				// if (i.intersectionRatio >= 0.25) { //可见元素占视窗的25%触发
 				// 	console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
 				// 	i.target.style.backgroundImage = "url(" +
 				// 		'http://pic35.photophoto.cn/20150528/0020032932102307_b.jpg' + ")"
 				// 		console.log(i.intersectionRatio);
 				// 	console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+				// 	// io.unobserve(i.target);
 				// }
+
+				if (i.isIntersecting) { //可见元素占视窗的25%触发
+					console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+					i.target.style.backgroundImage = "url(" +
+						'http://pic35.photophoto.cn/20150528/0020032932102307_b.jpg' + ")"
+						console.log(i.intersectionRatio);
+					console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+					// io.unobserve(i.target);
+				}
 			
 
 			});
 		}, {
 			/* Using default options. Details below */
-			threshold: [0.5, 0.55], //会执行5次
+			rootMargin:'30px',
+			threshold: 0,//[0.5, 0.55], //会执行5次
 		}
 	);
 	// Start observing an element

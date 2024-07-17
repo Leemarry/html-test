@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" theme="highlight">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>主题切换页面</title>
+  <style>
+    .item {
+  font-size: 14px;
+}
+
+html[theme='highlight'] .item {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+html[theme='dark'] .item {
+  background-color: #0f100f;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+html[theme='Custom'] .item {
+
+}
+
+  </style>
+</head>
+
+<body >
+  <div class="item">这是一个示例内容</div>
+  <button onclick="changehighlight()">亮色主题</button>
+  <button onclick="changeDark()">暗色主题</button>
+  <input type="color" id="colorPicker" onchange="changeTheme()">
+
+  <script>
+    function changeTheme() {
+        // 前面有个主题是什么  主题的字体颜色是什么
+        // 获取到颜色值 
+        // 修改 html[theme='Custom']  的 background-color 颜色值
+        // 修改 html[theme='Custom']  的 color 颜色值 为 前一个主题的字体颜色
+        // 将 当前主题设置为 Custom
+    
+
+    }
+
+    function changehighlight() {
+      document.documentElement.setAttribute('theme', 'highlight');
+    }
+    function changeDark() {
+      document.documentElement.setAttribute('theme', 'dark');
+    }
+  </script>
+</body>
+
+</html>

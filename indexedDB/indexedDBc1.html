@@ -3,8 +3,8 @@
  * @version: 
  * @Author: Eugene
  * @Date: 2023-12-21 09:22:11
- * @LastEditors: Andy
- * @LastEditTime: 2023-12-29 17:28:07
+ * @LastEditors: likai 2806699104@qq.com
+ * @LastEditTime: 2024-07-14 22:34:46
  
 -->
 
@@ -58,14 +58,14 @@
         console.log('数据库版本更改为： ' + dbVersion);
     };
     let user = {
-        username: '111007',
+        username: '11100sss7',
         phone: '189111833',
         address: 'aicoder.com'
     };
 
     function dbTest() {
-        for (let index = 0; index < 10000; index++) {
-            user.username = parseInt(user.username) + 1
+        // for (let index = 0; index < 1000; index++) {
+            // user.username =index
             // 创建一个事务，类型：IDBTransaction，文档地址： https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction
             let transaction = db.transaction("users", "readwrite"),
                 // 通过事务来获取IDBObjectStore
@@ -74,6 +74,6 @@
             result1.onsuccess = (e) => {
                 console.log("1111success");
             }
-        }
+        // }
     }
 </script>

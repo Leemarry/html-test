@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>indexedDB</title>
+</head>
+<body>
+  
+</body>
+</html>
+<script>
+  // 定义一个函数来打开或创建数据库  
+function openDB() {  
+    return new Promise((resolve, reject) => {  
+        const request = indexedDB.open('MyNotesDB2', 1); // 数据库名为'MyNotesDB'，版本为1  
+  
+        request.onerror = (event) => {  
+            console.error('Database error: ' + event.target.errorCode);  
+            reject(event.target.errorCode);  
+        };  
+  
+        request.onsuccess = (event) => {  
+            console.log('Database successfully opened or created.');  
+            resolve(event.target.result);  
+        };  
+  
+        // 处理数据库版本变更（例如，创建或修改对象存储）  
+        request.onupgradeneeded = (event) => {  
+            const db = event.target.result;  
+            // 创建一个名为'notes'的对象存储（如果尚不存在）  
+            if (!db.objectStoreNames.contains('notes')) {  
+                db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true });  
+            }  
+        };  
+    });  
+}  
+  
+// 定义一个函数来添加笔记  
+function addNote(db, note) {  
+  
+    return new Promise((resolve, reject) => {  
+        const transaction = db.transaction(['notes'], 'readwrite');  
+        const objectStore = transaction.objectStore('notes');  
+        console.log('addNote',db,note)
+        const request = objectStore.add(note);  
+  
+        request.onsuccess = (event) => {  
+            console.log('Note added successfully.',event);  
+            resolve(event.target.result);  
+        };  
+  
+        request.onerror = (event) => {  
+            console.error('Error adding note: ' + event.target.errorCode);  
+            reject(event.target.errorCode);  
+        };  
+    });  
+}  
+  
+// 定义一个函数来获取所有笔记  
+function getAllNotes(db) {  
+    return new Promise((resolve, reject) => {  
+        const transaction = db.transaction(['notes'], 'readonly');  
+        const objectStore = transaction.objectStore('notes');  
+  
+        const request = objectStore.getAll();  
+  
+        request.onsuccess = (event) => {  
+            console.log('All notes retrieved successfully.');  
+            resolve(event.target.result);  
+        };  
+  
+        request.onerror = (event) => {  
+            console.error('Error retrieving notes: ' + event.target.errorCode);  
+            reject(event.target.errorCode);  
+        };  
+    });  
+}  
+  
+// 使用示例  
+openDB().then(db => {  
+  console.log('Database opened or created.',db);
+    // 添加一个笔记  
+    addNote(db, { title: 'First Note', content: 'This is my first note.' }).then(id => {  
+        console.log('Note added with ID:', id);  
+  
+        // 获取所有笔记  
+        // getAllNotes(db).then(notes => {  
+        //     console.log('All notes:', notes);  
+        // }).catch(error => {  
+        //     console.error('Failed to retrieve notes:', error);  
+        // });  
+    }).catch(error => {  
+        console.error('Failed to open or create database:', error);  
+    });  
+}).catch(error => {  
+    console.error('Failed to open or create database:', error);  
+});
+</script>

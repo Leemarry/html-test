@@ -1,0 +1,37 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<title>动态改变主题颜色</title>  
+<style>  
+    .themed-background {  
+        background-color: red; /* 初始背景颜色 */  
+    }  
+</style>  
+</head>  
+<body>  
+  
+<input type="color" id="themeColorPicker">  
+  
+<div class="themed-background">这是一个背景需要改变颜色的元素</div>  
+<div class="themed-background">另一个背景需要改变的元素</div>  
+<div>这个元素不需要改变背景颜色</div>  
+  
+<script>  
+    document.addEventListener('DOMContentLoaded', function() {  
+        var colorPicker = document.getElementById('themeColorPicker');  
+  
+        colorPicker.addEventListener('change', function() {  
+            var selectedColor = this.value; // 获取选中的颜色值  
+  
+            // 遍历所有需要改变背景颜色的元素  
+            var themedElements = document.querySelectorAll('.themed-background');  
+            themedElements.forEach(function(element) {  
+                element.style.backgroundColor = selectedColor; // 设置背景颜色  
+            });  
+        });  
+    });  
+</script>  
+  
+</body>  
+</html>
