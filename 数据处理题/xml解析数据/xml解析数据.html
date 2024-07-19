@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 上传 -->
+    <input type="file" id="file">
+    </input>
+</body>
+</html>
+<script>
+    var file = document.getElementById('file');
+    file.onchange = function(e){
+     
+        
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(e){
+            var xml = e.target.result;
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(xml,'text/xml');
+
+            var data = xmlDoc.getElementsByTagName('coordinates')[0].textContent;
+            var coordinates = xmlDoc.getElementsByTagName('coordinates') ; // 获取所有coordinates标签
+            //coordinates 
+
+
+
+            
+
+        }
+    }
+
+    function parseXML(xmlString) {
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xmlString, "application/xml");
+
+    // 获取创建时间
+    let createTime = xmlDoc.getElementsByTagName('wpml:createTime')[0].textContent;
+    console.log('创建时间:', createTime);
+
+    // 获取更新时间
+    let updateTime = xmlDoc.getElementsByTagName('wpml:updateTime')[0].textContent;
+    console.log('更新时间:', updateTime);
+
+    // 获取飞行到航线模式
+    let flyToWaylineMode = xmlDoc.getElementsByTagName('wpml:flyToWaylineMode')[0].textContent;
+    console.log('飞行到航线模式:', flyToWaylineMode);
+
+    // 获取完成动作
+    let finishAction = xmlDoc.getElementsByTagName('wpml:finishAction')[0].textContent;
+    console.log('完成动作:', finishAction);
+
+    // 获取遥控器丢失时的退出动作
+    let exitOnRCLost = xmlDoc.getElementsByTagName('wpml:exitOnRCLost')[0].textContent;
+    console.log('遥控器丢失时的退出动作:', exitOnRCLost);
+
+    // 获取起飞安全高度
+    let takeOffSecurityHeight = xmlDoc.getElementsByTagName('wpml:takeOffSecurityHeight')[0].textContent;
+    console.log('起飞安全高度:', takeOffSecurityHeight);
+
+    // 获取全局过渡速度
+    let globalTransitionalSpeed = xmlDoc.getElementsByTagName('wpml:globalTransitionalSpeed')[0].textContent;
+    console.log('全局过渡速度:', globalTransitionalSpeed);
+
+    // 获取无人机枚举值
+    let droneEnumValue = xmlDoc.getElementsByTagName('wpml:droneEnumValue')[0].textContent;
+    console.log('无人机枚举值:', droneEnumValue);
+
+    // 获取无人机子枚举值
+    let droneSubEnumValue = xmlDoc.getElementsByTagName('wpml:droneSubEnumValue')[0].textContent;
+    console.log('无人机子枚举值:', droneSubEnumValue);
+
+    // 获取有效载荷枚举值
+    let payloadEnumValue = xmlDoc.getElementsByTagName('wpml:payloadEnumValue')[0].textContent;
+    console.log('有效载荷枚举值:', payloadEnumValue);
+
+    // 获取有效载荷子枚举值
+    let payloadSubEnumValue = xmlDoc.getElementsByTagName('wpml:payloadSubEnumValue')[0].textContent;
+    console.log('有效载荷子枚举值:', payloadSubEnumValue);
+
+    // 获取有效载荷位置索引
+    let payloadPositionIndex = xmlDoc.getElementsByTagName('wpml:payloadPositionIndex')[0].textContent;
+    let payloadPositionIndexs = xmlDoc.getElementsByTagName('wpml:payloadPositionIndex');
+    console.log('有效载荷位置索引:', payloadPositionIndex,payloadPositionIndexs);
+}
+
+let xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:wpml="http://www.dji.com/wpmz/1.0.0">
+  <Document>
+    <wpml:createTime>Mon Jun 03 11:06:51 GMT+08:00 2024</wpml:createTime>
+    <wpml:updateTime>Mon Jun 03 11:06:51 GMT+08:00 2024</wpml:updateTime>
+    <wpml:missionConfig>
+      <wpml:flyToWaylineMode>safely</wpml:flyToWaylineMode>
+      <wpml:finishAction>goHome</wpml:finishAction>
+      <wpml:exitOnRCLost>goContinue</wpml:exitOnRCLost>
+      <wpml:takeOffSecurityHeight>35</wpml:takeOffSecurityHeight>
+      <wpml:globalTransitionalSpeed>10</wpml:globalTransitionalSpeed>
+      <wpml:droneInfo>
+        <wpml:droneEnumValue>77</wpml:droneEnumValue>
+        <wpml:droneSubEnumValue>1</wpml:droneSubEnumValue>
+      </wpml:droneInfo>
+    </wpml:missionConfig>
+    <wpml:payloadInfo>
+        <wpml:payloadEnumValue>67</wpml:payloadEnumValue>
+        <wpml:payloadSubEnumValue>0</wpml:payloadSubEnumValue>
+        <wpml:payloadPositionIndex>0</wpml:payloadPositionIndex>
+      </wpml:payloadInfo>
+    <wpml:payloadInfo>
+        <wpml:payloadEnumValue>67</wpml:payloadEnumValue>
+        <wpml:payloadSubEnumValue>0</wpml:payloadSubEnumValue>
+        <wpml:payloadPositionIndex>0</wpml:payloadPositionIndex>
+      </wpml:payloadInfo>
+  </Document>
+</kml>`;
+console.log('xmlContent:', xmlContent);
+
+// parseXML(xmlContent);
+</script>
