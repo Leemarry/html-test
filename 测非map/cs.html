@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2024-07-17 13:25:33
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\测非map\cs.html
+ * @Description: Do not edit
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,13 +15,112 @@
 </head>
 
 <body>
-    <div class="c">
-        <div class="d1">无人机1556666666</div>
-        <div class="d2">44445556664555666655666661</div>
-    </div>
+<button type="submit" onclick='fetchAgin()'>点击</button>
+<div id="app"></div>
 </body>
 
 </html>
+<script>
+
+
+
+
+
+         getMethod().then((blob) => {
+          downloadFile(blob)
+            })
+     
+      function   downloadFile(blob, fileName = '') {
+            // 创建a 标签
+            const a = document.createElement('a');
+            const blobUrl = URL.createObjectURL(blob);
+            console.log('downloadFile', blob, fileName, blobUrl);
+            a.setAttribute('href', blobUrl);
+            a.setAttribute('download', fileName);
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl)
+        }
+
+        async   function   getMethod() {
+            console.log('getMethod');
+            const res = await fetch('http://vjs.zencdn.net/v/oceans.mp4', {
+                method: 'GET', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                responseType: 'blob', //重要代码
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            return res.blob();
+        }
+
+
+  
+requestAnimationFrame(animate);
+let start=0;
+function animate(time){
+  if(time-start>=1000){
+    start = time;
+  const app = document.getElementById('app');
+  // 当前时间 mm-dd hh:mm:ss
+  app.innerHTML  = new Date().toLocaleString();
+  }
+  requestAnimationFrame(animate); 
+}
+  
+// 定义一个函数来生成带有时间戳的URL  
+function getUniqueUrl(baseUrl) {  
+  return baseUrl + '?' + new Date().getTime();  
+}  
+  
+// 使用带有时间戳的URL  
+const url = getUniqueUrl('http://127.0.0.1:9090/efuavmodel/pointCloud/kunmingPv/tileset.json');  
+  
+// 发送请求（与之前的代码相同）  
+// fetch(url)  
+//   .then(response => {  
+//     if (!response.ok) {  
+//       throw new Error('请求失败，状态码：' + response.status);  
+//     }  
+//     return response.json();  
+//   })  
+//   .then(data => {  
+//     console.log(data);  
+//   })  
+//   .catch(error => {  
+//     console.error('请求发生错误:', error.message);  
+//     alert('请求失败，请稍后再试');  
+//   });
+
+  function fetchAgin(){
+     // 相当于点击一次页面左上角的刷新，来结束所有网络进程请求
+     location.reload()
+
+//      const url = 'http://127.0.0.1:9090/efuavmodel/pointCloud/kunmingPv/tileset.json?' + new Date().getTime();
+// // 发送请求（与之前的代码相同）  
+// fetch(url)  
+//   .then(response => {  
+//     if (!response.ok) {  
+//       throw new Error('请求失败，状态码：' + response.status);  
+//     }  
+//     return response.json();  
+//   })  
+//   .then(data => {  
+//     console.log(data);  
+//   })  
+//   .catch(error => {  
+//     console.error('请求发生错误:', error.message);  
+//     alert('请求失败，请稍后再试');  
+//   });
+  }
+</script>
 <style>
     .c {
         width: 300px;

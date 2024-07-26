@@ -1,0 +1,82 @@
+<!--
+ * @Date: 2024-07-17 13:25:33
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\AJAX\代理\cs.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代理</title>
+</head>
+
+<body>
+<button type="submit" onclick='fetchAgin()'>点击</button>
+<div id="app"></div>
+</body>
+
+</html>
+<script>
+
+
+
+
+
+         getMethod().then((json) => {
+          console.log('json',json);
+          
+          // downloadFile(blob)
+            })
+     
+      // function   downloadFile(blob, fileName = '') {
+      //       // 创建a 标签
+      //       const a = document.createElement('a');
+      //       const blobUrl = URL.createObjectURL(blob);
+      //       console.log('downloadFile', blob, fileName, blobUrl);
+      //       a.setAttribute('href', blobUrl);
+      //       a.setAttribute('download', fileName);
+      //       a.style.display = 'none';
+      //       document.body.appendChild(a);
+      //       a.click();
+      //       document.body.removeChild(a);
+      //       URL.revokeObjectURL(blobUrl)
+      //   }
+
+        async   function   getMethod() {
+            console.log('getMethod');
+            const res = await fetch('https://front-gateway.mtime.com/library/index/app/topList.api?tt=1663510444829&', {
+                method: 'GET', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                responseType: 'blob', //重要代码
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            return res.json();
+        }
+
+
+  
+
+  
+
+
+
+</script>
+<style>
+    .c {
+        width: 300px;
+        display: flex;
+    }
+    .d1{
+       
+    }
+</style>
