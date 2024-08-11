@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <button onclick='download()'>点击下载</button>
+    <!-- <a download='DJI_20231223122702_0008_D.JPG' href="/download/ches/DJI_20231223122702_0008_D.JPG">x</a> -->
+    <script>
+        // var assetURL = 'http://114.132.62.199:9000/test/DJI_0003.MP4';
+        const fileUrl = 'http://114.132.62.199:9000/ches/DJI_20231223122702_0008_D.JPG'
+        function getFileSize(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('HEAD', url, false);
+            xhr.send();
+            return xhr.getResponseHeader('Content-Length');
+        }
+        console.log(getFileSize(fileUrl))
+        const fileSize = getFileSize(fileUrl)
+        const chunkSize = 4 * 1024 * 1024; // 10MB  
+        const chunks = []
+        function downloadFileConcurrently(url, chunkSize, fileSize) {
+            // 打印执行用时 downloadFileConcurrently: 29176.2080078125 ms 28728.8740234375 m
+            console.time('downloadFileConcurrently');
+            for (let i = 0; i < Math.ceil(fileSize / chunkSize); i++) {
+                const start = i * chunkSize;
+                const end = Math.min(fileSize - 1, start + chunkSize-1);
+                console.log('ss');
+                
+                chunks.push(downloadFileSlice(url, start, end));
+            }
+            console.log(chunks);
+            Promise.all(chunks).then(chunks => {
+                console.log('ssss');
+                
+                const blob = new Blob(chunks, { type: 'image/jpeg' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'DJI_20231223122702_0008_D.JPG';
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+                console.timeEnd('downloadFileConcurrently');
+
+            })
+
+        }
+
+
+        // 异步函数来下载文件分片  
+        function downloadFileSlice(url, start, end) {
+            return fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Range': `bytes=${start}-${end}`
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to download slice: ${response.statusText}`);
+                }
+                return response.blob();
+            });
+        }
+
+
+        function download() {
+            downloadFileConcurrently(fileUrl, chunkSize, fileSize)
+        }
+
+        // 执行用时
+        console.time('downloadFileConcurrently');
+        // 使用 XMLHttpRequest 发起 GET 请求
+        var xhr = new XMLHttpRequest();
+        // xhr.open('GET', 'http://114.132.62.199:9000/ches/DJI_20231223122702_0008_D.JPG', true);
+        xhr.open('GET', 'http://114.132.62.199:9000/ches/DJI_20231223122702_0008_D.JPG', true);
+
+        xhr.responseType = 'blob'; // 设置响应类型为 blob
+
+        xhr.onload = function () {
+          if (this.status === 200) {
+            // 将 blob 数据赋值给变量 a
+            var a = this.response;
+            // 在这里可以进行后续的处理，例如创建下载链接
+            var url = URL.createObjectURL(a);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'DJI_20231223122702_0008_D.JPG';
+            document.body.appendChild(link);
+            link.click();
+            console.timeEnd('downloadFileConcurrently');
+          }
+        };
+
+        xhr.send();
+      
+    </script>
+
+</body>
+
+</html>

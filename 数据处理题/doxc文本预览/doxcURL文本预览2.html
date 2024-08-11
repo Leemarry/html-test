@@ -1,0 +1,46 @@
+<!--
+ * @Date: 2024-07-30 19:26:18
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\数据处理题\doxc文本预览\doxcURL文本预览2.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>doxcURL文本预览2 Preview</title>
+  <!-- <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.8/mammoth.browser.min.js"></script>
+</head>
+
+<body>
+  <div id="preview"></div>
+
+  <script>
+    // 发起文件下载请求
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://127.0.0.1:9090/efuavkmz/pointcloud/kmzTasks/2/%E5%8D%B1%E9%99%A9%E7%82%B9%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A.docx', true);
+    xhr.responseType = 'arraybuffer';
+
+    xhr.onload = async function () {
+      if (xhr.status === 200) {
+        try {
+          // 使用 mammoth.js 进行转换
+          const result = await mammoth.convertToHtml({ arrayBuffer: xhr.response });
+          document.getElementById('preview').innerHTML = result.value;
+        } catch (error) {
+          console.error('解析失败', error);
+        }
+      } else {
+        console.error('内容获取失败，状态码:', xhr.status);
+      }
+    };
+
+    xhr.send();
+  </script>
+</body>
+
+</html>

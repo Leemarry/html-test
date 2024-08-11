@@ -1,0 +1,44 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>图片上传与压缩</title>  
+</head>  
+<body>  
+    <input type="file" id="imageInput" accept="image/*">  
+    <button onclick="compressAndDisplayImage()">上传并压缩图片</button>  
+    <img id="compressedImage" src="" alt="Compressed Image">  
+  
+    <!-- 引入compressor.js库 -->  
+    <script src="https://cdn.jsdelivr.net/npm/compressorjs/dist/compressor.min.js"></script>  
+  
+    <script>  
+        function compressAndDisplayImage() {  
+            const fileInput = document.getElementById('imageInput');  
+            const file = fileInput.files[0];  
+  
+            if (!file) {  
+                alert('请选择文件！');  
+                return;  
+            }  
+  
+            // 这里假设文件已经是JPEG或PNG  
+            new Compressor(file, {  
+                quality: 0.6, // 压缩质量  
+                success: function(result) {  
+                    // 显示压缩后的图片  
+                    const img = document.getElementById('compressedImage');  
+                    img.src = URL.createObjectURL(result);  
+                },  
+                error: function(err) {  
+                    console.log(err.message);  
+                },  
+            });  
+        }  
+  
+        // 注意：对于TIF文件，你可能需要额外的转换步骤  
+        // 这通常需要在服务器端或使用其他JavaScript库来实现  
+    </script>  
+</body>  
+</html>

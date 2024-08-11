@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>指定范围视频播放示例</title>
+</head>
+
+<body>
+    <video id="videoPlayer" controls></video>
+    <script>
+        // 创建 MediaSource 对象
+        var mediaSource = new MediaSource();
+
+        // 获取 video 元素
+        var video = document.getElementById('videoPlayer');
+        video.src = URL.createObjectURL(mediaSource);
+
+        // 处理 MediaSource 打开事件
+        mediaSource.addEventListener('sourceopen', function (e) {
+            // 创建 SourceBuffer 对象
+            var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
+
+            // 视频的总时长（假设以秒为单位）
+            var totalDuration = 600;  // 示例总时长为 600 秒
+
+            // 计算起始和结束的字节位置
+            var startByte = Math.floor(200 * 1024 * 1024 * (totalDuration / (600 * 1024 * 1024)));
+            var endByte = Math.floor(202 * 1024 * 1024 * (totalDuration / (600 * 1024 * 1024)));
+
+
+            // 模拟获取指定范围视频分块数据的函数
+            function fetchChunk(startByte, endByte) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'http://114.132.62.199:9000/test/DJI_0003.MP4', true);
+                xhr.setRequestHeader('Range', 'bytes=' + startByte + '-' + endByte);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 206) {
+                        var chunkData = xhr.response;
+                        sourceBuffer.appendBuffer(chunkData);
+                    } else if (xhr.status !== 206) {
+                        console.error('请求指定范围分块数据失败，状态码:' + xhr.status);
+                    }
+                };
+
+                xhr.send();
+            }
+
+            // 初始化分块获取
+            fetchChunk(startByte, endByte);
+        });
+    </script>
+</body>
+
+</html>

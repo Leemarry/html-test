@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIF 文件在线预览</title>
+</head>
+
+<body>
+  <input type="file" id="fileInput">
+  <div id="preview"></div>
+  <div class="img-box">
+    <img id="img" src="" />
+</div>
+
+  <script src="./tiff.min.js"></script>
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const arrayBuffer = e.target.result;
+      const tiff = new Tiff({buffer: arrayBuffer});
+      // TIFF.decode(arrayBuffer).then(tiff => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      tiff.toCanvas(canvas);
+
+      const previewDiv = document.getElementById('preview');
+      previewDiv.appendChild(canvas);
+      // });
+        // TIFF.decode(arrayBuffer).then(tiff => {
+        //   const canvas = document.createElement('canvas');
+        //   const ctx = canvas.getContext('2d');
+
+        //   tiff.toCanvas(canvas);
+
+        //   const previewDiv = document.getElementById('preview');
+        //   previewDiv.appendChild(canvas);
+        // });
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+  </script>
+</body>
+
+</html>

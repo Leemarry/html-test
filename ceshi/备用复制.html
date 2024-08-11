@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id='copyButton'>copyButton</button>
+</body>
+</html>
+<script>
+    function copyTextToClipboard(text) {  
+  // 创建一个临时的textarea元素  
+  const textarea = document.createElement('textarea');  
+  // 设置textarea的值为要复制的文本  
+  textarea.value = text;  
+  // 将textarea添加到文档中（这一步是可选的，但有时候可以帮助某些浏览器）  
+  document.body.appendChild(textarea);  
+  // 选中textarea中的所有文本  
+  textarea.select();  
+  try {  
+    // 尝试执行复制命令  
+    const successful = document.execCommand('copy');  
+    const msg = successful ? '成功复制' : '复制失败';  
+    console.log(msg);  
+  } catch (err) {   
+    console.error('复制失败:', err);  
+  }  
+  // 移除textarea元素  
+  document.body.removeChild(textarea);  
+}  
+  
+// 示例用法  
+const button = document.getElementById('copyButton');  
+button.addEventListener('click', function() {  
+  const textToCopy = '这是需要复制的文本';  
+  copyTextToClipboard(textToCopy);  
+});
+</script>

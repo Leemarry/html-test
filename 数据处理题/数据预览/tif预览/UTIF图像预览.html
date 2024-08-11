@@ -1,0 +1,104 @@
+<!--
+ * @Date: 2024-08-01 15:20:53
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\数据处理题\数据预览\tif预览\UTIF图像预览.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIF 图像预览</title>
+  <script src="./UTIF.js"></script>
+</head>
+<body>
+  <button onclick="fetchImage()">加载 TIF 图像</button>
+  <img id="previewImage" alt="预览图像" />
+  <canvas id="canvas" class="canvas"></canvas>
+  <script>
+    function fetchImage() {
+      fetch("http://127.0.0.1:9090/efuav-ortho-img/pointcloud/kmzTasks/2/yingDeMap.tif")
+      .then(response => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.arrayBuffer();
+        })
+      .then(data => {
+          const ifds = UTIF.decode(data);
+          UTIF.decodeImage(data, ifds[0]);
+          const rgba = UTIF.toRGBA8(ifds[0]);
+          const width = ifds[0].width;
+          const height = ifds[0].height;
+          console.log(width,height);
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          const imgData = new ImageData(
+            new Uint8ClampedArray(rgba.buffer),
+            width,
+            height
+          );
+          ctx?.putImageData(imgData, 0, 0);
+          // 将canvas添加到页面
+          document.body.appendChild(canvas);
+        //      canvas.toBlob(blob => {
+        //    const url =URL.createObjectURL(blob);
+        //    document.getElementById('previewImage').src = url;
+        // });
+          const blob = new Blob([canvas.toDataURL('image/png')], { type: 'image/png' });
+          const url = URL.createObjectURL(blob);
+          document.getElementById('previewImage').src = url;
+//         const dataUrl = canvas.toDataURL('image/png');  
+// const byteString = atob(dataUrl.split(',')[1]);  
+// const ab = new ArrayBuffer(byteString.length);  
+// const ia = new Uint8Array(ab);  
+// for (let i = 0; i < byteString.length; i++) {  
+//     ia[i] = byteString.charCodeAt(i);  
+// }  
+  
+// const blob = new Blob([ia], { type: 'image/png' });  
+// const url = URL.createObjectURL(blob);  
+// document.getElementById('previewImage').src = url;
+        });
+    }
+ 
+    function fetchImages(){
+      fetch("http://127.0.0.1:9090/efuav-ortho-img/pointcloud/kmzTasks/2/yingDeMap.tif")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.arrayBuffer();
+      })
+      .then(data => {
+        const ifds = UTIF.decode(data);
+        UTIF.decodeImage(data, ifds[0]);
+        const rgba = UTIF.toRGBA8(ifds[0]);
+        const widh = ifds[0].width;
+        const height = ifds[0].height;
+        const canvas = document.getElementById("canvas");
+        canvas.width = widh;
+        canvas.height = height;
+        // this.width = widh;
+        // this.height = height;
+        const ctx = canvas.getContext("2d");
+        const imgData = new ImageData(
+          new Uint8ClampedArray(rgba.buffer),
+          widh,
+          height
+        );
+        ctx?.putImageData(imgData, 0, 0);
+        // canvas.toBlob(blob => {
+        //   this.imgData = URL.createObjectURL(blob);
+        // });
+      });
+  }
+ 
+ </script>
+</body>
+
+</html>

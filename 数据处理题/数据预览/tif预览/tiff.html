@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIF 文件在线预览</title>
+</head>
+<body>
+    <div id="drop">
+        <p>Drop TIFF file here!</p>
+    </div>
+    <div class="img-box">
+        <img id="img" src="" />
+    </div>
+  <script src="./tiff.min.js"></script>
+  <script>
+      const elm = document.getElementById("drop")
+      const img = document.getElementById("img")
+      elm.addEventListener("dragenter", e => e.preventDefault())
+      elm.addEventListener("dragover", e => e.preventDefault())
+      elm.addEventListener("drop", e => {
+          e.preventDefault()
+          const file = e.dataTransfer.files[0];
+          const reader = new FileReader();
+          reader.addEventListener("load", e => {
+              const arrayBuffer = e.target.result
+              
+              const tiff = new Tiff({buffer: arrayBuffer})
+              // const canvas = tiff.toCanvas() // 使用canvas调此方法
+              const imgData = tiff.toDataURL() // 使用base64调此方法
+              img.src = imgData
+          })
+          reader.readAsArrayBuffer(file)
+      })
+  </script>
+  
+</body>
+
+</html>
+<style>
+    #drop p {
+    text-align: center;
+    border: 1px dashed #ccc;
+    height: 200px;
+    line-height: 200px;
+}
+.img-box {
+    max-width: 1200px;
+    margin: 0 auto; 
+}
+.img-box img {
+    width: 100%;
+}
+
+</style>
