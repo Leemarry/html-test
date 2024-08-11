@@ -1,40 +1,41 @@
 <!--
- * @Descripttion: 
- * @version: 
- * @Author: Eugene
- * @Date: 2024-05-17 14:46:06
- * @LastEditors: Andy
- * @LastEditTime: 2024-05-17 15:03:57
+ * @Date: 2024-07-17 13:25:24
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\ceshi\qt.html
+ * @Description: Do not edit
 -->
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>color拾取器</title>
-</head>
-
-<body>
-    <label for="colorWell">Color: <span id="currentColorLabel">褐色</span></label>
-    <input type="color" id="color">
-</body>
-<script>
-    document.querySelector("#color").onchange = function () {
-        document.getElementById('color').click();
-        const color = this.value; // 获取颜色值
-        const currentColorLabel = document.getElementById("currentColorLabel");
-        currentColorLabel.textContent = color; // 更新显示当前颜色的 label 内容
-
-
-        // 必须添加触发click事件否则不能通过点击确定按钮触发更改颜色  
-        document.body.style.background = this.value;
-    }
-
-    //     const color = event.target.value; // 获取颜色值
-    //   const currentColorLabel = document.getElementById("currentColorLabel");
-    //   currentColorLabel.textContent = color; // 更新显示当前颜色的 label 内容
-</script>
-
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Copy Text Example</title>  
+</head>  
+<body>  
+  
+<button id="copyButton">复制小白兔</button>  
+<textarea id="pasteArea" placeholder="在这里粘贴"></textarea>  
+  
+<script >
+    document.getElementById('copyButton').addEventListener('click', function() {  
+    const textToCopy = '这是白兔';  
+    navigator.clipboard.writeText(textToCopy).then(function() {  
+        console.log('文本已复制到剪贴板');  
+    }).catch(function(err) {  
+        console.error('复制失败: ', err);  
+    });  
+});  
+  
+// 注意：下面的代码不是必须的，因为用户会在其他地方（如文本编辑器、输入框等）粘贴文本  
+// 这里只是为了演示如何在一个textarea中显示粘贴的内容  
+document.getElementById('pasteArea').addEventListener('paste', function(e) {  
+    e.preventDefault(); // 阻止默认粘贴行为  
+    const text = (e.originalEvent || e).clipboardData.getData('text');  
+    document.getElementById('pasteArea').value = text;  
+});  
+  
+// 注意：上面的paste事件处理中，e.preventDefault()的使用可能会阻止粘贴操作，  
+// 取决于你的具体需求。如果你只是想在textarea中显示粘贴的内容，可以移除这行代码。
+</script>  
+</body>  
 </html>

@@ -1,53 +1,32 @@
 <!--
- * @Descripttion: 
- * @version: 
- * @Author: likai
- * @Date: 2024-05-20 15:37:50
- * @LastEditors: likai
- * @LastEditTime: 2024-05-20 15:49:43
+ * @Date: 2024-07-17 13:25:24
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\ceshi\pppp.html
+ * @Description: Do not edit
 -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 
 <body>
+  <button onclick="copyText()">复制文本</button>
+  <a href="javascript:void(0)" onclick="pasteHandler()">粘贴并输出</a>
 
-    <div class="op">
-        <div class="p">7777</div>
-        <!-- <div class="p">777ssss7</div> -->
-    </div>
+  <script>
+    function copyText() {
+      navigator.clipboard.writeText('这是一白兔');
+    } 
+    function pasteHandler() {
+      const pastedText = navigator.clipboard.readText();
+      console.log(pastedText);
+    }
+  </script>
 </body>
 
 </html>
-<style>
-    .op {
-        width: 500px;
-        height: 500px;
-        background-color: antiquewhite;
-        position: relative;
-    }
-
-    .p {
-        position: absolute;
-        top: 20px;
-    }
-</style>
-<script>
-    // const elements = document.querySelectorAll('.p');
-    // const pele = document.getElementsByClassName('p')
-    const element = document.querySelector('.p');
-    // console.log('p', pele, element);
-    const tops = element.offsetTop
-    console.log('top', tops);
-
-    const opRect = element.getBoundingClientRect()
-    const cRectLeft = opRect.left
-    const cRectTop = opRect.top
-    console.log('opRect', cRectTop);
-</script>

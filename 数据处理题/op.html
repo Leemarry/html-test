@@ -1,0 +1,39 @@
+<!--
+ * @Date: 2024-08-05 21:45:39
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\数据处理题\op.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>
+<html>
+
+<body>
+
+  <script>
+    // 使用 XMLHttpRequest 发起 GET 请求
+    var xhr = new XMLHttpRequest();
+    // xhr.open('GET', 'http://114.132.62.199:9000/ches/DJI_20231223122702_0008_D.JPG', true);
+    xhr.open('GET', '/ches/DJI_20231223122702_0008_D.JPG', true);
+
+    xhr.responseType = 'blob'; // 设置响应类型为 blob
+
+    xhr.onload = function () {
+      if (this.status === 200) {
+        // 将 blob 数据赋值给变量 a
+        var a = this.response;
+        // 在这里可以进行后续的处理，例如创建下载链接
+        var url = URL.createObjectURL(a);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'DJI_20231223122702_0008_D.JPG';
+        document.body.appendChild(link);
+        link.click();
+      }
+    };
+
+    xhr.send();
+  </script>
+
+</body>
+
+</html>

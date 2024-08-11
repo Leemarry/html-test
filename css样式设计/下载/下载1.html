@@ -1,0 +1,58 @@
+<!--
+ * @Date: 2024-08-10 19:11:04
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\css样式设计\下载\下载1.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <video id="myVideo" width="600" controls></video>
+</body>
+<script>
+    const videoElement = document.getElementById('myVideo');  
+const mediaSource = new MediaSource();  
+videoElement.src = URL.createObjectURL(mediaSource);  
+
+mediaSource.addEventListener('sourceopen', async () => {  
+  const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.64001F, mp4a.40.2"');  
+  
+  const videoUrl = 'http://114.132.62.199:9000/test/DJI_0003.MP4'; // 替换为你的视频链接  
+  const rangeStart = 0; // 视频开始位置（字节）  
+  const rangeEnd = 3 * 1000 * 1000; // （字节）  
+
+  try {  
+    // 请求视频片段  
+    const response = await fetch(videoUrl, {  
+      method: 'GET',  
+      headers: {  
+        'Range': `bytes=${rangeStart}-${rangeEnd}`  
+      }  
+    });  
+
+    if (!response.ok) {  
+      throw new Error('网络错误: ' + response.status);  
+    }  
+
+    const arrayBuffer = await response.arrayBuffer();  
+    
+    // 将数据添加到 SourceBuffer  
+    sourceBuffer.addEventListener('updateend', () => {  
+      // 当数据添加完成后，触发播放  
+      if (!videoElement.playing) {  
+        videoElement.play();  
+      }  
+    });  
+  
+    sourceBuffer.appendBuffer(arrayBuffer);  
+  } catch (error) {  
+    console.error('播放视频时出错:', error);  
+  }  
+});
+</script>
+</html>

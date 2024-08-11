@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <img src="" alt="" id='img'> -->
+    <!-- <video src="http://114.132.62.199:9000/test/DJI_0003.MP4"></video> -->
+    <video src="" id='video'></video>
+</body>
+</html>
+<script>
+    const video = document.getElementById('video')
+    const rangeVideo = () => {
+      const totalSize = 1397956
+      const chunkSize = 500000
+      const numChunks = Math.ceil(totalSize / chunkSize)
+      let chunk = new Blob()
+      let index = 0
+
+      send()
+      function send() {
+        if (index >= numChunks) return
+        const start = index * chunkSize
+        const end = Math.min(start + chunkSize - 1, totalSize - 1)
+        fetch('http://114.132.62.199:9000/test/DJI_0003.MP4', {
+          headers: { Range: `bytes=${start}-${end}` },
+        })
+          .then((response) => {
+            index++
+            return response.blob()
+          })
+          .then((blob) => {
+            send()
+            chunk = new Blob([chunk, blob], { type: 'video/mp4' })
+            const url = URL.createObjectURL(chunk)
+            const currentTime = video.currentTime
+            video.src = url
+            video.currentTime = currentTime
+            if (video.readyState >= video.HAVE_ENOUGH_DATA) {
+  video.play();
+} else {
+  video.addEventListener('canplay', function() {
+    video.play();
+  });
+}
+          })
+      }
+    }
+    rangeVideo()
+
+    // const image = document.getElementById('img')
+    //   const rangeImge = () => {
+    //   const totalSize = 924087
+    //   const chunkSize = 300000
+    //   const numChunks = Math.ceil(totalSize / chunkSize)
+    //   let chunk = new Blob()
+    //   let index = 0
+    //   send()
+    //   function send() {
+    //     if (index >= numChunks) return
+    //     const start = 1*2000
+    //     const end = 3* 2000
+    //     fetch('http://114.132.62.199:9000/ches/DJI_20231223122702_0008_D.JPG', {
+    //       headers: { Range: `bytes=${start}-${end}` },
+    //     })
+    //       .then((response) => {
+    //         return response.blob()
+    //       })
+    //       .then((blob) => {
+    //         index++
+    //         send()
+    //         chunk = new Blob([chunk, blob], { type: 'image/png' })
+    //         const url = URL.createObjectURL(chunk)
+    //         console.log(111, chunk)
+    //         image.src = url
+    //       })
+    //   }
+    // }
+    // rangeImge()
+
+</script>

@@ -1,0 +1,63 @@
+<!--
+ * @Date: 2024-06-26 18:05:42
+ * @LastEditors: likai 2806699104@qq.com
+ * @LastEditTime: 2024-07-02 16:37:23
+ * @FilePath: \cshiDemo\js重新加载\js重新加载2.html
+ * @Description: Do not edit1
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>自定义</title>
+    <script >
+    const backdomains = ["unpk1.com",'cesium.com', "unpkg2.com", "unpkg.com"]; 
+    const nextdomains ={}
+        const maxRetry=3;
+        const retryInfo={};
+      window.addEventListener('error',(e)=>{
+        const tag = e.target
+        if (tag.tagName === 'SCRIPT' && !(e instanceof ErrorEvent)) {
+                const url=new URL(tag.src)
+                const pathname = url.pathname //http://static.com/js/1.js  除去域名后的路径 ——> /js/1.js
+         
+                if(!nextdomains[pathname]){
+                    nextdomains[pathname] = 0
+                }
+                const index = nextdomains[pathname]
+                if(index>=backdomains.length){
+                    return
+                }
+                const domain  = backdomains[index]
+                console.log(pathname,url,domain);
+                url.hostname = domain // origin hostname
+                const newUrl = url.toString()
+                document.write(`<script src="${newUrl}">\<\/script>`)  // 用于堵塞
+                // const script = document.createElement('script')
+                // script.src = newUrl
+                // e.target.parentElement.insertBefore(script, e.target)
+                console.log('当前', nextdomains[pathname]);
+                
+                nextdomains[pathname] ++;
+            }
+
+
+      },true)
+    </script>
+  </head>
+  <body>
+    <div id="demo-app"></div>
+    <!-- <script src='http://static.com/js/1.js'></script> -->
+    <!-- <script src="https://cdn.topskys.org/v0/js.js"></script> -->
+    <!-- <script src="https://cdn.xx1.cn/y.js"></script> -->
+    <!-- <script src="https://cdn.xx2.com/loadjs.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/vditor/dist/index.css" />
+    <script src="https://unpkg.com/vditor/dist/index.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://unp11kg.com/vditor/dist/index.css" /> -->
+    <script src="https://unpkg123.com/vditor/dist/index.min.js"></script>
+    <script src="https://cesiu4m.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script>
+    <!-- <script src="https://cesium.com/downloads/cesiumjs/releases/1.98/Build/Cesium/Cesium.js"></script> -->
+  </body>
+</html>

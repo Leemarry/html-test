@@ -1,0 +1,4 @@
+node_modules
+
+# Logs 忽略 ZSCESHI文件夹
+ZSCESHI

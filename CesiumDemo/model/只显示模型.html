@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+  <title>加载纯色背景</title>
+   <link rel="stylesheet" href="../CesiumUnminified/Widgets/widgets.css">
+   <script src="../CesiumUnminified/Cesium.js"></script>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+ <!-- 设置你需要的背景图片 -->
+  <div id="cesiumContainer" class="fullSize" style="background-image: url(image/bg.jpg)"></div>
+  <script>
+    var viewer = new Cesium.Viewer('cesiumContainer', {
+      //需要进行可视化的数据源的集合
+      selectionIndicator: false,//关闭绿色点击框
+      animation: false, //是否显示动画控件
+      shouldAnimate: false,
+      homeButton: false, //是否显示Home按钮
+      fullscreenButton: false, //是否显示全屏按钮
+      baseLayerPicker: false, //是否显示图层选择控件
+      geocoder: false, //是否显示地名查找控件
+      timeline: false, //是否显示时间线控件
+      sceneModePicker: false, //是否显示投影方式控件
+      navigationHelpButton: false, //是否显示帮助信息控件
+      infoBox: false, //是否显示点击要素之后显示的信息
+      requestRenderMode: true, //启用请求渲染模式
+      scene3DOnly: false, //每个几何实例将只能以3D渲染以节省GPU内存
+      sceneMode: 3, //初始场景模式 1 2D模式 2 2D循环模式 3 3D模式  Cesium.SceneMode
+      fullscreenElement: document.body, //全屏时渲染的HTML元素 暂时没发现用处
+      //加载谷歌影像地图，UrlTemplateImageryProvider该接口是加载谷歌地图服务的接口
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: "https://map.geoq.cn/arcgis/rest/services/ChinaOnlineStreetPurplishBlue/MapServer",
+      }),
+      //需要纯色背景必须设置
+      contextOptions: {
+        webgl: {
+          alpha: true,
+        }
+      },
+    })
+    //背景透明
+    viewer.scene.backgroundColor = new Cesium.Color(0.0, 0.0, 0.0, 0.0);
+    
+    //关闭大气
+    viewer.scene.skyAtmosphere.show = false
+    //抗锯齿
+    viewer.scene.fxaa = true;
+    viewer.scene.postProcessStages.fxaa.enabled = true;
+    
+    //关闭天空月亮
+    viewer.scene.sun.show = false; //在Cesium1.6(不确定)之后的版本会显示太阳和月亮，不关闭会影响展示
+    viewer.scene.moon.show = false;
+    viewer.scene.skyBox.show = false;//关闭天空盒，否则会显示天空颜色
+    //隐藏地球
+    viewer.scene.undergroundMode = true; //重要，开启地下模式，设置基色透明，这样就看不见黑色地球了
+    viewer.scene.globe.show = false; //不显示地球，这条和地球透明度选一个就可以
+    viewer.scene.globe.baseColor = new Cesium.Color(255, 0, 0, 1);
+    
+    var tileset = viewer.scene.primitives.add(
+                            new Cesium.Cesium3DTileset({
+                                url:'./pv/tileset.json',
+                                maximumScreenSpaceError: 16,//默认16,最大屏幕空间错误
+                                maximumNumberOfLoadedTiles: 1000,
+                                maximumMemoryUsage:1024//默认512,内存MB的最大数量
+                            }));
+    tileset.readyPromise.then((tileset) => {
+                        
+        viewer.zoomTo(tileset);//视野定位到模型处
+    });
+    
+  </script>
+</body>
+
+</html>

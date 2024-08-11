@@ -1,0 +1,71 @@
+<!--
+ * @Date: 2024-07-31 17:20:58
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\数据处理题\doxc文本预览\p.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Preview</title>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.8/mammoth.browser.min.js"></script>
+</head>
+
+<body>
+  <div id="preview"></div>
+  <div id="progressBar"></div> <!-- 添加进度条容器 -->
+  <p id="statusMessage"></p> <!-- 添加状态消息显示区域 -->
+
+  <script>
+    // 发起文件下载请求
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://127.0.0.1:9090/efuavkmz/pointcloud/kmzTasks/2/%E5%8D%B1%E9%99%A9%E7%82%B9%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A.docx', true);
+    // xhr.responseType = 'blob'; // 使用 Blob 类型
+    xhr.responseType = 'arraybuffer';
+
+    // 监听进度事件
+    xhr.onprogress = function (event) {
+      if (event.lengthComputable) {
+        const percentComplete = (event.loaded / event.total) * 100;
+        document.getElementById('progressBar').style.width = `${percentComplete}%`; // 更新进度条宽度
+      }
+    };
+
+    xhr.onload = async function () {
+      if (xhr.status === 200) {
+        try {
+          // 使用 mammoth.js 进行转换
+        //   const result = await mammoth.convertToHtml({ blob: xhr.response });
+        //   document.getElementById('preview').innerHTML = result.value;
+          const result = await mammoth.convertToHtml({ arrayBuffer: xhr.response });
+          document.getElementById('preview').innerHTML = result.value;
+          document.getElementById('statusMessage').innerHTML = '转换完成'; // 显示转换完成消息
+        } catch (error) {
+          console.error('解析失败', error);
+          document.getElementById('statusMessage').innerHTML = '解析失败，请重试'; // 显示失败消息
+        }
+      } else {
+        console.error('内容获取失败，状态码:', xhr.status);
+        document.getElementById('statusMessage').innerHTML = '下载失败，请检查网络'; // 显示下载失败消息
+      }
+    };
+
+    xhr.onerror = function () {
+      console.error('发生网络错误');
+      document.getElementById('statusMessage').innerHTML = '发生网络错误，请稍后重试'; // 显示网络错误消息
+    };
+
+    xhr.ontimeout = function () {
+      console.error('下载超时');
+      document.getElementById('statusMessage').innerHTML = '下载超时，请稍后重试'; // 显示超时消息
+    };
+
+    xhr.send();
+  </script>
+</body>
+
+</html>

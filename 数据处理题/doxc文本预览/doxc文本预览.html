@@ -1,0 +1,48 @@
+<!--
+ * @Date: 2024-07-30 18:45:40
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\数据处理题\p.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>doxc文本预览</title>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.8/mammoth.browser.min.js"></script>
+</head>
+
+<body>
+
+    <input type="file" id="docx-input">  
+    <div id="output"></div>  
+    
+    <script>  
+      document.getElementById('docx-input').addEventListener('change', function(e) {  
+        var file = e.target.files[0];  
+        var reader = new FileReader();  
+    
+        reader.onload = function(e) {  
+          var arrayBuffer = e.target.result;  
+    
+          mammoth.convertToHtml({arrayBuffer: arrayBuffer})  
+            .then(function(result) {  
+              var html = result.value; // 生成的HTML  
+              var messages = result.messages; // 任何转换消息  
+              document.getElementById('output').innerHTML = html;  
+            })  
+            .catch(function(err) {  
+              console.error(err);  
+            });  
+        };  
+    
+        reader.readAsArrayBuffer(file);  
+      });  
+    </script>
+
+</body>
+
+</html>

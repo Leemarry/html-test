@@ -1,0 +1,74 @@
+<!--
+ * @Date: 2024-07-22 18:31:31
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\css样式设计\base64.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>  
+<html>  
+  
+<head>  
+  <meta charset="utf-8" />  
+</head>  
+  
+<body>  
+  <video controls></video>  
+  <button id="playButton">播放视频</button>  
+  <script>  
+    var video = document.querySelector('video');  
+    var playButton = document.getElementById('playButton');  
+  
+    var assetURL = 'http://114.132.62.199:9000/test/DJI_0003.MP4';  
+    var mimeCodec = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';  
+  
+    if ('MediaSource' in window && MediaSource.isTypeSupported(mimeCodec)) {  
+      var mediaSource = new MediaSource;  
+      video.src = URL.createObjectURL(mediaSource);  
+      mediaSource.addEventListener('sourceopen', sourceOpen);  
+    } else {  
+      console.error('Unsupported MIME type or codec: ', mimeCodec);  
+    }  
+  
+    function sourceOpen(_) {  
+      var mediaSource = this;  
+      var sourceBuffer = mediaSource.addSourceBuffer(mimeCodec);  
+      fetchAB(assetURL, function (buf) {  
+        sourceBuffer.appendBuffer(buf);  
+        sourceBuffer.addEventListener('updateend', function () {  
+          mediaSource.endOfStream();  
+          // 移除事件监听器，避免多次点击播放  
+          playButton.removeEventListener('click', playVideo);  
+          // 允许用户点击后播放  
+          playButton.addEventListener('click', playVideo);  
+        });  
+      });  
+    }  
+  
+
+    function fetchAB(url, cb) {
+      // 计算起始和结束的字节位置
+      // 视频的总时长（假设以秒为单位）
+      var totalDuration = 24;  // 示例总时长为 600 秒
+      var startByte = Math.floor(200 * 1024 * 1024 * (totalDuration / (600 * 1024 * 1024)));
+      var endByte = Math.floor(202 * 1024 * 1024 * (totalDuration / (600 * 1024 * 1024)));
+      console.log(url);
+      var xhr = new XMLHttpRequest;
+      xhr.open('get', url);
+      xhr.setRequestHeader('Range', 'bytes=' + startByte + '-' + endByte);
+      xhr.responseType = 'arraybuffer';
+      xhr.onload = function () {
+        cb(xhr.response);
+      };
+      xhr.send();
+    };
+    function playVideo() {  
+      video.play().catch(error => {  
+        console.error("Error attempting to play video:", error);  
+      });  
+    }  
+  
+    // 初始时不添加点击事件监听器，避免自动播放  
+  </script>  
+</body>  
+  
+</html>

@@ -1,0 +1,41 @@
+<!--
+ * @Date: 2024-07-18 14:16:14
+ * @LastEditors: likai 2806699104@qq.com
+ * @FilePath: \html-test\数据处理题\xml解析数据\kmz解析数据.html
+ * @Description: Do not edit
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script> -->
+    <script src="./jszip.min.js"></script> 
+</head>
+<body>
+    <input type="file" id="fileInput" />  
+<script>  
+    document.getElementById('fileInput').addEventListener('change', function(e) {  
+        const file = e.target.files[0];  
+        // if (!file.type.match('application/zip')) {  
+        //     alert('Please upload a ZIP file.');  
+        //     return;  
+        // }  
+  
+        JSZip.loadAsync(file)  
+            .then(function(zip) {  
+                // 遍历ZIP文件中的条目  
+                Object.keys(zip.files).forEach(function(filename) {  
+                    zip.files[filename].async('text').then(function(content) {  
+                        console.log(filename + ':' + content);  
+                    });  
+                });  
+            })  
+            .catch(function(err) {  
+                console.error('Error reading zip:', err);  
+            });  
+    });  
+</script>
+</body>
+</html>
