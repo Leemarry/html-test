@@ -2,3 +2,7 @@ node_modules
 
 # Logs 忽略 ZSCESHI文件夹
 ZSCESHI
+
+# 如果您有文件 file_ceshi.txt 、 ceshi_data.csv 等，上述规则将会使这些文件被 Git 忽略，不会被包含在提交中。
+*cs*
+# folder/*ceshi*
