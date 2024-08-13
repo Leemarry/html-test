@@ -76,3 +76,16 @@ docker build -t myapp:1.0 .
 docker run -d -p 8080:8085 myapp:1.0
 docker run -d -p 8085:8080 myapp:1.0
 ENTRYPOINT ["java", "-jar", "/app.jar", "--spring.profiles.active=pro"]
+
+
+
+离线 
+
+docker save -o [保存文件全路径] [镜像名称]:[镜像版本]
+$ docker save -o /Users/Aion/mysql-8.0.31.tar mysql:8.0.31
+docker save -o F:\document\p\mysql-8.0.31.tar mysql:8.0.31
+
+
+docker load命令 
+   docker load -i F:\document\p\mysql-8.0.31.tar
+   docker run -p 3306:3306 --name some-mysql -e MYSQL_ROOT_PASSWORD=your_password mysql:8.0.31
