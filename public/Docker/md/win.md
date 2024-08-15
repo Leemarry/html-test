@@ -22,9 +22,8 @@ docker run -d -p 9000:9000 -p 9001:9001 -v /root/minio/data:/data -v /root/minio
 docker run -d -p 9009:9000 -p 9001:9001 -v F:\document\0awork\docker\minio\data:/data -v F:\document\0awork\docker\minio\config:/root/.minio --name minio -e "MINIO_ACCESS_KEY=minioadmin" -e "MINIO_SECRET_KEY=minioadmin" minio/minio server /data --console-address ":9001"
 
  docker cp nginx178:/etc/nginx/nginx.conf F:\document\0awork\docker\nginx\conf/nginx.conf
- docker cp F:\document\0awork\docker\nginx\conf/nginx.conf /root/nginx/conf/nginx.conf
-## mysql 
-docker run -p 3307:3306 --name dokermysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql
+ docker cp F:\document\0awork\docker\nginx\conf/nginx.conf /root/nginx/conf/nginx.confF
+
 
 
 ##
@@ -85,6 +84,7 @@ docker save -o [保存文件全路径] [镜像名称]:[镜像版本]
 $ docker save -o /Users/Aion/mysql-8.0.31.tar mysql:8.0.31
 docker save -o F:\document\p\mysql-8.0.31.tar mysql:8.0.31
 
+docker save -o  D:\DockerImage\nginx.tar nginx:1.17.8
 
 docker load命令 
    docker load -i F:\document\p\mysql-8.0.31.tar

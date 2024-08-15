@@ -4,7 +4,7 @@
  * @Author: Eugene
  * @Date: 2023-10-13 16:48:41
  * @LastEditors: likai 2806699104@qq.com
- * @LastEditTime: 2024-08-14 16:21:02
+ * @LastEditTime: 2024-08-14 11:56:10
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -52,13 +52,12 @@
         // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
         //     url: "https://elevation3d.arcgis.com/arcgis/rest/services/World_Imagery/MapServer",
         // }),
-        imageryProvider :  new Cesium.UrlTemplateImageryProvider({
-            // url: 'http://127.0.0.1:9009/efuav-image/20240814124434/tiles/{z}/{x}/{y}.png',
-            // Satellite
-            // url: 'http://127.0.0.1:9009/efuav-image/Satellite/{z}/{x}/{y}.png',
-              url: 'http://127.0.0.1:9009/efuav-ortho-img/900/map/{z}/{x}/{y}.png'
-            
-            
+        imageryLayers :  new Cesium.UrlTemplateImageryProvider({
+        // url: "http://114.132.62.199:9000/ches/result/{z}/{x}/{y}.png", 
+        // http://114.132.62.199:9000/ches/cloud2/tileset.json
+        // url: "/map/Map/result/{z}/{x}/{y}.png", 
+            // url: 'http://127.0.0.1:9009/efuav-image/map/{z}/{x}/{y}.png', // 黄瓜
+            url: 'http://127.0.0.1:9009/efuav-image/result/{z}/{x}/{y}.png',
         // url: "./result/{z}/{x}/{y}.png", 
     })
     });
@@ -89,16 +88,16 @@
     //             },
     //         });
     function addImageryProvider(){
-        var imageryProvider = new Cesium.UrlTemplateImageryProvider({
-        // url: "http://114.132.62.199:9000/ches/result/{z}/{x}/{y}.png", 
-        // http://114.132.62.199:9000/ches/cloud2/tileset.json
-        // url: "/map/Map/result/{z}/{x}/{y}.png", 
-            url: 'http://127.0.0.1:9009/efuav-ortho-img/900/map/{z}/{x}/{y}.png', // 黄瓜  efuav-ortho-img/map efuav-ortho-img/900/map
-            // url: 'http://127.0.0.1:9009/efuav-image/result/{z}/{x}/{y}.png',
-        // url: "./result/{z}/{x}/{y}.png", 
-    });
-    // 图层添加
-    viewer.imageryLayers.addImageryProvider(imageryProvider);
+    //     var imageryProvider = new Cesium.UrlTemplateImageryProvider({
+    //     // url: "http://114.132.62.199:9000/ches/result/{z}/{x}/{y}.png", 
+    //     // http://114.132.62.199:9000/ches/cloud2/tileset.json
+    //     // url: "/map/Map/result/{z}/{x}/{y}.png", 
+    //         // url: 'http://127.0.0.1:9009/efuav-image/map/{z}/{x}/{y}.png', // 黄瓜
+    //         url: 'http://127.0.0.1:9009/efuav-image/result/{z}/{x}/{y}.png',
+    //     // url: "./result/{z}/{x}/{y}.png", 
+    // });
+    // // 图层添加
+    // viewer.imageryLayers.addImageryProvider(imageryProvider);
     }
 
 
@@ -113,11 +112,9 @@
     // })
     // 设置默认相机视角 // 工厂 112.26670, 31.01892 // 县城 114.45006173 ,29.62837653
     // loacl  112.26219704156568 ,31.026628725595643  
-    // 黄冈测试  113.6303242675915 30.72446282288464
+    // 黄冈测试   115.4748352341811, 30.912401156776475
     viewer.camera.setView({
-        // destination: Cesium.Cartesian3.fromDegrees( 112.26219704156568 ,31.026628725595643, 1000),
-        
-        destination: Cesium.Cartesian3.fromDegrees( 115.20445022502247,30.839853465243316, 1000), // 黄冈 115.48027239020547 30.910056912936394
+        destination: Cesium.Cartesian3.fromDegrees( 112.26219704156568 ,31.026628725595643, 1000),
         // 方向，俯视和仰视的视角
         orientation: {
             heading: Cesium.Math.toRadians(0), // 设置偏航角度（单位：弧度）
@@ -140,63 +137,63 @@
     // );
 
     // 注册地图点击事件
-    function getClickPointAdd() {
-        // 注册屏幕点击事件
-        console.log('viewer', viewer);
+    // function getClickPointAdd() {
+    //     // 注册屏幕点击事件
+    //     console.log('viewer', viewer);
 
-        var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-        //注册鼠标事件,event参数是点击的地方是在哪里
-        var positionList = [];
-        handler.setInputAction(event => {
-            //定义一个屏幕点击的事件，pickPosition封装的是获取点击的位置的坐标
-            var position = viewer.scene.pickPosition(event.position);
-            //输出之后我们发现坐标信息都是大数目，因为cesium定义的球体坐标都是笛卡尔坐标，所以我们需要转换笛卡尔坐标
-            console.log("笛卡尔：" + position);
-            //将笛卡尔坐标转化为弧度坐标
-            var cartographic = Cesium.Cartographic.fromCartesian(position);
-            console.log("弧度：" + cartographic);
-            //将弧度坐标转换为经纬度坐标（先转弧度再转经纬度简单一点，直接转换的方法也有，不过推荐用这种）
-            var longitude = Cesium.Math.toDegrees(cartographic.longitude); //经度
-            var latitude = Cesium.Math.toDegrees(cartographic.latitude); //纬度
-            var height = cartographic.height; //高度
-            console.log("经纬度：" + longitude, latitude, height);
-            positionList.push({
-                lat: latitude,
-                lng: longitude,
-                lat: height
-            });
-            console.log(positionList);
-            // if(height < 0) {
-            //     height = 0;
-            // }
-            // alert("经度：" + longitude + "纬度：" + latitude + "高度：" + height);
-            //同时也可以将经度度转回为笛卡尔
-            var ellipsoid = viewer.scene.globe.ellipsoid;
-            //定义84坐标为一个Cartesian值
-            var wgs84 = Cesium.Cartographic.fromDegrees(
-                longitude,
-                latitude,
-                height
-            );
-            //将84坐标转换为笛卡尔
-            var dikaer = ellipsoid.cartographicToCartesian(wgs84);
-            //赋值
-            var longitude = dikaer.x;
-            var latitude = dikaer.y;
-            var height = dikaer.z;
-            // alert("笛卡尔x：" + longitude + "笛卡尔y：" + latitude + "笛卡尔z：" + height);
-            // 添加点
-            viewer.entities.add({
-                position: position,
-                name: "111", //点击描上的显示信息
-                point: {
-                    color: Cesium.Color.YELLOW,
-                    pixelSize: 10
-                    // heightReference: 相对于地面的位置
-                }
-            });
-        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-    }
+    //     var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    //     //注册鼠标事件,event参数是点击的地方是在哪里
+    //     var positionList = [];
+    //     handler.setInputAction(event => {
+    //         //定义一个屏幕点击的事件，pickPosition封装的是获取点击的位置的坐标
+    //         var position = viewer.scene.pickPosition(event.position);
+    //         //输出之后我们发现坐标信息都是大数目，因为cesium定义的球体坐标都是笛卡尔坐标，所以我们需要转换笛卡尔坐标
+    //         console.log("笛卡尔：" + position);
+    //         //将笛卡尔坐标转化为弧度坐标
+    //         var cartographic = Cesium.Cartographic.fromCartesian(position);
+    //         console.log("弧度：" + cartographic);
+    //         //将弧度坐标转换为经纬度坐标（先转弧度再转经纬度简单一点，直接转换的方法也有，不过推荐用这种）
+    //         var longitude = Cesium.Math.toDegrees(cartographic.longitude); //经度
+    //         var latitude = Cesium.Math.toDegrees(cartographic.latitude); //纬度
+    //         var height = cartographic.height; //高度
+    //         console.log("经纬度：" + longitude, latitude, height);
+    //         positionList.push({
+    //             lat: latitude,
+    //             lng: longitude,
+    //             lat: height
+    //         });
+    //         console.log(positionList);
+    //         // if(height < 0) {
+    //         //     height = 0;
+    //         // }
+    //         // alert("经度：" + longitude + "纬度：" + latitude + "高度：" + height);
+    //         //同时也可以将经度度转回为笛卡尔
+    //         var ellipsoid = viewer.scene.globe.ellipsoid;
+    //         //定义84坐标为一个Cartesian值
+    //         var wgs84 = Cesium.Cartographic.fromDegrees(
+    //             longitude,
+    //             latitude,
+    //             height
+    //         );
+    //         //将84坐标转换为笛卡尔
+    //         var dikaer = ellipsoid.cartographicToCartesian(wgs84);
+    //         //赋值
+    //         var longitude = dikaer.x;
+    //         var latitude = dikaer.y;
+    //         var height = dikaer.z;
+    //         // alert("笛卡尔x：" + longitude + "笛卡尔y：" + latitude + "笛卡尔z：" + height);
+    //         // 添加点
+    //         viewer.entities.add({
+    //             position: position,
+    //             name: "111", //点击描上的显示信息
+    //             point: {
+    //                 color: Cesium.Color.YELLOW,
+    //                 pixelSize: 10
+    //                 // heightReference: 相对于地面的位置
+    //             }
+    //         });
+    //     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    // }
 
 
 
